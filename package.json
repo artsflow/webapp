@@ -1,0 +1,77 @@
+{
+  "name": "artsflow-saas",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "type-check": "tsc --pretty --noEmit",
+    "format": "prettier --write \"**/*.{js,ts,tsx}\" && eslint --fix \"**/*.{js,ts,tsx}\"",
+    "lint": "prettier --check \"**/*.{ts,tsx}\" && eslint \"**/*.{ts,tsx}\"",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run --browser chrome --headless",
+    "test:e2e": "start-server-and-test 'yarn dev' 3000 'yarn cypress'",
+    "test:e2e:ci": "start-server-and-test 'yarn dev' 3000 'yarn cypress:headless'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "yarn lint",
+      "yarn format"
+    ]
+  },
+  "dependencies": {
+    "@chakra-ui/core": "^1.0.0-rc.8",
+    "apollo-server-micro": "^2.19.0",
+    "framer-motion": "^2.9.4",
+    "graphql": "^15.4.0",
+    "next": "10.0.0",
+    "next-compose-plugins": "^2.2.0",
+    "next-pwa": "^3.1.5",
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@testing-library/cypress": "^7.0.1",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^14.14.6",
+    "@types/react": "^16.9.55",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "autoprefixer": "^10.0.1",
+    "babel-loader": "^8.1.0",
+    "cypress": "^5.5.0",
+    "eslint": "^7.12.1",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-cypress": "^2.11.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest-dom": "^3.2.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-testing-library": "^3.10.0",
+    "husky": "^4.3.0",
+    "jest": "^26.6.1",
+    "jest-watch-typeahead": "^0.6.1",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.1.2",
+    "react-docgen-typescript-plugin": "^0.6.0",
+    "start-server-and-test": "^1.11.5",
+    "ts-jest": "^26.4.3",
+    "typescript": "^4.0.5"
+  }
+}
