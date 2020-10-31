@@ -21,6 +21,7 @@ module.exports = {
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
+    'plugin:prettier/recommended',
     'prettier',
     'prettier/@typescript-eslint',
     'prettier/react',
@@ -41,10 +42,10 @@ module.exports = {
     'react/no-unescaped-entities': 'off',
     'jsx-a11y/accessible-emoji': 'off',
     '@typescript-eslint/explicit-function-return-type': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/explicit-member-accessibility': 0,
     '@typescript-eslint/indent': 0,
     '@typescript-eslint/member-delimiter-style': 0,
-    '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-use-before-define': ['error', { variables: false }],
     '@typescript-eslint/no-unused-vars': [
       2,
@@ -73,9 +74,12 @@ module.exports = {
     ],
   },
   settings: {
+    react: {
+      version: 'detect',
+    },
     'import/resolver': {
       node: {
-        paths: ['.'],
+        paths: ['./src'],
       },
     },
   },
