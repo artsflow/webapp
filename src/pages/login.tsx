@@ -78,6 +78,14 @@ export default function Home(): JSX.Element {
     [login, isLoggingIn, emailValue]
   )
 
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
+      if (isEmailValid) onLogin(e)
+    },
+    [isEmailValid, emailValue]
+  )
+
   return (
     <Container height="100vh" justifyContent="center">
       <Link href="/">
@@ -86,27 +94,29 @@ export default function Home(): JSX.Element {
         </a>
       </Link>
       <Box>
-        <InputGroup>
-          <InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em" children="@" />
-          <Input
-            borderColor="af.teal"
-            placeholder="hello@artsflow.com"
-            type="email"
-            onChange={handleEmailChange}
-            value={emailValue}
-          />
-          <InputRightElement children={<CheckIcon color={isEmailValid ? 'af.teal' : 'grey'} />} />
-        </InputGroup>
-        <Button
-          w="full"
-          bg="af.pink"
-          mt="2"
-          disabled={!isEmailValid || isLoggingIn}
-          isLoading={isLoggingIn}
-          onClick={onLogin}
-        >
-          Continue with email
-        </Button>
+        <form onSubmit={onSubmit}>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em" children="@" />
+            <Input
+              borderColor="af.teal"
+              placeholder="hello@artsflow.com"
+              type="email"
+              onChange={handleEmailChange}
+              value={emailValue}
+            />
+            <InputRightElement children={<CheckIcon color={isEmailValid ? 'af.teal' : 'grey'} />} />
+          </InputGroup>
+          <Button
+            w="full"
+            bg="af.pink"
+            mt="2"
+            disabled={!isEmailValid || isLoggingIn}
+            isLoading={isLoggingIn}
+            onClick={onLogin}
+          >
+            Continue with email
+          </Button>
+        </form>
       </Box>
     </Container>
   )
