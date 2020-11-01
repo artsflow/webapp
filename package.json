@@ -31,15 +31,25 @@
   },
   "dependencies": {
     "@chakra-ui/core": "^1.0.0-rc.8",
+    "@chakra-ui/icons": "^1.0.0-rc.8",
+    "@hapi/iron": "^6.0.0",
+    "@magic-sdk/admin": "^1.2.2",
+    "@types/cookie": "^0.4.0",
     "apollo-server-micro": "^2.19.0",
+    "cookie": "^0.4.1",
+    "faunadb": "^3.0.1",
     "framer-motion": "^2.9.4",
     "graphql": "^15.4.0",
+    "lodash": "^4.17.20",
+    "magic-sdk": "^3.0.1",
     "next": "10.0.0",
     "next-compose-plugins": "^2.2.0",
     "next-pwa": "^3.1.5",
     "next-react-svg": "^1.1.2",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "swr": "^0.3.8",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
