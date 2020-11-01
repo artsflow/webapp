@@ -6,14 +6,24 @@ import * as userModel from 'lib/models/user'
 
 const handlers = {
   GET: async (req: NextApiRequest, res: NextApiResponse) => {
-    const { token, issuer } = await getSession(req)
+    const session = await getSession(req)
 
-    await Promise.all([magic.users.logoutByIssuer(issuer), userModel.invalidateFaunaDBToken(token)])
+    if (!session) {
+      res.writeHead(302, { Location: '/' })
+      res.end()
+    } else {
+      const { token, issuer } = session
 
-    removeSession(res)
+      await Promise.all([
+        magic.users.logoutByIssuer(issuer),
+        userModel.invalidateFaunaDBToken(token),
+      ])
 
-    res.writeHead(302, { Location: '/' })
-    res.end()
+      removeSession(res)
+
+      res.writeHead(302, { Location: '/' })
+      res.end()
+    }
   },
 }
 

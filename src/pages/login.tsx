@@ -23,7 +23,7 @@ export default function Home(): JSX.Element {
   const { user } = useUser()
   const [isLoggingIn, setIsLoggingIn] = useState(false)
   const [isEmailValid, setEmailValid] = useState(false)
-  const [emailValue, setEmail] = useState('')
+  const [emailValue, setEmailValue] = useState('')
   const [errorMsg, setErrorMsg] = useState(undefined)
   const isMounted = useIsMounted()
 
@@ -33,7 +33,7 @@ export default function Home(): JSX.Element {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailValid(validateEmail(e.target.value))
-    setEmail(e.target.value)
+    setEmailValue(e.target.value)
   }
 
   const login = useCallback(
@@ -75,7 +75,7 @@ export default function Home(): JSX.Element {
       setIsLoggingIn(true)
       login(emailValue).then(() => setIsLoggingIn(false))
     },
-    [login, isLoggingIn]
+    [login, isLoggingIn, emailValue]
   )
 
   return (
