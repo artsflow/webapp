@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Magic } from 'magic-sdk'
+import { OAuthExtension } from '@magic-ext/oauth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import {
+  Text,
   Box,
   Button,
   Input,
@@ -13,8 +15,12 @@ import {
 import { CheckIcon } from '@chakra-ui/icons'
 
 import Logo from 'svg/artsflow.svg'
+import GoogleButton from 'svg/google-signin.svg'
 import { Container } from 'components'
 import { useUser, useIsMounted } from 'hooks'
+
+const NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: string = process.env
+  .NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
 
 const validateEmail = (str: string): boolean => !!str.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)
 
@@ -41,8 +47,6 @@ export default function Home(): JSX.Element {
       if (isMounted() && errorMsg) setErrorMsg(undefined)
 
       try {
-        const NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: string = process.env
-          .NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
         const magic = new Magic(NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY)
         const didToken = await magic.auth.loginWithMagicLink({ email })
 
@@ -86,6 +90,17 @@ export default function Home(): JSX.Element {
     [isEmailValid, emailValue]
   )
 
+  const onGoogleLogin = async () => {
+    const magic = new Magic(NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY, {
+      extensions: [new OAuthExtension()],
+    })
+
+    await magic.oauth.loginWithRedirect({
+      provider: 'google',
+      redirectURI: `${window.location.origin}/callback`,
+    })
+  }
+
   return (
     <Container height="100vh" justifyContent="center">
       <Link href="/">
@@ -115,6 +130,12 @@ export default function Home(): JSX.Element {
             onClick={onLogin}
           >
             Continue with email
+          </Button>
+          <Text textAlign="center" py="2">
+            or
+          </Text>
+          <Button variant="link" outline="none" w="full" p="0" onClick={onGoogleLogin}>
+            <GoogleButton />
           </Button>
         </form>
       </Box>

@@ -1,10 +1,12 @@
 import { ExprArg } from 'faunadb'
+
+import { UserInfo } from 'lib/types'
 import { q, adminClient, getClient } from '../faunadb'
 
-export const createUser = async (email: string) =>
+export const createUser = async (email: string, userInfo?: UserInfo) =>
   adminClient.query(
     q.Create(q.Collection('users'), {
-      data: { email },
+      data: { email, ...userInfo },
     })
   )
 

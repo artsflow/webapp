@@ -33,6 +33,7 @@
     "@chakra-ui/core": "^1.0.0-rc.8",
     "@chakra-ui/icons": "^1.0.0-rc.8",
     "@hapi/iron": "^6.0.0",
+    "@magic-ext/oauth": "^0.7.0",
     "@magic-sdk/admin": "^1.2.2",
     "@types/cookie": "^0.4.0",
     "apollo-server-micro": "^2.19.0",

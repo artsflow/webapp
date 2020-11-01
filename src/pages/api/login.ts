@@ -1,8 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { magic } from 'lib/magic'
+import { omit } from 'lodash'
+
 import { createSession } from 'lib/auth-cookies'
 import { createHandlers } from 'lib/rest-utils'
 import * as userModel from 'lib/models/user'
+import { UserInfo } from 'lib/types'
 
 const handlers = {
   POST: async (req: NextApiRequest, res: NextApiResponse) => {
@@ -15,7 +18,12 @@ const handlers = {
       return res.status(401).end('Unauthorized')
     }
 
-    const user = (await userModel.getUserByEmail(email)) ?? (await userModel.createUser(email))
+    const userInfo: UserInfo | undefined = req.body.userInfo
+      ? (omit(req.body.userInfo, ['sub', 'sources']) as UserInfo)
+      : undefined
+
+    const user =
+      (await userModel.getUserByEmail(email)) ?? (await userModel.createUser(email, userInfo))
     const token = await userModel.obtainFaunaDBToken(user)
 
     if (!token) {
