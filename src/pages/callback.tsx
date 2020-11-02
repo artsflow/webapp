@@ -43,7 +43,7 @@ export default function Callback(): JSX.Element {
   }, [])
 
   return (
-    <VStack justifyContent="center" h="100vh" alignItems="center">
+    <VStack h="100%" justifyContent="center" alignItems="center">
       <AfLogo width="142" height="186" />
       <Text>redirecting...</Text>
     </VStack>

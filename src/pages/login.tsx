@@ -102,7 +102,7 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <Container height="100vh" justifyContent="center">
+    <Container h="100%" justifyContent="center">
       <Link href="/">
         <a>
           <Logo width="242px" />

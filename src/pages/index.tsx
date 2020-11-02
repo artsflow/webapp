@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Text, Link } from '@chakra-ui/core'
+import { Text, Box } from '@chakra-ui/core'
 import { useRouter } from 'next/router'
 
-import Logo from 'svg/artsflow.svg'
-import { Container } from 'components'
 import { useUser, useFirstRender } from 'hooks'
 
 export default function Home(): JSX.Element {
@@ -25,16 +23,14 @@ export default function Home(): JSX.Element {
   }, [user, userLoading])
 
   return (
-    <Container height="100vh" justifyContent="center">
-      <Logo width="242px" />
+    <Box justifyContent="center">
       {initialized ? (
         <>
-          <Text>welcome {user?.email}</Text>
-          <Link href="/api/logout">Logout</Link>
+          <Text>welcome</Text>
         </>
       ) : (
         <Text>loading...</Text>
       )}
-    </Container>
+    </Box>
   )
 }

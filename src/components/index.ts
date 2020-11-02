@@ -1,1 +1,6 @@
 export { Container } from './Container'
+export { Meta } from './Meta'
+export { Layout } from './Layout'
+export { Error404 } from './Error404'
+export { Footer } from './Footer'
+export { Header } from './Header'
