@@ -1,17 +1,17 @@
 import { ExprArg } from 'faunadb'
 
-import { UserInfo } from 'lib/types'
+import { User } from 'lib/types'
 import { q, adminClient, getClient } from '../faunadb'
 
-export const createUser = async (email: string, userInfo?: UserInfo) =>
+export const createUser = async (email: string, userData?: User) =>
   adminClient.query(
-    q.Create(q.Collection('users'), {
-      data: { email, ...userInfo },
+    q.Create(q.Collection('User'), {
+      data: { email, ...userData },
     })
   )
 
 export const getUserByEmail = async (email: string) =>
-  adminClient.query(q.Get(q.Match(q.Index('users_by_email'), email))).catch(() => undefined)
+  adminClient.query(q.Get(q.Match(q.Index('findUserByEmail'), email))).catch(() => undefined)
 
 interface Response {
   secret?: string

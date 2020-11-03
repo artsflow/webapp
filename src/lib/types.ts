@@ -12,3 +12,16 @@ export interface UserInfo {
   locale: string
   name: string
 }
+
+export enum UserRole {
+  USER = 'USER',
+  PRACTITIONER = 'PRACTITIONER',
+}
+
+export interface User {
+  firstName?: string
+  lastName?: string
+  picture?: string
+  name?: string
+  role: UserRole
+}

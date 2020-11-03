@@ -73,6 +73,8 @@ module.exports = {
       'error',
       { devDependencies: ['**/*.spec.ts', '**/*.spec.tsx'] },
     ],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
   },
   settings: {
     react: {
