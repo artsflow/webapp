@@ -1,0 +1,35 @@
+enum UserRole {
+   USER
+   PRACTITIONER
+}
+
+type User {
+   email: String! @unique
+   role: UserRole!
+   name: String
+   firstName: String
+   lastName: String
+   picture: String
+   about: String
+   home: String
+   works: String
+   onboarded: Boolean
+   activities: [Activity]
+}
+
+type Activity {
+   title: String!
+   description: String!
+   pictures: [String]
+   duration: Int!
+   date: String!
+   repeat: String
+   active: Boolean!
+   user: User!
+}
+
+
+type Query {
+   findUserByEmail(email: String!): User 
+   allActiveActivities(active: Boolean!): [Activity!]
+}

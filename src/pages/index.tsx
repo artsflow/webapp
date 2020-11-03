@@ -8,8 +8,8 @@ export default function Home(): JSX.Element {
   const router = useRouter()
   const [initialized, setInitialized] = useState(false)
   const isFirstRender = useFirstRender()
-
   const { user, loading: userLoading } = useUser()
+
   useEffect(() => {
     if (user && !userLoading && !initialized) {
       setInitialized(true)
@@ -22,15 +22,5 @@ export default function Home(): JSX.Element {
     }
   }, [user, userLoading])
 
-  return (
-    <Box justifyContent="center">
-      {initialized ? (
-        <>
-          <Text>welcome</Text>
-        </>
-      ) : (
-        <Text>loading...</Text>
-      )}
-    </Box>
-  )
+  return <Box justifyContent="center">{initialized && <Text>welcome</Text>}</Box>
 }
