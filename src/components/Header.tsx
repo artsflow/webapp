@@ -3,6 +3,7 @@ import NextLink from 'next/link'
 
 import { useUser } from 'hooks'
 import Logo from 'svg/artsflow.svg'
+import { API_URL } from 'lib/config'
 
 export function Header() {
   const { user } = useUser()
@@ -25,7 +26,7 @@ export function Header() {
         {user?.email}
       </Box>
       <Box>
-        <Link href="/api/logout">Logout</Link>
+        <Link href={`${API_URL}/logout`}>Logout</Link>
       </Box>
     </Grid>
   )

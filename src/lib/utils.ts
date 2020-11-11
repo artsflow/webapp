@@ -10,3 +10,5 @@ export const transformUserInfo = (userInfo: UserInfo): User =>
       return k
     })
   ) as any)(userInfo)
+
+export const isDev = () => process.env.NODE_ENV !== 'production'

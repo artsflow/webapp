@@ -18,6 +18,7 @@ import Logo from 'svg/artsflow.svg'
 import GoogleButton from 'svg/google-signin.svg'
 import { Container } from 'components'
 import { useUser, useIsMounted } from 'hooks'
+import { API_URL } from 'lib/config'
 
 const NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: string = process.env
   .NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
@@ -50,8 +51,10 @@ export default function Home(): JSX.Element {
         const magic = new Magic(NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY)
         const didToken = await magic.auth.loginWithMagicLink({ email })
 
-        const res = await fetch('/api/login', {
+        const res = await fetch(`${API_URL}/login`, {
           method: 'POST',
+          mode: 'cors',
+          // credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${didToken}`,

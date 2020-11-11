@@ -14,7 +14,7 @@ type User {
    home: String
    works: String
    onboarded: Boolean
-   activities: [Activity]
+   activities: [Activity] @relation
 }
 
 type Activity {

@@ -4,6 +4,7 @@ import { OAuthExtension } from '@magic-ext/oauth'
 import { useRouter } from 'next/router'
 import { VStack, Text } from '@chakra-ui/core'
 
+import { API_URL } from 'lib/config'
 import AfLogo from 'svg/af.svg'
 
 const NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: string = process.env
@@ -19,8 +20,10 @@ export default function Callback(): JSX.Element {
       })
       const result = await magic.oauth.getRedirectResult()
 
-      const res = await fetch('/api/login', {
+      const res = await fetch(`${API_URL}/login`, {
         method: 'POST',
+        mode: 'cors',
+        // credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${result.magic.idToken}`,

@@ -43,3 +43,5 @@ contentful/scripts/ENVIRONMENT_ID
 # Storybook files
 build-storybook.log
 .storybook-dist
+.env
+.env.local
