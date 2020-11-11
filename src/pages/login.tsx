@@ -54,7 +54,7 @@ export default function Home(): JSX.Element {
         const res = await fetch(`${API_URL}/login`, {
           method: 'POST',
           mode: 'cors',
-          // credentials: 'include',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${didToken}`,

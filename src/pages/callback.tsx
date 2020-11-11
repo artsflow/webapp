@@ -23,7 +23,7 @@ export default function Callback(): JSX.Element {
       const res = await fetch(`${API_URL}/login`, {
         method: 'POST',
         mode: 'cors',
-        // credentials: 'include',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${result.magic.idToken}`,
