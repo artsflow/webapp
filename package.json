@@ -41,6 +41,7 @@
     "faunadb": "^3.0.1",
     "framer-motion": "^2.9.4",
     "graphql": "^15.4.0",
+    "graphql-request": "^3.3.0",
     "lodash": "^4.17.20",
     "magic-sdk": "^3.0.1",
     "next": "10.0.0",
