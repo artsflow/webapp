@@ -1,20 +1,27 @@
 import { useCallback, useEffect, useRef } from 'react'
+import { GraphQLClient, gql } from 'graphql-request'
 import useSWR from 'swr'
-import { get } from 'lodash'
 
 import { API_URL } from 'lib/config'
 
-const jsonFetcher = (selector?: string) => (url: string) =>
-  fetch(url, {
-    mode: 'cors',
-    credentials: 'include',
-  })
-    .then((r) => r.json())
-    .then((data) => (selector ? get(data, selector, null) : data ?? null))
+export const GET_ME = gql`
+  query getMe {
+    getMe {
+      email
+      firstName
+      lastName
+      picture
+    }
+  }
+`
+
+const client = new GraphQLClient(`${API_URL}/graphql`, {
+  credentials: 'include',
+})
 
 export function useUser() {
-  const { data, isValidating } = useSWR(`${API_URL}/user`, jsonFetcher())
-  const user = data?.user ?? null
+  const { data, isValidating } = useSWR(GET_ME, (query) => client.request(query))
+  const user = data?.getMe?.email ? data?.getMe : null
   return { user, loading: isValidating }
 }
 

@@ -1,48 +1,25 @@
 import React, { useEffect } from 'react'
-import { Magic } from 'magic-sdk'
-import { OAuthExtension } from '@magic-ext/oauth'
 import { useRouter } from 'next/router'
 import { VStack, Text } from '@chakra-ui/core'
 
-import { API_URL } from 'lib/config'
+import { loginWithGoogle } from 'services/auth'
 import AfLogo from 'svg/af.svg'
-
-const NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: string = process.env
-  .NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
 
 export default function Callback(): JSX.Element {
   const router = useRouter()
 
-  const loginWithGoogle = async () => {
+  const login = async () => {
     try {
-      const magic = new Magic(NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY, {
-        extensions: [new OAuthExtension()],
-      })
-      const result = await magic.oauth.getRedirectResult()
-
-      const res = await fetch(`${API_URL}/login`, {
-        method: 'POST',
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${result.magic.idToken}`,
-        },
-        body: JSON.stringify({ userInfo: result.oauth.userInfo }),
-      })
-
-      if (res.status === 200) {
-        router.push('/')
-      } else {
-        throw new Error(await res.text())
-      }
+      const data = await loginWithGoogle()
+      console.log('loginWithGoogle', data)
+      router.push('/')
     } catch (err) {
       console.error('An unexpected error occurred:', err)
     }
   }
 
   useEffect(() => {
-    loginWithGoogle()
+    login()
   }, [])
 
   return (

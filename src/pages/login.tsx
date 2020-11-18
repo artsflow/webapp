@@ -18,14 +18,14 @@ import Logo from 'svg/artsflow.svg'
 import GoogleButton from 'svg/google-signin.svg'
 import { Container } from 'components'
 import { useUser, useIsMounted } from 'hooks'
-import { API_URL } from 'lib/config'
+import { loginWithEmail } from 'services/auth'
 
 const NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: string = process.env
   .NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
 
 const validateEmail = (str: string): boolean => !!str.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)
 
-export default function Home(): JSX.Element {
+export default function Login(): JSX.Element {
   const router = useRouter()
   const { user } = useUser()
   const [isLoggingIn, setIsLoggingIn] = useState(false)
@@ -38,38 +38,24 @@ export default function Home(): JSX.Element {
     if (user) router.push('/')
   }, [user])
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmailValid(validateEmail(e.target.value))
-    setEmailValue(e.target.value)
-  }
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmailValid(validateEmail(e.target.value))
+      setEmailValue(e.target.value)
+    },
+    [emailValue]
+  )
 
   const login = useCallback(
     async (email) => {
       if (isMounted() && errorMsg) setErrorMsg(undefined)
+      const result = await loginWithEmail(email)
 
-      try {
-        const magic = new Magic(NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY)
-        const didToken = await magic.auth.loginWithMagicLink({ email })
-
-        const res = await fetch(`${API_URL}/login`, {
-          method: 'POST',
-          mode: 'cors',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${didToken}`,
-          },
-          body: JSON.stringify({ email }),
-        })
-
-        if (res.status === 200) {
-          router.push('/')
-        } else {
-          throw new Error(await res.text())
-        }
-      } catch (err) {
-        console.error('An unexpected error occurred:', err)
-        if (isMounted()) setErrorMsg(err.message)
+      if (result.login.error) {
+        console.error('An unexpected error occurred:', result.login.error)
+        if (isMounted()) setErrorMsg(result.login.error)
+      } else {
+        router.push('/')
       }
     },
     [errorMsg]

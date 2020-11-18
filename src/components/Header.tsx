@@ -1,13 +1,34 @@
-import { Grid, Box, Link } from '@chakra-ui/core'
+import { Grid, Box, Link, Button } from '@chakra-ui/core'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
+import { GraphQLClient } from 'graphql-request'
 
-import { useUser } from 'hooks'
-import Logo from 'svg/artsflow.svg'
 import { API_URL } from 'lib/config'
+
+import { useUser, GET_ME } from 'hooks'
+import Logo from 'svg/artsflow.svg'
+
+import { logout } from 'services/auth'
+
+const client = new GraphQLClient(`${API_URL}/graphql`, {
+  credentials: 'include',
+})
 
 export function Header() {
   const { user } = useUser()
+  const router = useRouter()
+  const { mutate } = useSWR(GET_ME, (query) => client.request(query))
+
   if (!user) return <div />
+
+  const handleLogout = async () => {
+    console.log('handleLogout')
+    await logout()
+    mutate()
+    router.push('/')
+  }
+
   return (
     <Grid as="nav" py="4" px="4" gridTemplateColumns="auto auto 1fr auto" alignItems="center">
       <Box mx="8">
@@ -26,7 +47,7 @@ export function Header() {
         {user?.email}
       </Box>
       <Box>
-        <Link href={`${API_URL}/logout`}>Logout</Link>
+        <Button onClick={handleLogout}>Logout</Button>
       </Box>
     </Grid>
   )
