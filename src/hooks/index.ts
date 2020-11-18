@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { GraphQLClient, gql } from 'graphql-request'
+import { gql } from 'graphql-request'
 import useSWR from 'swr'
 
-import { API_URL } from 'lib/config'
+import { client } from 'services/client'
 
 export const GET_ME = gql`
   query getMe {
@@ -14,10 +14,6 @@ export const GET_ME = gql`
     }
   }
 `
-
-const client = new GraphQLClient(`${API_URL}/graphql`, {
-  credentials: 'include',
-})
 
 export function useUser() {
   const { data, isValidating } = useSWR(GET_ME, (query) => client.request(query))

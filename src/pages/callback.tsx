@@ -10,8 +10,7 @@ export default function Callback(): JSX.Element {
 
   const login = async () => {
     try {
-      const data = await loginWithGoogle()
-      console.log('loginWithGoogle', data)
+      await loginWithGoogle()
       router.push('/')
     } catch (err) {
       console.error('An unexpected error occurred:', err)
@@ -25,7 +24,7 @@ export default function Callback(): JSX.Element {
   return (
     <VStack h="100%" justifyContent="center" alignItems="center">
       <AfLogo width="142" height="186" />
-      <Text>redirecting...</Text>
+      <Text>Artsflow is logging you in...</Text>
     </VStack>
   )
 }
