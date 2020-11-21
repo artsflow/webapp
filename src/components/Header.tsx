@@ -1,4 +1,4 @@
-import { Grid, Box, Link, Button } from '@chakra-ui/core'
+import { Grid, Box, Link, Button, HStack } from '@chakra-ui/core'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -31,11 +31,14 @@ export function Header() {
           </Link>
         </NextLink>
       </Box>
-      <Box mx="8">
+      <HStack mx="8" spacing="8">
         <NextLink href="/add">
-          <Link>Add Activity</Link>
+          <Link>Add Service</Link>
         </NextLink>
-      </Box>
+        <NextLink href="/list">
+          <Link>List services</Link>
+        </NextLink>
+      </HStack>
       <Box mx="8" ml="auto">
         {user?.email}
       </Box>
