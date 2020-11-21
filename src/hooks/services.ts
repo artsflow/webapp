@@ -22,9 +22,7 @@ const TOGGLE_SERVICE = gql`
 
 async function toggleService(id: string) {
   const res = await client.request(TOGGLE_SERVICE, { id })
-  console.log('1')
   await mutate(LIST_SERVICES)
-  console.log('2', res)
   return res
 }
 

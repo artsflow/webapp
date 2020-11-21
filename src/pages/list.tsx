@@ -15,7 +15,7 @@ export default function ListServices() {
         <Skeleton isLoaded={!loading || data}>
           <HStack spacing="4">
             {data?.map((serviceData: any) => (
-              <Service key={data.id} {...serviceData} toggleService={toggleService} />
+              <Service key={serviceData.id} {...serviceData} toggleService={toggleService} />
             ))}
           </HStack>
         </Skeleton>
