@@ -18,9 +18,11 @@ import {
 } from '@chakra-ui/core'
 import { SearchIcon } from '@chakra-ui/icons'
 import { isEmpty } from 'lodash'
+import GoogleMapReact from 'google-map-react'
 
 import { Meta } from 'components'
 import { client } from 'services/client'
+import { GCP_MAPS_KEY } from 'lib/config'
 
 const ADD_SERVICE = gql`
   mutation addService($input: ServiceInput!) {
@@ -146,6 +148,8 @@ const AddressLookup = () => {
   )
 }
 
+const Marker: React.FC<any> = () => <Box w="8" h="8" borderRadius="16px" bg="red.400" />
+
 const AddressInfo = ({
   streetNumber,
   streetName,
@@ -153,8 +157,20 @@ const AddressInfo = ({
   municipality,
   countryCode,
   country,
+  position: { lat, lon: lng },
 }: any) => (
-  <Text>
-    {streetNumber} {streetName}, {municipality}, {extendedPostalCode}, {countryCode}, {country}{' '}
-  </Text>
+  <>
+    <Text>
+      {streetNumber} {streetName}, {municipality}, {extendedPostalCode}, {countryCode}, {country}{' '}
+    </Text>
+    <Box w="full" h="360px" border="1px" mt="2">
+      <GoogleMapReact
+        defaultCenter={{ lat, lng }}
+        defaultZoom={16}
+        bootstrapURLKeys={{ key: GCP_MAPS_KEY as string }}
+      >
+        <Marker lat={lat} lng={lng} />
+      </GoogleMapReact>
+    </Box>
+  </>
 )
