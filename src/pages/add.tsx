@@ -19,6 +19,7 @@ import {
 import { SearchIcon } from '@chakra-ui/icons'
 import { isEmpty } from 'lodash'
 import GoogleMapReact from 'google-map-react'
+import { useRouter } from 'next/router'
 
 import { Meta } from 'components'
 import { client } from 'services/client'
@@ -31,13 +32,15 @@ const ADD_SERVICE = gql`
 `
 
 export default function AddService() {
-  const { register, handleSubmit, errors, formState } = useForm()
+  const { register, handleSubmit, errors, formState, setValue } = useForm()
+  const router = useRouter()
+
   const onSubmit = async (data: any) => {
-    console.log(data)
-    if (!data) return
-    const variables = { input: { ...data, published: false } }
+    if (isEmpty(data)) return
+    const variables = { input: { ...data, address: JSON.parse(data.address), published: false } }
     const res = await client.request(ADD_SERVICE, variables)
     console.log(res)
+    router.push('/list')
   }
 
   return (
@@ -65,7 +68,10 @@ export default function AddService() {
                 ref={register({ required: true, maxLength: 200 })}
               />
             </Box>
-            <AddressLookup />
+            <Input type="hidden" name="address" ref={register({ required: true })} />
+            <AddressLookup
+              onAddress={(address: any) => setValue('address', JSON.stringify(address))}
+            />
             <Button type="submit" isLoading={formState.isSubmitting}>
               Submit
             </Button>
@@ -97,7 +103,7 @@ const GET_ADDRESS = gql`
   }
 `
 
-const AddressLookup = () => {
+const AddressLookup = ({ onAddress }: any) => {
   const [selectedAddress, setSelectedAddress]: any = useState({})
   const [lookupAddress, setLookupAddress] = useState('')
   const [addresses, setAddresses] = useState([])
@@ -137,7 +143,13 @@ const AddressLookup = () => {
         <List spacing="2">
           {addresses.map((a: any) => (
             <ListItem key={a.id}>
-              <Button variant="outline" onClick={() => setSelectedAddress(a)}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSelectedAddress(a)
+                  onAddress(a)
+                }}
+              >
                 {a.freeformAddress}
               </Button>
             </ListItem>
@@ -161,7 +173,7 @@ const AddressInfo = ({
 }: any) => (
   <>
     <Text>
-      {streetNumber} {streetName}, {municipality}, {extendedPostalCode}, {countryCode}, {country}{' '}
+      {streetNumber} {streetName}, {municipality}, {extendedPostalCode}, {countryCode}, {country}
     </Text>
     <Box w="full" h="360px" border="1px" mt="2">
       <GoogleMapReact
