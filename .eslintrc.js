@@ -36,7 +36,7 @@ module.exports = {
     'import/extensions': 0,
     'react/prop-types': 0,
     'react/react-in-jsx-scope': 'off',
-    'react/jsx-props-no-spreading': ['error', { custom: 'ignore' }],
+    'react/jsx-props-no-spreading': 0,
     'react/no-children-prop': 0,
     'prettier/prettier': 'error',
     'jsx-a11y/label-has-associated-control': 'off',

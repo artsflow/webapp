@@ -21,7 +21,7 @@ import { isEmpty } from 'lodash'
 import GoogleMapReact from 'google-map-react'
 import { useRouter } from 'next/router'
 
-import { Meta } from 'components'
+import { Meta, ImageUploader } from 'components'
 import { client } from 'services/client'
 import { GCP_MAPS_KEY } from 'lib/config'
 
@@ -50,6 +50,7 @@ export default function AddService() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl isInvalid={errors.name}>
           <VStack mt="8" w="md" alignItems="flex-start" spacing="4">
+            <ImageUploader />
             <Box w="full">
               <FormLabel htmlFor="title">Title</FormLabel>
               <Input
