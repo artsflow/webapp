@@ -1,28 +1,32 @@
 import { createMachine, assign } from 'xstate'
 import { createContext } from 'react'
 
+const defaultContext: ServiceContext = {
+  category: 'visual',
+  title: '',
+  description: '',
+}
+
 export const Context = createContext({})
+
 export const steps = ['category', 'title', 'description']
 
-interface ServiceContext {
-  category: string[]
+export interface ServiceContext {
+  category: string
   title: string
   description: string
 }
 
 interface ServiceEvent {
   type: 'NEXT' | 'PREV' | 'UPDATE'
+  data: ServiceContext
 }
 
 export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
   {
     key: 'machine',
     initial: 'category',
-    context: {
-      category: [],
-      title: '',
-      description: '',
-    },
+    context: defaultContext,
     states: {
       category: {
         on: {
@@ -53,7 +57,7 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
     actions: {
       stepUpdate: assign((ctx, evt) => {
         console.log('stepUpdate: ', ctx, evt)
-        return { ...ctx, ...evt }
+        return { ...ctx, ...evt.data }
       }),
     },
   }
