@@ -1,6 +1,8 @@
 import { createMachine, assign } from 'xstate'
 import { createContext } from 'react'
 
+import { TITLE_LENGTH, DESCRIPTION_LENGTH } from './config'
+
 const defaultContext: ServiceContext = {
   category: 'visual',
   title: '',
@@ -37,14 +39,14 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
       title: {
         on: {
           PREV: 'category',
-          NEXT: 'description',
+          NEXT: [{ target: 'description', cond: { type: 'titleValid' } }],
           UPDATE: { actions: 'stepUpdate' },
         },
       },
       description: {
         on: {
           PREV: 'title',
-          NEXT: 'complete',
+          NEXT: [{ target: 'complete', cond: { type: 'descriptionValid' } }],
           UPDATE: { actions: 'stepUpdate' },
         },
       },
@@ -56,9 +58,14 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
   {
     actions: {
       stepUpdate: assign((ctx, evt) => {
-        console.log('stepUpdate: ', ctx, evt)
+        // console.log('stepUpdate: ', ctx, evt)
         return { ...ctx, ...evt.data }
       }),
+    },
+    guards: {
+      titleValid: (ctx) => ctx.title.length > 20 && ctx.title.length <= TITLE_LENGTH,
+      descriptionValid: (ctx) =>
+        ctx.description.length > 100 && ctx.title.length <= DESCRIPTION_LENGTH,
     },
   }
 )

@@ -1,8 +1,9 @@
 import { memo, useContext } from 'react'
-import { Box, Input, Heading } from '@chakra-ui/core'
+import { Box, Input, InputGroup, InputRightElement, Heading } from '@chakra-ui/core'
 
 import { LoremIpsum } from 'lib/utils'
 import { Context } from '../machine'
+import { TITLE_LENGTH } from '../config'
 
 const Lipsum = memo(() => <LoremIpsum />)
 
@@ -11,19 +12,29 @@ export function Title() {
   const { title } = context
 
   const handleChange = (e: any) => {
-    send({ type: 'UPDATE', data: { title: e.target.value } })
+    send({ type: 'UPDATE', data: { title: e.target.value.substr(0, TITLE_LENGTH) } })
   }
 
   return (
     <Box>
       <Heading size="lg">Title</Heading>
-      <Input
-        my="4"
-        placeholder="add service title"
-        value={title}
-        onChange={handleChange}
-        autoFocus
-      />
+      <InputGroup>
+        <Input
+          my="4"
+          pr="60px"
+          placeholder="add service title"
+          value={title}
+          onChange={handleChange}
+          autoFocus
+        />
+        <InputRightElement
+          my="4"
+          mr="2"
+          fontSize="xs"
+          color="grey.300"
+          children={`${title.length}/${TITLE_LENGTH}`}
+        />
+      </InputGroup>
       <Lipsum />
     </Box>
   )
