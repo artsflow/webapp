@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 import { Button, HStack, Box, Text } from '@chakra-ui/core'
 
-import { steps, Context } from './machine'
+import { Context } from './machine'
+import { steps } from './config'
 
 interface Props {
   step: string

@@ -1,5 +1,6 @@
 import { createMachine, assign } from 'xstate'
 import { createContext } from 'react'
+import { isEmpty } from 'lodash'
 
 import { TITLE_LENGTH, DESCRIPTION_LENGTH } from './config'
 
@@ -7,16 +8,15 @@ const defaultContext: ServiceContext = {
   category: 'visual',
   title: '',
   description: '',
+  address: {},
 }
 
 export const Context = createContext({})
-
-export const steps = ['category', 'title', 'description']
-
 export interface ServiceContext {
   category: string
   title: string
   description: string
+  address: any
 }
 
 interface ServiceEvent {
@@ -27,7 +27,7 @@ interface ServiceEvent {
 export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
   {
     key: 'machine',
-    initial: 'category',
+    initial: 'address',
     context: defaultContext,
     states: {
       category: {
@@ -46,7 +46,14 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
       description: {
         on: {
           PREV: 'title',
-          NEXT: [{ target: 'complete', cond: { type: 'descriptionValid' } }],
+          NEXT: [{ target: 'address', cond: { type: 'descriptionValid' } }],
+          UPDATE: { actions: 'stepUpdate' },
+        },
+      },
+      address: {
+        on: {
+          PREV: 'description',
+          NEXT: [{ target: 'complete', cond: { type: 'addressValid' } }],
           UPDATE: { actions: 'stepUpdate' },
         },
       },
@@ -66,6 +73,7 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
       titleValid: (ctx) => ctx.title.length > 20 && ctx.title.length <= TITLE_LENGTH,
       descriptionValid: (ctx) =>
         ctx.description.length > 100 && ctx.title.length <= DESCRIPTION_LENGTH,
+      addressValid: (ctx) => !isEmpty(ctx.address),
     },
   }
 )
