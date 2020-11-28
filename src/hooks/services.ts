@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 import useSWR, { mutate } from 'swr'
 
-import { client } from 'services/client'
+import { client, makeClient } from 'services/client'
 
 const LIST_SERVICES = gql`
   query {
@@ -56,12 +56,18 @@ const GET_SERVICE = gql`
   }
 `
 
-export function useService(id: string) {
+export const fetchService = (id: string, reqCookies: any) => {
+  const serverClient = makeClient(reqCookies)
+  return serverClient.request(GET_SERVICE, { id })
+}
+
+export function useService(id: string, initialData = {}) {
   const { data, isValidating } = useSWR(
     id && id !== 'add' ? [GET_SERVICE, id] : null,
     (q: string) => client.request(q, { id }),
-    { revalidateOnFocus: false }
+    { initialData, revalidateOnFocus: false }
   )
+
   return { data: data?.getService, loading: isValidating }
 }
 

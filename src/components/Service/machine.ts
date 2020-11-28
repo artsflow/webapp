@@ -23,7 +23,7 @@ export interface ServiceContext {
 }
 
 interface ServiceEvent {
-  type: 'NEXT' | 'PREV' | 'UPDATE'
+  type: 'NEXT' | 'PREV' | 'UPDATE' | 'CLEAR'
   data: ServiceContext
 }
 
@@ -71,9 +71,19 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
         // type: 'final',
       },
     },
+    on: {
+      CLEAR: {
+        actions: 'clear',
+        target: 'category',
+      },
+    },
   },
   {
     actions: {
+      clear: () => {
+        console.log('CLEAR!!!!!!!!!!')
+        return assign(defaultContext)
+      },
       stepUpdate: assign((ctx, evt) => {
         // console.log('stepUpdate: ', ctx, evt)
         return { ...ctx, ...evt.data }
