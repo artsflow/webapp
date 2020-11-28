@@ -20,7 +20,7 @@ type User {
 type Activity {
    title: String!
    description: String!
-   pictures: [String]
+   images: [String]
    duration: Int!
    date: String!
    repeat: String

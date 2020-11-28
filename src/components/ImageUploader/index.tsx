@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { RiImageAddFill } from 'react-icons/ri'
-import { Box, Icon, Spinner, Image, IconButton } from '@chakra-ui/core'
+import { Box, Icon, Spinner, Image, IconButton, VStack } from '@chakra-ui/core'
 import { DeleteIcon } from '@chakra-ui/icons'
 import { gql } from 'graphql-request'
 
@@ -19,22 +19,23 @@ const DELETE_IMAGE = gql`
   }
 `
 
-export function ImageUploader() {
-  const [fileName, setFileName] = useState('')
+export function ImageUploader({ onUpload, onDelete, imageId }: any) {
+  const [fileName, setFileName] = useState(imageId)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleDelete = useCallback(async () => {
     console.log('remove', fileName)
     setFileName('')
     await client.request(DELETE_IMAGE, { id: fileName })
+    onDelete(fileName)
   }, [fileName])
 
   const onDrop = useCallback(async ([file]) => {
     setIsLoading(true)
-    const res = await client.request(UPLOAD_IMAGE, { file })
+    const { uploadImage } = await client.request(UPLOAD_IMAGE, { file })
     setIsLoading(false)
-    setFileName(res?.uploadImage)
-    console.log(res)
+    setFileName(uploadImage)
+    onUpload(uploadImage)
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -47,8 +48,8 @@ export function ImageUploader() {
       {fileName ? (
         <Box pos="relative">
           <Image
-            boxSize="100px"
-            src={`https://ik.imagekit.io/artsflow/${fileName}?tr=h-100,w-100`}
+            boxSize="160px"
+            src={`https://ik.imagekit.io/artsflow/${fileName}?tr=h-160,w-160`}
           />
           <IconButton
             top="3"
@@ -66,10 +67,12 @@ export function ImageUploader() {
           {!isLoading ? (
             <>
               <input {...getInputProps()} />
-              <Icon w="100px" h="100px" as={RiImageAddFill} color="grey" />
+              <Icon w="160px" h="160px" as={RiImageAddFill} color="grey" />
             </>
           ) : (
-            <Spinner size="xl" />
+            <VStack alignItems="center" justifyContent="center" h="full">
+              <Spinner size="xl" />
+            </VStack>
           )}
         </Box>
       )}

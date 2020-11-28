@@ -25,7 +25,6 @@ export default function ManageService({ initialData }: any) {
 }
 
 export async function getServerSideProps(context: any) {
-  console.log('getServerSideProps')
   const {
     query: { id },
     req,

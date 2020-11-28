@@ -11,6 +11,7 @@ export const defaultContext: ServiceContext = {
   title: '',
   description: '',
   address: {},
+  images: [],
 }
 
 export const Context = createContext({})
@@ -20,17 +21,20 @@ export interface ServiceContext {
   title: string
   description: string
   address: any
+  images: string[]
 }
 
 interface ServiceEvent {
   type: 'NEXT' | 'PREV' | 'UPDATE' | 'CLEAR'
-  data: ServiceContext
+  data: any
+  action: string
 }
 
 export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
   {
     key: 'machine',
-    initial: 'category',
+    // initial: 'category',
+    initial: 'images',
     context: defaultContext,
     states: {
       category: {
@@ -56,13 +60,20 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
       address: {
         on: {
           PREV: 'description',
-          NEXT: [{ target: 'complete', cond: { type: 'addressValid' } }],
+          NEXT: [{ target: 'images', cond: { type: 'addressValid' } }],
+          UPDATE: { actions: 'stepUpdate' },
+        },
+      },
+      images: {
+        on: {
+          PREV: 'address',
+          NEXT: [{ target: 'complete', cond: { type: 'imagesValid' } }],
           UPDATE: { actions: 'stepUpdate' },
         },
       },
       complete: {
         on: {
-          PREV: 'address',
+          PREV: 'images',
         },
         invoke: {
           id: 'update-service',
@@ -80,13 +91,17 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
   },
   {
     actions: {
-      clear: () => {
-        console.log('CLEAR!!!!!!!!!!')
-        return assign(defaultContext)
-      },
+      clear: () => assign(defaultContext),
       stepUpdate: assign((ctx, evt) => {
         // console.log('stepUpdate: ', ctx, evt)
-        return { ...ctx, ...evt.data }
+        switch (evt.action) {
+          case 'addImage':
+            return { ...ctx, images: [...ctx.images, evt.data.imageId] }
+          case 'removeImage':
+            return { ...ctx, images: ctx.images.filter((id: string) => id !== evt.data.imageId) }
+          default:
+            return { ...ctx, ...evt.data }
+        }
       }),
     },
     guards: {
@@ -94,6 +109,7 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
       descriptionValid: (ctx) =>
         ctx.description.length > 100 && ctx.title.length <= DESCRIPTION_LENGTH,
       addressValid: (ctx) => !isEmpty(ctx.address),
+      imagesValid: (ctx) => ctx.images.length === 3,
     },
   }
 )

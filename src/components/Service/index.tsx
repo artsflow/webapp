@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/core'
 import { useMachine } from '@xstate/react'
 
-import { Category, Title, Description, Complete, Address } from './steps'
+import { Category, Title, Description, Complete, Address, Images } from './steps'
 import { serviceMachine, Context } from './machine'
 import { Navigation } from './Navigation'
 
@@ -15,6 +15,7 @@ const stepsMap: StepsMap = {
   description: Description,
   complete: Complete,
   address: Address,
+  images: Images,
 }
 
 export function Service({ data }: any) {
