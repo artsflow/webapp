@@ -9,6 +9,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta charSet="utf-8" />
+          <link rel="stylesheet" type="text/css" href="/nprogress.css" />
           <script
             type="text/javascript"
             src={`https://maps.google.com/maps/api/js?key=${GCP_MAPS_KEY}`}
