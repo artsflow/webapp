@@ -32,7 +32,7 @@ export function Header() {
         </NextLink>
       </Box>
       <HStack mx="8" spacing="8">
-        <NextLink href="/add">
+        <NextLink href="/service/add">
           <Link>Add Service</Link>
         </NextLink>
         <NextLink href="/list">

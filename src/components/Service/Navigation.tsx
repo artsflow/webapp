@@ -10,13 +10,16 @@ interface Props {
 
 export function Navigation({ step }: Props) {
   const { send } = useContext(Context) as any
+  const index = steps.indexOf(step)
 
   return (
     <HStack w="full" justify="space-between">
-      <Button onClick={() => send('PREV')}>Prev</Button>
+      <Button onClick={() => send('PREV')} disabled={index === 0}>
+        Prev
+      </Button>
       <Box>
         <Text>
-          {steps.indexOf(step) + 1}/{steps.length}
+          {index + 1}/{steps.length}
         </Text>
       </Box>
       <Button onClick={() => send('NEXT')}>Next</Button>

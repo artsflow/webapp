@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/core'
 import { useMachine } from '@xstate/react'
 
 import { Category, Title, Description, Complete, Address } from './steps'
-import { serviceMachine, Context } from './machine'
+import { serviceMachine, Context, defaultContext } from './machine'
 import { Navigation } from './Navigation'
 
 interface StepsMap {
@@ -17,11 +17,13 @@ const stepsMap: StepsMap = {
   address: Address,
 }
 
-export function Service() {
-  const [machine, send] = useMachine(serviceMachine)
+export function Service({ data }: any) {
+  // console.log('Service data:', data)
+  const [machine, send] = useMachine(serviceMachine.withContext(data || defaultContext))
   const { context, value } = machine
   const currentStep = value as string
   const Screen = stepsMap[currentStep]
+  // console.log('Service ctx:', context)
 
   return (
     <Context.Provider value={{ context, send }}>

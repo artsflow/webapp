@@ -2,9 +2,11 @@ import { createMachine, assign } from 'xstate'
 import { createContext } from 'react'
 import { isEmpty } from 'lodash'
 
+import { updateService } from 'hooks/services'
 import { TITLE_LENGTH, DESCRIPTION_LENGTH } from './config'
 
-const defaultContext: ServiceContext = {
+export const defaultContext: ServiceContext = {
+  id: '',
   category: 'visual',
   title: '',
   description: '',
@@ -13,6 +15,7 @@ const defaultContext: ServiceContext = {
 
 export const Context = createContext({})
 export interface ServiceContext {
+  id: string
   category: string
   title: string
   description: string
@@ -27,7 +30,7 @@ interface ServiceEvent {
 export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
   {
     key: 'machine',
-    initial: 'address',
+    initial: 'category',
     context: defaultContext,
     states: {
       category: {
@@ -58,7 +61,14 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
         },
       },
       complete: {
-        type: 'final',
+        on: {
+          PREV: 'address',
+        },
+        invoke: {
+          id: 'update-service',
+          src: updateService,
+        },
+        // type: 'final',
       },
     },
   },
@@ -70,7 +80,7 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
       }),
     },
     guards: {
-      titleValid: (ctx) => ctx.title.length > 20 && ctx.title.length <= TITLE_LENGTH,
+      titleValid: (ctx) => ctx.title.length >= 20 && ctx.title.length <= TITLE_LENGTH,
       descriptionValid: (ctx) =>
         ctx.description.length > 100 && ctx.title.length <= DESCRIPTION_LENGTH,
       addressValid: (ctx) => !isEmpty(ctx.address),

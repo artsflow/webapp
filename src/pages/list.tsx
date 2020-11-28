@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Text, Box, VStack, HStack, Button, Skeleton } from '@chakra-ui/core'
+import { useRouter } from 'next/router'
 
 import { Meta } from 'components'
 import { useServices } from 'hooks/services'
@@ -26,6 +27,7 @@ export default function ListServices() {
 
 const Service = ({ id, title, description, published, toggleService }: any) => {
   const [loadingValue, setLoading] = useState(false)
+  const router = useRouter()
 
   const handleToggle = async () => {
     setLoading(true)
@@ -33,12 +35,16 @@ const Service = ({ id, title, description, published, toggleService }: any) => {
     setLoading(false)
   }
 
+  const handleEdit = () => {
+    router.push(`/service/${id}`)
+  }
+
   return (
     <Box border="1px" p="4" minW="16">
       <Text fontWeight="bold">{title}</Text>
       <Text>{description}</Text>
       <HStack mt="4">
-        <Button>Edit</Button>
+        <Button onClick={handleEdit}>Edit</Button>
         <Button
           isLoading={loadingValue}
           bg={published ? 'red.200' : 'green.200'}
