@@ -25,7 +25,7 @@ export interface ServiceContext {
 }
 
 interface ServiceEvent {
-  type: 'NEXT' | 'PREV' | 'UPDATE' | 'CLEAR'
+  type: 'NEXT' | 'PREV' | 'UPDATE' | 'CLEAR' | 'SAVE'
   data: any
   action: string
 }
@@ -33,8 +33,8 @@ interface ServiceEvent {
 export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
   {
     key: 'machine',
-    // initial: 'category',
-    initial: 'images',
+    initial: 'category',
+    // initial: 'images',
     context: defaultContext,
     states: {
       category: {
@@ -75,23 +75,17 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
         on: {
           PREV: 'images',
         },
-        invoke: {
-          id: 'update-service',
-          src: updateService,
-        },
+        invoke: { src: 'updateService' },
         // type: 'final',
       },
     },
     on: {
-      CLEAR: {
-        actions: 'clear',
-        target: 'category',
-      },
+      SAVE: { actions: 'save' },
     },
   },
   {
     actions: {
-      clear: () => assign(defaultContext),
+      save: updateService,
       stepUpdate: assign((ctx, evt) => {
         // console.log('stepUpdate: ', ctx, evt)
         switch (evt.action) {

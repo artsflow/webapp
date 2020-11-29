@@ -52,6 +52,7 @@ const GET_SERVICE = gql`
           lon
         }
       }
+      images
     }
   }
 `

@@ -49,7 +49,7 @@ export function ImageUploader({ onUpload, onDelete, imageId }: any) {
         <Box pos="relative">
           <Image
             boxSize="160px"
-            src={`https://ik.imagekit.io/artsflow/${fileName}?tr=h-160,w-160`}
+            src={`https://ik.imagekit.io/artsflow/tr:w-160,h-160,fo-auto/${fileName}`}
           />
           <IconButton
             top="3"

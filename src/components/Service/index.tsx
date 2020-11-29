@@ -13,9 +13,9 @@ const stepsMap: StepsMap = {
   category: Category,
   title: Title,
   description: Description,
-  complete: Complete,
   address: Address,
   images: Images,
+  complete: Complete,
 }
 
 export function Service({ data }: any) {

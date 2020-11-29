@@ -14,11 +14,13 @@ export function Images() {
   const handleUpload = (imageId: string) => {
     console.log('handleUpload', imageId)
     send({ type: 'UPDATE', action: 'addImage', data: { imageId } })
+    send('SAVE')
   }
 
   const handleDelete = (imageId: string) => {
     console.log('handleDelete', imageId)
     send({ type: 'UPDATE', action: 'removeImage', data: { imageId } })
+    send('SAVE')
   }
 
   return (
