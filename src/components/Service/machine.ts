@@ -3,6 +3,7 @@ import { createContext } from 'react'
 import { isEmpty } from 'lodash'
 
 import { updateService } from 'hooks/services'
+import { showAlert } from 'lib/utils'
 import { TITLE_LENGTH, DESCRIPTION_LENGTH } from './config'
 
 export const defaultContext: ServiceContext = {
@@ -99,11 +100,35 @@ export const serviceMachine = createMachine<ServiceContext, ServiceEvent>(
       }),
     },
     guards: {
-      titleValid: (ctx) => ctx.title.length >= 20 && ctx.title.length <= TITLE_LENGTH,
+      titleValid: (ctx) =>
+        checkGuard(
+          'Invalid title',
+          'Title should have minimum 20 characters',
+          ctx.title.length >= 20 && ctx.title.length <= TITLE_LENGTH
+        ),
       descriptionValid: (ctx) =>
-        ctx.description.length > 100 && ctx.title.length <= DESCRIPTION_LENGTH,
-      addressValid: (ctx) => !isEmpty(ctx.address),
-      imagesValid: (ctx) => ctx.images.length === 3,
+        checkGuard(
+          'Invalid description',
+          'Description should have minimum 100 characters',
+          ctx.description.length > 100 && ctx.description.length <= DESCRIPTION_LENGTH
+        ),
+      addressValid: (ctx) =>
+        checkGuard(
+          'Invalid address',
+          'You need to select an address from the list',
+          !isEmpty(ctx.address)
+        ),
+      imagesValid: (ctx) =>
+        checkGuard('Upload incomplete', 'Minimum 3 images are required', ctx.images.length >= 3),
     },
   }
 )
+
+const checkGuard = (title: string, description: string, cond: boolean) => {
+  if (!cond)
+    showAlert({
+      title,
+      description,
+    })
+  return cond
+}
