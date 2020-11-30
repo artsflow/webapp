@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 import useSWR, { mutate } from 'swr'
+import Router from 'next/router'
 
 import { client, makeClient } from 'services/client'
 
@@ -53,6 +54,8 @@ const GET_SERVICE = gql`
         }
       }
       images
+      step
+      published
     }
   }
 `
@@ -82,4 +85,20 @@ export async function updateService(ctx: any) {
   console.log('updateService:', ctx)
   const variables = { input: { ...ctx } }
   await client.request(UPDATE_SERVICE, variables)
+}
+
+const ADD_SERVICE = gql`
+  mutation addService($input: ServiceInput!) {
+    addService(input: $input)
+  }
+`
+
+export async function addService(ctx: any) {
+  console.log('addService:')
+  if (ctx.id) return
+
+  const variables = { input: { ...ctx } }
+  const res = await client.request(ADD_SERVICE, variables)
+
+  Router.replace(`/service/${res.addService}`)
 }

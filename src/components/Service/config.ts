@@ -9,6 +9,7 @@ export const steps = [
   'frequency',
   'capacity',
   'price',
+  'complete',
 ]
 
 export const TITLE_LENGTH = 80

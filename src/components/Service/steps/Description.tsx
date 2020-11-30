@@ -10,6 +10,7 @@ const Lipsum = memo(() => <LoremIpsum p={1} />)
 export function Description() {
   const { send, context } = useContext(Context) as any
   const { description } = context
+  console.log(context)
 
   const handleChange = (e: any) => {
     send({ type: 'UPDATE', data: { description: e.target.value.substr(0, DESCRIPTION_LENGTH) } })
