@@ -9,7 +9,7 @@ const LIST_SERVICES = gql`
     listServices {
       id
       title
-      description
+      step
       published
     }
   }

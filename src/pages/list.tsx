@@ -25,9 +25,10 @@ export default function ListServices() {
   )
 }
 
-const Service = ({ id, title, description, published, toggleService }: any) => {
+const Service = ({ id, title, step, published, toggleService }: any) => {
   const [loadingValue, setLoading] = useState(false)
   const router = useRouter()
+  const isCompleted = step === 'complete'
 
   const handleToggle = async () => {
     setLoading(true)
@@ -42,11 +43,11 @@ const Service = ({ id, title, description, published, toggleService }: any) => {
   return (
     <Box border="1px" p="4" minW="16">
       <Text fontWeight="bold">{title}</Text>
-      <Text>{description}</Text>
       <HStack mt="4">
-        <Button onClick={handleEdit}>Edit</Button>
+        <Button onClick={handleEdit}>{isCompleted ? 'Edit' : 'Continue...'}</Button>
         <Button
           isLoading={loadingValue}
+          disabled={!isCompleted}
           bg={published ? 'red.200' : 'green.200'}
           onClick={handleToggle}
         >
