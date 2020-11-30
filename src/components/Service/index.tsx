@@ -16,7 +16,6 @@ import {
 } from './steps'
 import { makeServiceMachine, Context } from './machine'
 import { Navigation } from './Navigation'
-import { steps } from './config'
 
 interface StepsMap {
   [key: string]: React.FC
@@ -36,10 +35,8 @@ const stepsMap: StepsMap = {
   complete: Complete,
 }
 
-const nextStep = (s: string) => steps[steps.indexOf(s) + 1]
-
 export function Service({ data }: any) {
-  const [machine, send] = useMachine(makeServiceMachine(nextStep(data?.step)), {
+  const [machine, send] = useMachine(makeServiceMachine(data?.step), {
     context: data,
     devTools: true,
   })

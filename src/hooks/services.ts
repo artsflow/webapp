@@ -3,6 +3,7 @@ import useSWR, { mutate } from 'swr'
 import Router from 'next/router'
 
 import { client, makeClient } from 'services/client'
+import { steps } from 'components/Service/config'
 
 const LIST_SERVICES = gql`
   query {
@@ -92,12 +93,13 @@ const ADD_SERVICE = gql`
     addService(input: $input)
   }
 `
+const nextStep = (s: string) => steps[steps.indexOf(s) + 1]
 
 export async function addService(ctx: any) {
-  console.log('addService:')
+  console.log('addService:', ctx)
   if (ctx.id) return
 
-  const variables = { input: { ...ctx } }
+  const variables = { input: { ...ctx, step: nextStep(ctx.step) } }
   const res = await client.request(ADD_SERVICE, variables)
 
   Router.replace(`/service/${res.addService}`)
