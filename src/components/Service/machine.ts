@@ -13,6 +13,11 @@ export const defaultContext: ServiceContext = {
   description: '',
   address: {},
   images: [],
+  video: '',
+  duration: 0,
+  frequency: '',
+  capacity: 0,
+  price: 0,
   step: 'category',
   published: false,
 }
@@ -25,6 +30,11 @@ export interface ServiceContext {
   description: string
   address: any
   images: string[]
+  video: string
+  duration: number
+  frequency: string
+  capacity: number
+  price: number
   step: string
   published: boolean
 }
@@ -73,13 +83,48 @@ export const makeServiceMachine = (initial: string) =>
         images: {
           on: {
             PREV: 'address',
-            NEXT: [{ target: 'complete', cond: { type: 'imagesValid' } }],
+            NEXT: [{ target: 'video', cond: { type: 'imagesValid' } }],
+            UPDATE: { actions: 'stepUpdate' },
+          },
+        },
+        video: {
+          on: {
+            PREV: 'images',
+            NEXT: [{ target: 'duration', cond: { type: 'videoValid' } }],
+            UPDATE: { actions: 'stepUpdate' },
+          },
+        },
+        duration: {
+          on: {
+            PREV: 'video',
+            NEXT: [{ target: 'frequency', cond: { type: 'durationValid' } }],
+            UPDATE: { actions: 'stepUpdate' },
+          },
+        },
+        frequency: {
+          on: {
+            PREV: 'duration',
+            NEXT: [{ target: 'capacity', cond: { type: 'frequencyValid' } }],
+            UPDATE: { actions: 'stepUpdate' },
+          },
+        },
+        capacity: {
+          on: {
+            PREV: 'frequency',
+            NEXT: [{ target: 'price', cond: { type: 'capacityValid' } }],
+            UPDATE: { actions: 'stepUpdate' },
+          },
+        },
+        price: {
+          on: {
+            PREV: 'capacity',
+            NEXT: [{ target: 'complete', cond: { type: 'priceValid' } }],
             UPDATE: { actions: 'stepUpdate' },
           },
         },
         complete: {
           on: {
-            PREV: 'images',
+            PREV: 'capacity',
           },
           invoke: { src: 'updateService' },
           // type: 'final',
@@ -129,6 +174,11 @@ export const makeServiceMachine = (initial: string) =>
           ),
         imagesValid: (ctx) =>
           checkGuard('Upload incomplete', 'Minimum 3 images are required', ctx.images.length >= 3),
+        videoValid: () => true,
+        durationValid: () => true,
+        frequencyValid: () => true,
+        capacityValid: () => true,
+        priceValid: () => true,
       },
     }
   )

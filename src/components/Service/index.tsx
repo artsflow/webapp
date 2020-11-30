@@ -1,7 +1,19 @@
 import { VStack } from '@chakra-ui/core'
 import { useMachine } from '@xstate/react'
 
-import { Category, Title, Description, Complete, Address, Images } from './steps'
+import {
+  Category,
+  Title,
+  Description,
+  Complete,
+  Address,
+  Images,
+  Video,
+  Duration,
+  Frequency,
+  Capacity,
+  Price,
+} from './steps'
 import { makeServiceMachine, Context } from './machine'
 import { Navigation } from './Navigation'
 import { steps } from './config'
@@ -16,6 +28,11 @@ const stepsMap: StepsMap = {
   description: Description,
   address: Address,
   images: Images,
+  video: Video,
+  duration: Duration,
+  frequency: Frequency,
+  capacity: Capacity,
+  price: Price,
   complete: Complete,
 }
 

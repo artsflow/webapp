@@ -1,10 +1,10 @@
 import { Box, Text, Heading } from '@chakra-ui/core'
 
-export function Complete() {
+export function Duration() {
   return (
     <Box w="full">
       <Heading mb="4" size="lg">
-        Complete
+        Duration
       </Heading>
       <Text>not implemented</Text>
     </Box>
