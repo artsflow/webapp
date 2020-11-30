@@ -1,11 +1,8 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { Box, Input, InputGroup, InputRightElement, Heading } from '@chakra-ui/core'
 
-import { LoremIpsum } from 'lib/utils'
 import { Context } from '../machine'
-import { TITLE_LENGTH } from '../config'
-
-const Lipsum = memo(() => <LoremIpsum />)
+import { TITLE_LENGTH, Lipsum } from '../config'
 
 export function Title() {
   const { send, context } = useContext(Context) as any

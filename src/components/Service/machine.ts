@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash'
 
 import { updateService, addService } from 'hooks/services'
 import { showAlert } from 'lib/utils'
-import { TITLE_LENGTH, DESCRIPTION_LENGTH } from './config'
+import { TITLE_LENGTH, DESCRIPTION_LENGTH, DURATION_MIN, DURATION_MAX } from './config'
 
 export const defaultContext: ServiceContext = {
   id: '',
@@ -14,10 +14,10 @@ export const defaultContext: ServiceContext = {
   address: {},
   images: [],
   video: '',
-  duration: 0,
+  duration: 60,
   frequency: '',
-  capacity: 0,
-  price: 0,
+  capacity: 1,
+  price: 20,
   step: 'category',
   published: false,
 }
@@ -186,7 +186,12 @@ export const makeServiceMachine = (initial: string) =>
         imagesValid: (ctx) =>
           checkGuard('Upload incomplete', 'Minimum 3 images are required', ctx.images.length >= 3),
         videoValid: () => true,
-        durationValid: () => true,
+        durationValid: (ctx) =>
+          checkGuard(
+            'Invalid duration',
+            'Duration is between 30 and 360 minutes',
+            ctx.duration >= DURATION_MIN && ctx.duration <= DURATION_MAX
+          ),
         frequencyValid: () => true,
         capacityValid: () => true,
         priceValid: () => true,

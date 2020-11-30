@@ -1,11 +1,8 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { Box, Textarea, InputGroup, InputRightElement, Heading } from '@chakra-ui/core'
 
-import { LoremIpsum } from 'lib/utils'
 import { Context } from '../machine'
-import { DESCRIPTION_LENGTH } from '../config'
-
-const Lipsum = memo(() => <LoremIpsum p={1} />)
+import { DESCRIPTION_LENGTH, Lipsum } from '../config'
 
 export function Description() {
   const { send, context } = useContext(Context) as any
