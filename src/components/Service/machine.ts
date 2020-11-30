@@ -45,6 +45,24 @@ interface ServiceEvent {
   action: string
 }
 
+interface MakeStepsProps {
+  step: string
+  prev: string
+  next: string
+  cond: string
+  extra?: any
+}
+
+const makeStep = ({ step, prev, next, cond, extra }: MakeStepsProps) => ({
+  [step]: {
+    on: {
+      PREV: prev,
+      NEXT: [{ target: next, cond: { type: cond } }],
+      UPDATE: { actions: 'stepUpdate' },
+    },
+    ...extra,
+  },
+})
 export const makeServiceMachine = (initial: string) =>
   createMachine<ServiceContext, ServiceEvent>(
     {
@@ -58,70 +76,63 @@ export const makeServiceMachine = (initial: string) =>
             UPDATE: { actions: 'stepUpdate' },
           },
         },
-        title: {
-          on: {
-            PREV: 'category',
-            NEXT: [{ target: 'description', cond: { type: 'titleValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
+        ...makeStep({
+          step: 'title',
+          prev: 'category',
+          next: 'description',
+          cond: 'titleValid',
+        }),
+        ...makeStep({
+          step: 'description',
+          prev: 'title',
+          next: 'address',
+          cond: 'descriptionValid',
+        }),
+        ...makeStep({
+          step: 'address',
+          prev: 'description',
+          next: 'images',
+          cond: 'addressValid',
+          extra: {
+            invoke: { src: addService },
           },
-        },
-        description: {
-          on: {
-            PREV: 'title',
-            NEXT: [{ target: 'address', cond: { type: 'descriptionValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
-        address: {
-          invoke: { src: addService },
-          on: {
-            PREV: 'description',
-            NEXT: [{ target: 'images', cond: { type: 'addressValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
-        images: {
-          on: {
-            PREV: 'address',
-            NEXT: [{ target: 'video', cond: { type: 'imagesValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
-        video: {
-          on: {
-            PREV: 'images',
-            NEXT: [{ target: 'duration', cond: { type: 'videoValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
-        duration: {
-          on: {
-            PREV: 'video',
-            NEXT: [{ target: 'frequency', cond: { type: 'durationValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
-        frequency: {
-          on: {
-            PREV: 'duration',
-            NEXT: [{ target: 'capacity', cond: { type: 'frequencyValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
-        capacity: {
-          on: {
-            PREV: 'frequency',
-            NEXT: [{ target: 'price', cond: { type: 'capacityValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
-        price: {
-          on: {
-            PREV: 'capacity',
-            NEXT: [{ target: 'complete', cond: { type: 'priceValid' } }],
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
+        }),
+        ...makeStep({
+          step: 'images',
+          prev: 'address',
+          next: 'video',
+          cond: 'imagesValid',
+        }),
+        ...makeStep({
+          step: 'video',
+          prev: 'images',
+          next: 'duration',
+          cond: 'videoValid',
+        }),
+        ...makeStep({
+          step: 'duration',
+          prev: 'video',
+          next: 'frequency',
+          cond: 'durationValid',
+        }),
+        ...makeStep({
+          step: 'frequency',
+          prev: 'duration',
+          next: 'capacity',
+          cond: 'frequencyValid',
+        }),
+        ...makeStep({
+          step: 'capacity',
+          prev: 'frequency',
+          next: 'price',
+          cond: 'capacityValid',
+        }),
+        ...makeStep({
+          step: 'price',
+          prev: 'capacity',
+          next: 'complete',
+          cond: 'priceValid',
+        }),
         complete: {
           on: {
             PREV: 'capacity',
