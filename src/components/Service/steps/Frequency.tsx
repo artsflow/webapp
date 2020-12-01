@@ -15,7 +15,7 @@ import {
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { isEmpty, uniq, pick } from 'lodash'
 import { RRule, RRuleSet, Weekday, rrulestr } from 'rrule'
-import { getDate, getMonth, getYear, addMonths, format } from 'date-fns'
+import { getDate, getMonth, getYear, format } from 'date-fns'
 
 import { Context } from '../machine'
 
@@ -66,7 +66,7 @@ export function Frequency() {
       interval: state.interval,
       byweekday: state.days.map((d) => weekDaysMap[d]),
       dtstart: dstart,
-      until: addMonths(dstart, 3),
+      count: 10,
     })
 
     setState({ ...state, rrules: uniq([...state.rrules, rule.toString()]) })
