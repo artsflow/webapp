@@ -120,8 +120,8 @@ export function Frequency() {
           {!isEmpty(state.rrules) && <Text fontWeight="bold">Rules:</Text>}
           <VStack align="flex-start" height="220px" overflow="scroll" w="full">
             {state.rrules.map((r) => (
-              <HStack key={r}>
-                <Text fontSize="xs">{ruleText(r)}</Text>
+              <HStack key={r} w="full" justify="space-between">
+                <Text fontSize="xs">{ruleText(r).replace(' for 10 times', '')}</Text>
                 <IconButton
                   aria-label="Delete rule"
                   icon={<DeleteIcon />}
