@@ -24,7 +24,7 @@ export function Duration() {
     duration >= DURATION_MIN && duration <= DURATION_MAX ? humanize(duration * 1000 * 60) : ''
 
   const handleChange = (_: string, value: number) => {
-    send({ type: 'UPDATE', data: { duration: value } })
+    send({ type: 'UPDATE', data: { duration: value, meta: { isDirty: true } } })
   }
 
   return (

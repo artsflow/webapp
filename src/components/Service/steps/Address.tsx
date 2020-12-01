@@ -9,7 +9,7 @@ export function Address() {
   const { address } = context
 
   const handleAddress = (selectedAddress: any) => {
-    send({ type: 'UPDATE', data: { address: selectedAddress } })
+    send({ type: 'UPDATE', data: { address: selectedAddress, meta: { isDirty: true } } })
   }
 
   return (

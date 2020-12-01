@@ -1,6 +1,7 @@
 import { gql } from 'graphql-request'
 import useSWR, { mutate } from 'swr'
 import Router from 'next/router'
+import { omit } from 'lodash'
 
 import { client, makeClient } from 'services/client'
 import { nextStep } from 'components/Service/config'
@@ -91,9 +92,10 @@ const UPDATE_SERVICE = gql`
 `
 
 export async function updateService(ctx: any) {
-  console.log('updateService:', ctx)
-  const variables = { input: { ...ctx } }
-  await client.request(UPDATE_SERVICE, variables)
+  console.log('updateService')
+  if (!ctx.meta.isDirty) return false
+  const variables = { input: { ...omit(ctx, ['meta']) } }
+  return client.request(UPDATE_SERVICE, variables)
 }
 
 const ADD_SERVICE = gql`
@@ -105,7 +107,7 @@ export async function addService(ctx: any) {
   console.log('addService:', ctx)
   if (ctx.id) return
 
-  const variables = { input: { ...ctx, step: nextStep(ctx.step) } }
+  const variables = { input: { ...omit(ctx, ['meta']), step: nextStep(ctx.step) } }
   const res = await client.request(ADD_SERVICE, variables)
 
   Router.replace(`/service/${res.addService}`)

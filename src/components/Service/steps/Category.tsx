@@ -14,7 +14,7 @@ export function Category() {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'category',
     defaultValue: category,
-    onChange: (c) => send({ type: 'UPDATE', data: { category: c } }),
+    onChange: (c) => send({ type: 'UPDATE', data: { category: c, meta: { isDirty: true } } }),
   })
 
   const group = getRootProps()

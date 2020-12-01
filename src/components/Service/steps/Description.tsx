@@ -10,7 +10,10 @@ export function Description() {
   console.log(context)
 
   const handleChange = (e: any) => {
-    send({ type: 'UPDATE', data: { description: e.target.value.substr(0, DESCRIPTION_LENGTH) } })
+    send({
+      type: 'UPDATE',
+      data: { description: e.target.value.substr(0, DESCRIPTION_LENGTH), meta: { isDirty: true } },
+    })
   }
 
   return (

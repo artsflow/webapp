@@ -17,7 +17,7 @@ import { isEmpty, uniq, pick } from 'lodash'
 import { RRule, RRuleSet, Weekday, rrulestr } from 'rrule'
 import { getDate, getMonth, getYear, format } from 'date-fns'
 
-import { Context } from '../machine'
+import { Context, Meta } from '../machine'
 
 const weekDaysMap: Record<string, Weekday> = {
   Mo: RRule.MO,
@@ -34,11 +34,12 @@ interface State {
   interval: number
   rrules: string[]
   exdate: string[]
+  meta: Meta
 }
 
 export function Frequency() {
   const { send, context } = useContext(Context) as any
-  const { frequency } = context
+  const { frequency, meta } = context
 
   const initialState: State = {
     days: [],
@@ -46,6 +47,7 @@ export function Frequency() {
     interval: 1,
     rrules: frequency.rrules,
     exdate: frequency.exdate,
+    meta,
   }
   const [state, setState] = useState(initialState)
   const isDisabled = isEmpty(state.days) || !state.time.length
@@ -69,17 +71,25 @@ export function Frequency() {
       count: 10,
     })
 
-    setState({ ...state, rrules: uniq([...state.rrules, rule.toString()]) })
+    setState({
+      ...state,
+      rrules: uniq([...state.rrules, rule.toString()]),
+      meta: { isDirty: true },
+    })
   }
 
   const toggleExDate = (d: string) => {
     const isExcluded = state.exdate.includes(d)
-    if (!isExcluded) setState({ ...state, exdate: [...state.exdate, d] })
-    else setState({ ...state, exdate: state.exdate.filter((e) => e !== d) })
+    if (!isExcluded) setState({ ...state, exdate: [...state.exdate, d], meta: { isDirty: true } })
+    else
+      setState({ ...state, exdate: state.exdate.filter((e) => e !== d), meta: { isDirty: true } })
   }
 
   useEffect(() => {
-    send({ type: 'UPDATE', data: { frequency: pick(state, ['rrules', 'exdate']) } })
+    send({
+      type: 'UPDATE',
+      data: { frequency: pick(state, ['rrules', 'exdate']), meta: state.meta },
+    })
   }, [state.rrules, state.exdate])
 
   return (

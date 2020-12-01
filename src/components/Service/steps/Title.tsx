@@ -9,7 +9,10 @@ export function Title() {
   const { title } = context
 
   const handleChange = (e: any) => {
-    send({ type: 'UPDATE', data: { title: e.target.value.substr(0, TITLE_LENGTH) } })
+    send({
+      type: 'UPDATE',
+      data: { title: e.target.value.substr(0, TITLE_LENGTH), meta: { isDirty: true } },
+    })
   }
 
   return (

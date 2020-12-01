@@ -20,10 +20,16 @@ export const defaultContext: ServiceContext = {
   price: 20,
   step: 'category',
   published: false,
+  meta: {
+    isDirty: false,
+  },
 }
 
 export const Context = createContext({})
 
+export interface Meta {
+  isDirty: boolean
+}
 interface Frequency {
   rrules: string[]
   exdate: string[]
@@ -42,6 +48,7 @@ export interface ServiceContext {
   price: number
   step: string
   published: boolean
+  meta: Meta
 }
 
 interface ServiceEvent {
@@ -133,7 +140,10 @@ export const makeServiceMachine = (initial: string) =>
           next: 'price',
           cond: 'capacityValid',
           extra: {
-            invoke: { src: updateService },
+            invoke: {
+              src: updateService,
+              onDone: { actions: assign({ meta: { isDirty: false } }) },
+            },
           },
         }),
         ...makeStep({
@@ -146,7 +156,10 @@ export const makeServiceMachine = (initial: string) =>
           on: {
             PREV: 'capacity',
           },
-          invoke: { src: updateService },
+          invoke: {
+            src: updateService,
+            onDone: { actions: assign({ meta: { isDirty: false } }) },
+          } as any,
           // type: 'final',
         },
       },
