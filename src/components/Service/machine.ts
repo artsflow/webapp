@@ -15,7 +15,7 @@ export const defaultContext: ServiceContext = {
   images: [],
   video: '',
   duration: 60,
-  frequency: '',
+  frequency: { rrules: [], exdate: [] },
   capacity: 1,
   price: 20,
   step: 'category',
@@ -23,6 +23,11 @@ export const defaultContext: ServiceContext = {
 }
 
 export const Context = createContext({})
+
+interface Frequency {
+  rrules: string[]
+  exdate: string[]
+}
 export interface ServiceContext {
   id: string
   category: string
@@ -32,7 +37,7 @@ export interface ServiceContext {
   images: string[]
   video: string
   duration: number
-  frequency: string
+  frequency: Frequency
   capacity: number
   price: number
   step: string
@@ -68,6 +73,7 @@ export const makeServiceMachine = (initial: string) =>
     {
       key: 'machine',
       initial: initial || 'category',
+      // initial: 'frequency',
       context: defaultContext,
       states: {
         category: {
@@ -126,6 +132,9 @@ export const makeServiceMachine = (initial: string) =>
           prev: 'frequency',
           next: 'price',
           cond: 'capacityValid',
+          extra: {
+            invoke: { src: updateService },
+          },
         }),
         ...makeStep({
           step: 'price',
@@ -137,7 +146,7 @@ export const makeServiceMachine = (initial: string) =>
           on: {
             PREV: 'capacity',
           },
-          invoke: { src: 'updateService' },
+          invoke: { src: updateService },
           // type: 'final',
         },
       },
@@ -149,7 +158,6 @@ export const makeServiceMachine = (initial: string) =>
       actions: {
         save: updateService,
         stepUpdate: assign((ctx, evt, meta) => {
-          console.log('stepUpdate: ', ctx)
           switch (evt.action) {
             case 'addImage':
               return { ...ctx, step: meta.state?.value, images: [...ctx.images, evt.data.imageId] }
@@ -192,7 +200,12 @@ export const makeServiceMachine = (initial: string) =>
             'Duration is between 30 and 360 minutes',
             ctx.duration >= DURATION_MIN && ctx.duration <= DURATION_MAX
           ),
-        frequencyValid: () => true,
+        frequencyValid: (ctx) =>
+          checkGuard(
+            'Invalid frequency',
+            'Frequency is not set up',
+            !isEmpty(ctx.frequency.rrules)
+          ),
         capacityValid: () => true,
         priceValid: () => true,
       },

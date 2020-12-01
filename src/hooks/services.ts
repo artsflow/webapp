@@ -55,6 +55,14 @@ const GET_SERVICE = gql`
         }
       }
       images
+      video
+      duration
+      frequency {
+        rrules
+        exdate
+      }
+      capacity
+      price
       step
       published
     }
