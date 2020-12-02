@@ -13,7 +13,7 @@ import {
   IconButton,
 } from '@chakra-ui/core'
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
-import { isEmpty, uniq, pick } from 'lodash'
+import { isEmpty, uniq, pick, difference } from 'lodash'
 import { RRule, RRuleSet, Weekday, rrulestr } from 'rrule'
 import { getDate, getMonth, getYear, format } from 'date-fns'
 
@@ -85,6 +85,19 @@ export function Frequency() {
       setState({ ...state, exdate: state.exdate.filter((e) => e !== d), meta: { isDirty: true } })
   }
 
+  const handleDelete = (r: string) => {
+    setState({
+      ...state,
+      rrules: state.rrules.filter((e) => e !== r),
+      exdate: difference(
+        state.exdate,
+        rrulestr(r)
+          .all()
+          .map((e) => e.toString())
+      ),
+    })
+  }
+
   useEffect(() => {
     send({
       type: 'UPDATE',
@@ -136,9 +149,7 @@ export function Frequency() {
                   aria-label="Delete rule"
                   icon={<DeleteIcon />}
                   color="red.500"
-                  onClick={() =>
-                    setState({ ...state, rrules: state.rrules.filter((e) => e !== r) })
-                  }
+                  onClick={() => handleDelete(r)}
                 />
               </HStack>
             ))}
