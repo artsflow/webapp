@@ -7,7 +7,6 @@ import { DESCRIPTION_LENGTH, Lipsum } from '../config'
 export function Description() {
   const { send, context } = useContext(Context) as any
   const { description } = context
-  console.log(context)
 
   const handleChange = (e: any) => {
     send({

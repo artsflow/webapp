@@ -9,18 +9,17 @@ const NUM_IMG = 6
 export function Images() {
   const { send, context } = useContext(Context) as any
   const { images } = context
-  console.log('Images', images)
 
   const handleUpload = (imageId: string) => {
-    console.log('handleUpload', imageId)
-    send({ type: 'UPDATE', action: 'addImage', data: { imageId } })
+    send({ type: 'UPDATE', action: 'addImage', data: { imageId, meta: { isDirty: true } } })
     send('SAVE')
+    send({ type: 'UPDATE', data: { meta: { isDirty: false } } })
   }
 
   const handleDelete = (imageId: string) => {
-    console.log('handleDelete', imageId)
-    send({ type: 'UPDATE', action: 'removeImage', data: { imageId } })
+    send({ type: 'UPDATE', action: 'removeImage', data: { imageId, meta: { isDirty: true } } })
     send('SAVE')
+    send({ type: 'UPDATE', data: { meta: { isDirty: false } } })
   }
 
   return (

@@ -7,9 +7,7 @@ import { useService, fetchService } from 'hooks/services'
 export default function ManageService({ initialData }: any) {
   const { query } = useRouter()
   const { id } = query
-  const { data, loading } = useService(id as string, initialData)
-
-  console.log('ManageService', data, loading)
+  const { data } = useService(id as string, initialData)
 
   return (
     <>

@@ -24,7 +24,6 @@ export function ImageUploader({ onUpload, onDelete, imageId }: any) {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleDelete = useCallback(async () => {
-    console.log('remove', fileName)
     setFileName('')
     await client.request(DELETE_IMAGE, { id: fileName })
     onDelete(fileName)

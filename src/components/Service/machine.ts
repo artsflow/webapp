@@ -93,18 +93,21 @@ export const makeServiceMachine = (initial: string) =>
         ...makeStep({
           step: 'category',
           next: 'title',
+          extra,
         }),
         ...makeStep({
           step: 'title',
           prev: 'category',
           next: 'description',
           cond: 'titleValid',
+          extra,
         }),
         ...makeStep({
           step: 'description',
           prev: 'title',
           next: 'address',
           cond: 'descriptionValid',
+          extra,
         }),
         ...makeStep({
           step: 'address',
@@ -126,18 +129,21 @@ export const makeServiceMachine = (initial: string) =>
           prev: 'images',
           next: 'duration',
           cond: 'videoValid',
+          extra,
         }),
         ...makeStep({
           step: 'duration',
           prev: 'video',
           next: 'frequency',
           cond: 'durationValid',
+          extra,
         }),
         ...makeStep({
           step: 'frequency',
           prev: 'duration',
           next: 'capacity',
           cond: 'frequencyValid',
+          extra,
         }),
         ...makeStep({
           step: 'capacity',
@@ -168,12 +174,18 @@ export const makeServiceMachine = (initial: string) =>
         stepUpdate: assign((ctx, evt, meta) => {
           switch (evt.action) {
             case 'addImage':
-              return { ...ctx, step: meta.state?.value, images: [...ctx.images, evt.data.imageId] }
+              return {
+                ...ctx,
+                step: ctx.step === 'complete' ? ctx.step : meta.state?.value,
+                images: [...ctx.images, evt.data.imageId],
+                meta: { isDirty: true },
+              }
             case 'removeImage':
               return {
                 ...ctx,
-                step: meta.state?.value,
+                step: ctx.step === 'complete' ? ctx.step : meta.state?.value,
                 images: ctx.images.filter((id: string) => id !== evt.data.imageId),
+                meta: { isDirty: true },
               }
             default:
               return {
