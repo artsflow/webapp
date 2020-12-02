@@ -94,7 +94,7 @@ const UPDATE_SERVICE = gql`
 export async function updateService(ctx: any) {
   console.log('updateService')
   if (!ctx.meta.isDirty) return false
-  const variables = { input: { ...omit(ctx, ['meta']) } }
+  const variables = { input: { ...omit(ctx, ['meta']), price: Number(ctx.price) } }
   return client.request(UPDATE_SERVICE, variables)
 }
 

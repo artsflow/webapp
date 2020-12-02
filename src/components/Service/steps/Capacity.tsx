@@ -18,7 +18,7 @@ export function Capacity() {
   const { capacity } = context
 
   const handleChange = (_: string, value: number) => {
-    send({ type: 'UPDATE', data: { capacity: value, meta: { isDirty: true } } })
+    send({ type: 'UPDATE', data: { capacity: Math.round(value), meta: { isDirty: true } } })
   }
 
   return (
@@ -26,7 +26,14 @@ export function Capacity() {
       <Heading mb="4" size="lg">
         Capacity
       </Heading>
-      <NumberInput onChange={handleChange} defaultValue={capacity} min={1} max={30}>
+      <NumberInput
+        onChange={handleChange}
+        defaultValue={capacity}
+        min={1}
+        max={30}
+        step={1}
+        autoFocus
+      >
         <NumberInputField />
         <NumberInputStepper>
           <NumberIncrementStepper />

@@ -52,16 +52,16 @@ export interface ServiceContext {
 }
 
 interface ServiceEvent {
-  type: 'NEXT' | 'PREV' | 'UPDATE' | 'CLEAR' | 'SAVE'
+  type: 'NEXT' | 'PREV' | 'UPDATE' | 'SAVE'
   data: any
   action: string
 }
 
 interface MakeStepsProps {
   step: string
-  prev: string
-  next: string
-  cond: string
+  prev?: string
+  next?: string
+  cond?: string
   extra?: any
 }
 
@@ -69,12 +69,20 @@ const makeStep = ({ step, prev, next, cond, extra }: MakeStepsProps) => ({
   [step]: {
     on: {
       PREV: prev,
-      NEXT: [{ target: next, cond: { type: cond } }],
+      NEXT: [{ target: next, cond: cond && { type: cond } }],
       UPDATE: { actions: 'stepUpdate' },
     },
     ...extra,
   },
 })
+
+const extra = {
+  invoke: {
+    src: updateService,
+    onDone: { actions: assign({ meta: { isDirty: false } }) },
+  },
+}
+
 export const makeServiceMachine = (initial: string) =>
   createMachine<ServiceContext, ServiceEvent>(
     {
@@ -83,12 +91,10 @@ export const makeServiceMachine = (initial: string) =>
       // initial: 'frequency',
       context: defaultContext,
       states: {
-        category: {
-          on: {
-            NEXT: 'title',
-            UPDATE: { actions: 'stepUpdate' },
-          },
-        },
+        ...makeStep({
+          step: 'category',
+          next: 'title',
+        }),
         ...makeStep({
           step: 'title',
           prev: 'category',
@@ -139,12 +145,7 @@ export const makeServiceMachine = (initial: string) =>
           prev: 'frequency',
           next: 'price',
           cond: 'capacityValid',
-          extra: {
-            invoke: {
-              src: updateService,
-              onDone: { actions: assign({ meta: { isDirty: false } }) },
-            },
-          },
+          extra,
         }),
         ...makeStep({
           step: 'price',
@@ -152,16 +153,11 @@ export const makeServiceMachine = (initial: string) =>
           next: 'complete',
           cond: 'priceValid',
         }),
-        complete: {
-          on: {
-            PREV: 'capacity',
-          },
-          invoke: {
-            src: updateService,
-            onDone: { actions: assign({ meta: { isDirty: false } }) },
-          } as any,
-          // type: 'final',
-        },
+        ...makeStep({
+          step: 'complete',
+          prev: 'price',
+          extra,
+        }),
       },
       on: {
         SAVE: { actions: 'save' },
@@ -219,8 +215,10 @@ export const makeServiceMachine = (initial: string) =>
             'Frequency is not set up',
             !isEmpty(ctx.frequency.rrules)
           ),
-        capacityValid: () => true,
-        priceValid: () => true,
+        capacityValid: (ctx) =>
+          checkGuard('Invalid capacity', 'Capacity is not a number', !!Number(ctx.capacity)),
+        priceValid: (ctx) =>
+          checkGuard('Invalid price', 'Price is not a number', !!Number(ctx.price)),
       },
     }
   )
