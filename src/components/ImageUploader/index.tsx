@@ -1,11 +1,20 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { RiImageAddFill } from 'react-icons/ri'
-import { Box, Icon, Spinner, Image, IconButton, VStack } from '@chakra-ui/core'
+import {
+  Box,
+  Text,
+  Icon,
+  CircularProgress,
+  CircularProgressLabel,
+  Image,
+  IconButton,
+  VStack,
+} from '@chakra-ui/core'
 import { DeleteIcon } from '@chakra-ui/icons'
 import { gql } from 'graphql-request'
 
-import { client } from 'services/client'
+import { client, clientWithProgressUpload } from 'services/client'
 
 const UPLOAD_IMAGE = gql`
   mutation uploadImage($file: Upload!) {
@@ -22,6 +31,7 @@ const DELETE_IMAGE = gql`
 export function ImageUploader({ onUpload, onDelete, imageId }: any) {
   const [fileName, setFileName] = useState(imageId)
   const [isLoading, setIsLoading] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   const handleDelete = useCallback(async () => {
     setFileName('')
@@ -29,9 +39,15 @@ export function ImageUploader({ onUpload, onDelete, imageId }: any) {
     onDelete(fileName)
   }, [fileName])
 
+  const onProgress = (ev: ProgressEvent) => {
+    setProgress(ev.loaded / ev.total)
+  }
+
   const onDrop = useCallback(async ([file]) => {
     setIsLoading(true)
-    const { uploadImage } = await client.request(UPLOAD_IMAGE, { file })
+
+    const progressUploadClient = clientWithProgressUpload(onProgress)
+    const { uploadImage } = await progressUploadClient.request(UPLOAD_IMAGE, { file })
     setIsLoading(false)
     setFileName(uploadImage)
     onUpload(uploadImage)
@@ -70,7 +86,18 @@ export function ImageUploader({ onUpload, onDelete, imageId }: any) {
             </>
           ) : (
             <VStack alignItems="center" justifyContent="center" h="full">
-              <Spinner size="xl" />
+              <CircularProgress
+                min={0}
+                max={1}
+                value={progress}
+                isIndeterminate={progress === 1}
+                color="blue.400"
+              >
+                {progress !== 1 && (
+                  <CircularProgressLabel>{`${Math.round(progress * 100)}%`}</CircularProgressLabel>
+                )}
+              </CircularProgress>
+              <Text>{progress === 1 ? `processing...` : 'uploading...'}</Text>
             </VStack>
           )}
         </Box>

@@ -44,6 +44,7 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'react/no-unescaped-entities': 'off',
     'jsx-a11y/accessible-emoji': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/explicit-member-accessibility': 0,
