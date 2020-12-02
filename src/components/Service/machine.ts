@@ -87,8 +87,7 @@ export const makeServiceMachine = (initial: string) =>
   createMachine<ServiceContext, ServiceEvent>(
     {
       key: 'machine',
-      initial: initial || 'category',
-      // initial: 'frequency',
+      initial: initial === 'complete' ? 'category' : initial,
       context: defaultContext,
       states: {
         ...makeStep({
@@ -177,7 +176,11 @@ export const makeServiceMachine = (initial: string) =>
                 images: ctx.images.filter((id: string) => id !== evt.data.imageId),
               }
             default:
-              return { ...ctx, step: meta.state?.value, ...evt.data }
+              return {
+                ...ctx,
+                step: ctx.step === 'complete' ? ctx.step : meta.state?.value,
+                ...evt.data,
+              }
           }
         }),
       },
