@@ -68,7 +68,7 @@ export const AddressLookup = ({ address = {}, onAddress }: any) => {
           <AddressInfo {...selectedAddress} />
         </Box>
       )}
-      {!isEmpty(selectedAddress) && !isCountryAllowed && (
+      {selectedAddress.country && !isCountryAllowed && (
         <Box mt="2" p="2">
           <Text>
             The service is not available in <b>{selectedAddress.country}</b>
