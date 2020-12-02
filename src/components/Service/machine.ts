@@ -87,7 +87,7 @@ export const makeServiceMachine = (initial: string) =>
   createMachine<ServiceContext, ServiceEvent>(
     {
       key: 'machine',
-      initial: initial === 'complete' ? 'category' : initial,
+      initial: initial === 'complete' ? 'category' : initial || 'category',
       context: defaultContext,
       states: {
         ...makeStep({
