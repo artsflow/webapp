@@ -9,6 +9,7 @@ export const client = new GraphQLClient(`${API_URL}/graphql`, {
 
 export const clientWithProgressUpload = (onProgress: any) =>
   new GraphQLClient(`${API_URL}/graphql`, {
+    credentials: 'include',
     fetch: uploadXhr,
     // @ts-ignore
     onProgress,
