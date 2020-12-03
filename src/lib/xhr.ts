@@ -1,5 +1,6 @@
 const parseHeaders = (rawHeaders: any) => {
   const headers = new Headers()
+  console.log('rawHeaders', rawHeaders)
   // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
   // https://tools.ietf.org/html/rfc7230#section-3.2
   const preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ')
@@ -11,13 +12,15 @@ const parseHeaders = (rawHeaders: any) => {
       headers.append(key, value)
     }
   })
+  console.log('headers', headers)
+
   return headers
 }
 
-export const uploadXhr = (url: string, options: any) =>
-  new Promise((resolve, reject) => {
+export const uploadXhr = (url: string, options: any) => {
+  console.log('options', options)
+  return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
-    xhr.withCredentials = true
 
     xhr.onload = () => {
       const opts: any = {
@@ -36,6 +39,7 @@ export const uploadXhr = (url: string, options: any) =>
       reject(new TypeError('Network request failed'))
     }
     xhr.open(options.method, url, true)
+    xhr.withCredentials = true
 
     Object.keys(options.headers).forEach((key) => {
       xhr.setRequestHeader(key, options.headers[key])
@@ -47,3 +51,4 @@ export const uploadXhr = (url: string, options: any) =>
 
     xhr.send(options.body)
   })
+}
