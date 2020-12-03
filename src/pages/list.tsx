@@ -1,26 +1,22 @@
 import { useState } from 'react'
-import { Text, Box, VStack, HStack, Button, Skeleton } from '@chakra-ui/core'
+import { Text, Grid, VStack, HStack, Button } from '@chakra-ui/core'
 import { useRouter } from 'next/router'
 
 import { Meta } from 'components'
 import { useServices } from 'hooks/services'
 
 export default function ListServices() {
-  const { data, loading, toggleService } = useServices()
+  const { data, toggleService } = useServices()
 
   return (
     <>
       <Meta title="List services" />
       <Text>List services</Text>
-      <VStack mt="8" w="md" alignItems="flex-start">
-        <Skeleton isLoaded={!loading || data}>
-          <HStack spacing="4">
-            {data?.map((serviceData: any) => (
-              <Service key={serviceData.id} {...serviceData} toggleService={toggleService} />
-            ))}
-          </HStack>
-        </Skeleton>
-      </VStack>
+      <Grid mt="8" pos="relative" templateColumns="repeat(auto-fit, 240px)" gap={6}>
+        {data?.map((serviceData: any) => (
+          <Service key={serviceData.id} {...serviceData} toggleService={toggleService} />
+        ))}
+      </Grid>
     </>
   )
 }
@@ -41,7 +37,7 @@ const Service = ({ id, title, step, published, toggleService }: any) => {
   }
 
   return (
-    <Box border="1px" p="4" minW="16">
+    <VStack border="1px" p="4" w="240px" minH="140px" justify="space-between">
       <Text fontWeight="bold">{title}</Text>
       <HStack mt="4">
         <Button onClick={handleEdit}>{isCompleted ? 'Edit' : 'Continue...'}</Button>
@@ -54,6 +50,6 @@ const Service = ({ id, title, step, published, toggleService }: any) => {
           {published ? 'Unpublish' : 'Publish'}
         </Button>
       </HStack>
-    </Box>
+    </VStack>
   )
 }

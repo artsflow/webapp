@@ -20,7 +20,7 @@ export function Layout({ children }: Props) {
         gridTemplateColumns="100%"
       >
         <Header />
-        <Box as="main" px={[4, 32]} p="100px">
+        <Box as="main" px={[4, 32]} p="100px" pos="relative">
           {children}
         </Box>
         <Footer />
