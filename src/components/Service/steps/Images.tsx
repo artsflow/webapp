@@ -34,7 +34,6 @@ export function Images() {
             onUpload={handleUpload}
             onDelete={handleDelete}
             imageId={images[i]}
-            withProgress={false}
           />
         ))}
       </SimpleGrid>

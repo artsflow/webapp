@@ -32,7 +32,7 @@ interface ImageUploaderProps {
   onUpload: (f: string) => void
   onDelete: (f: string) => void
   imageId: string
-  withProgress: boolean
+  withProgress?: boolean
 }
 
 export function ImageUploader({
