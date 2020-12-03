@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/core'
+import { HStack, VStack } from '@chakra-ui/core'
 import { useMachine } from '@xstate/react'
 
 import {
@@ -16,6 +16,7 @@ import {
 } from './steps'
 import { makeServiceMachine, Context } from './machine'
 import { Navigation } from './Navigation'
+import { Preview } from './Preview'
 
 interface StepsMap {
   [key: string]: React.FC
@@ -46,10 +47,13 @@ export function Service({ data }: any) {
 
   return (
     <Context.Provider value={{ context, send }}>
-      <VStack border="1px" p="4" h="60vh" justify="space-between">
-        <Screen />
-        <Navigation step={currentStep} />
-      </VStack>
+      <HStack spacing="20" w="full">
+        <VStack border="1px" p="4" w="600px" h="600px" justify="space-between">
+          <Screen />
+          <Navigation step={currentStep} />
+        </VStack>
+        <Preview />
+      </HStack>
     </Context.Provider>
   )
 }

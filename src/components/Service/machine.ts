@@ -14,10 +14,10 @@ export const defaultContext: ServiceContext = {
   address: {},
   images: [],
   video: '',
-  duration: 60,
+  duration: 0,
   frequency: { rrules: [], exdate: [] },
-  capacity: 1,
-  price: 20,
+  capacity: 0,
+  price: 0,
   step: 'category',
   published: false,
   meta: {

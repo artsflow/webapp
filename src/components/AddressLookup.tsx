@@ -2,7 +2,7 @@ import { gql } from 'graphql-request'
 import { useState, useCallback } from 'react'
 import { Box, Text, Button, Input, HStack, FormLabel, List, ListItem } from '@chakra-ui/core'
 import { SearchIcon } from '@chakra-ui/icons'
-import GoogleMapReact from 'google-map-react'
+import GoogleMap from 'google-map-react'
 import { isEmpty } from 'lodash'
 
 import { GCP_MAPS_KEY } from 'lib/config'
@@ -100,7 +100,7 @@ export const AddressLookup = ({ address = {}, onAddress }: any) => {
 
 const Marker: React.FC<any> = () => <Box w="8" h="8" borderRadius="16px" bg="red.400" />
 
-const AddressInfo = ({
+export const AddressInfo = ({
   streetNumber,
   streetName,
   extendedPostalCode,
@@ -108,19 +108,26 @@ const AddressInfo = ({
   countryCode,
   country,
   position: { lat, lon: lng },
+  withAddress = true,
+  defaultZoom = 16,
 }: any) => (
   <>
-    <Text>
-      {streetNumber} {streetName}, {municipality}, {extendedPostalCode}, {countryCode}, {country}
-    </Text>
+    {withAddress && (
+      <Text fontSize="xs">
+        {streetNumber} {streetName}, {municipality}, {extendedPostalCode}, {countryCode}, {country}
+      </Text>
+    )}
     <Box w="full" h="220px" border="1px" mt="2">
-      <GoogleMapReact
+      <GoogleMap
         defaultCenter={{ lat, lng }}
-        defaultZoom={16}
+        defaultZoom={defaultZoom}
         bootstrapURLKeys={{ key: GCP_MAPS_KEY as string }}
+        options={{
+          fullscreenControl: false,
+        }}
       >
         <Marker lat={lat} lng={lng} />
-      </GoogleMapReact>
+      </GoogleMap>
     </Box>
   </>
 )

@@ -12,7 +12,7 @@ export default function ManageService({ initialData }: any) {
   return (
     <>
       <Meta title="Service" />
-      <Box w="50%">
+      <Box>
         <Heading size="md" mb="2">
           Edit Service
         </Heading>

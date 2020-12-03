@@ -5,10 +5,10 @@ export default function ManageService() {
   return (
     <>
       <Meta title="Add Service" />
-      <Heading size="md" mb="2">
-        Add Service
-      </Heading>
-      <Box w="50%">
+      <Box>
+        <Heading size="md" mb="2">
+          Add Service
+        </Heading>
         <Service />
       </Box>
     </>

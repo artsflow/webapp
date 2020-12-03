@@ -140,11 +140,12 @@ export function Frequency() {
               Add
             </Button>
           </HStack>
+
           {!isEmpty(state.rrules) && <Text fontWeight="bold">Rules:</Text>}
           <VStack align="flex-start" height="220px" overflow="scroll" w="full">
             {state.rrules.map((r) => (
               <HStack key={r} w="full" justify="space-between">
-                <Text fontSize="xs">{ruleText(r).replace(' for 10 times', '')}</Text>
+                <Text fontSize="xs">{ruleText(r)}</Text>
                 <IconButton
                   aria-label="Delete rule"
                   icon={<DeleteIcon />}
@@ -155,6 +156,7 @@ export function Frequency() {
             ))}
           </VStack>
         </VStack>
+
         <VStack align="flex-start" height="400px" overflow="scroll" w="full" spacing="0">
           {!isEmpty(rruleSet.all()) && <Text fontWeight="bold">Booking dates:</Text>}
           {rruleSet.all().map((d) => (
@@ -201,8 +203,8 @@ const WeekDaysCheckbox = (props: WDCProps) => {
   )
 }
 
-const ruleText = (r: string) => {
+export const ruleText = (r: string) => {
   const rule = rrulestr(r)
   const hhmm = format(rule.options.dtstart, 'HH:mm')
-  return `at ${hhmm} on ${rule.toText()}`
+  return `at ${hhmm} on ${rule.toText()}`.replace(' for 10 times', '')
 }
