@@ -9,14 +9,13 @@ import {
   HStack,
   VStack,
   Button,
-  Image,
 } from '@chakra-ui/core'
 import humanize from 'humanize-duration'
 import { RRuleSet, rrulestr } from 'rrule'
 import { format } from 'date-fns'
 import { isEmpty } from 'lodash'
 
-import { AddressInfo } from 'components'
+import { AddressInfo, ImageGallery } from 'components'
 import { MockiPhone } from './Phone'
 import { Context } from './machine'
 import { ruleText } from './steps/Frequency'
@@ -43,15 +42,18 @@ export function Preview() {
       {isEmpty(images) ? (
         <Skeleton h="280px" startColor="grey" endColor="grey" />
       ) : (
-        <Image
-          boxSize="280px"
-          src={`https://ik.imagekit.io/artsflow/tr:w-280,h-280,fo-auto/${images[0]}`}
-        />
+        <Box pos="relative" height="280px">
+          <ImageGallery
+            images={images.map(
+              (img: string) => `https://ik.imagekit.io/artsflow/tr:w-280,h-280,fo-auto/${img}`
+            )}
+          />
+        </Box>
       )}
 
       <Box p="4">
         <HStack mt="-60px" mb="30px" justify="flex-end">
-          <Text p="1" px="2" bg="white" fontSize="xs">
+          <Text p="1" px="2" bg="white" fontSize="xs" zIndex="2">
             #{category}
           </Text>
         </HStack>

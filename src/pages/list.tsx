@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Text, Grid, VStack, HStack, Button } from '@chakra-ui/core'
 import { useRouter } from 'next/router'
+import { Text, Grid, VStack, HStack, Button } from '@chakra-ui/core'
 
 import { Meta } from 'components'
 import { useServices } from 'hooks/services'
