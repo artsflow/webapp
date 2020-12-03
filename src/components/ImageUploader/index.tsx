@@ -28,10 +28,22 @@ const DELETE_IMAGE = gql`
   }
 `
 
-export function ImageUploader({ onUpload, onDelete, imageId }: any) {
+interface ImageUploaderProps {
+  onUpload: (f: string) => void
+  onDelete: (f: string) => void
+  imageId: string
+  withProgress: boolean
+}
+
+export function ImageUploader({
+  onUpload,
+  onDelete,
+  imageId,
+  withProgress = true,
+}: ImageUploaderProps) {
   const [fileName, setFileName] = useState(imageId)
   const [isLoading, setIsLoading] = useState(false)
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(withProgress ? 0 : 1)
 
   const handleDelete = useCallback(async () => {
     setFileName('')
@@ -47,7 +59,10 @@ export function ImageUploader({ onUpload, onDelete, imageId }: any) {
     setIsLoading(true)
 
     const progressUploadClient = clientWithProgressUpload(onProgress)
-    const { uploadImage } = await progressUploadClient.request(UPLOAD_IMAGE, { file })
+    const { uploadImage } = withProgress
+      ? await progressUploadClient.request(UPLOAD_IMAGE, { file })
+      : await client.request(UPLOAD_IMAGE, { file })
+
     setIsLoading(false)
     setFileName(uploadImage)
     onUpload(uploadImage)
