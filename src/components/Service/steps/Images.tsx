@@ -1,7 +1,10 @@
-import { useContext } from 'react'
+import { useContext, useCallback } from 'react'
 import { Box, SimpleGrid, Heading } from '@chakra-ui/core'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import update from 'immutability-helper'
 
-import { ImageUploader } from 'components'
+import { ImageUploader, DragCard } from 'components'
 import { Context } from '../machine'
 
 const NUM_IMG = 6
@@ -22,20 +25,41 @@ export function Images() {
     send({ type: 'UPDATE', data: { meta: { isDirty: false } } })
   }
 
+  const moveCard = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const dragCard = images[dragIndex]
+      if (!dragCard) return
+
+      const reordered = update(images, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragCard],
+        ],
+      })
+
+      send({ type: 'UPDATE', data: { images: reordered, meta: { isDirty: true } } })
+    },
+    [images]
+  )
+
   return (
     <Box>
       <Heading mb="4" size="lg">
         Add Images
       </Heading>
       <SimpleGrid columns={3} spacing={4}>
-        {[...Array(NUM_IMG).keys()].map((i) => (
-          <ImageUploader
-            key={i}
-            onUpload={handleUpload}
-            onDelete={handleDelete}
-            imageId={images[i]}
-          />
-        ))}
+        <DndProvider backend={HTML5Backend}>
+          {[...Array(NUM_IMG).keys()].map((i) => (
+            <DragCard key={images[i]} index={i} id={images[i]} moveCard={moveCard}>
+              <ImageUploader
+                key={i}
+                onUpload={handleUpload}
+                onDelete={handleDelete}
+                imageId={images[i]}
+              />
+            </DragCard>
+          ))}
+        </DndProvider>
       </SimpleGrid>
     </Box>
   )
