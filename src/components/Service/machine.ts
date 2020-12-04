@@ -68,6 +68,7 @@ interface MakeStepsProps {
 const makeStep = ({ step, prev, next, cond, extra }: MakeStepsProps) => ({
   [step]: {
     on: {
+      // ...steps.reduce((all, s) => ({ ...all, [s]: s }), {}),
       PREV: prev,
       NEXT: [{ target: next, cond: cond && { type: cond } }],
       UPDATE: { actions: 'stepUpdate' },
