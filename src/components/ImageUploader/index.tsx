@@ -32,18 +32,12 @@ interface ImageUploaderProps {
   onUpload: (f: string) => void
   onDelete: (f: string) => void
   imageId: string
-  withProgress?: boolean
 }
 
-export function ImageUploader({
-  onUpload,
-  onDelete,
-  imageId,
-  withProgress = true,
-}: ImageUploaderProps) {
+export function ImageUploader({ onUpload, onDelete, imageId }: ImageUploaderProps) {
   const [fileName, setFileName] = useState(imageId)
   const [isLoading, setIsLoading] = useState(false)
-  const [progress, setProgress] = useState(withProgress ? 0 : 1)
+  const [progress, setProgress] = useState(0)
 
   const handleDelete = useCallback(async () => {
     setFileName('')
@@ -58,10 +52,22 @@ export function ImageUploader({
   const onDrop = useCallback(async ([file]) => {
     setIsLoading(true)
 
+    const heic2any = (await import('heic2any')).default
+    // @ts-ignore
+    const { readAndCompressImage } = await import('browser-image-resizer')
+
+    const resizedImage = await readAndCompressImage(
+      file.type === 'image/heic' ? await heic2any({ blob: file }) : file,
+      {
+        quality: 0.9,
+        maxWidth: 2400,
+        maxHeight: 2400,
+        debug: true,
+      }
+    )
+
     const progressUploadClient = clientWithProgressUpload(onProgress)
-    const { uploadImage } = withProgress
-      ? await progressUploadClient.request(UPLOAD_IMAGE, { file })
-      : await client.request(UPLOAD_IMAGE, { file })
+    const { uploadImage } = await progressUploadClient.request(UPLOAD_IMAGE, { file: resizedImage })
 
     setIsLoading(false)
     setFileName(uploadImage)
