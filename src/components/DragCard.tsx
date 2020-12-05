@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+import { Flex } from '@chakra-ui/core'
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd'
 import { XYCoord } from 'dnd-core'
 
@@ -80,8 +81,15 @@ export const DragCard: React.FC<CardProps> = ({ id, children, index, moveCard })
   const opacity = isDragging ? 0 : 1
   drag(drop(ref))
   return (
-    <div ref={ref} style={{ cursor: 'move', opacity }}>
+    <Flex
+      ref={ref}
+      opacity={opacity}
+      cursor="move"
+      border="1px solid lightgrey"
+      alignItems="center"
+      justifyContent="center"
+    >
       {children}
-    </div>
+    </Flex>
   )
 }

@@ -106,7 +106,7 @@ export function ImageUploader({ onUpload, onDelete, imageId }: ImageUploaderProp
               <Icon w="160px" h="160px" as={RiImageAddFill} color="grey" />
             </>
           ) : (
-            <VStack alignItems="center" justifyContent="center" h="full">
+            <VStack>
               <CircularProgress
                 min={0}
                 max={1}
@@ -115,10 +115,12 @@ export function ImageUploader({ onUpload, onDelete, imageId }: ImageUploaderProp
                 color="blue.400"
               >
                 {progress !== 1 && (
-                  <CircularProgressLabel>{`${Math.round(progress * 100)}%`}</CircularProgressLabel>
+                  <CircularProgressLabel fontSize="xs">{`${Math.round(
+                    progress * 100
+                  )}%`}</CircularProgressLabel>
                 )}
               </CircularProgress>
-              <Text>{progress === 1 ? `processing...` : 'uploading...'}</Text>
+              <Text fontSize="xs">{progress === 1 ? `processing...` : 'uploading...'}</Text>
             </VStack>
           )}
         </Box>
