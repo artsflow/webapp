@@ -1,20 +1,18 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Text, Grid, VStack, HStack, Button } from '@chakra-ui/core'
+import { Text, Grid, VStack, HStack, Button } from '@chakra-ui/react'
 
 import { Meta } from 'components'
-import { useServices } from 'hooks/services'
 
 export default function ListServices() {
-  const { data, toggleService } = useServices()
-
+  const data = [] as any
   return (
     <>
       <Meta title="List services" />
       <Text>List services</Text>
       <Grid mt="8" pos="relative" templateColumns="repeat(auto-fit, 240px)" gap={6}>
         {data?.map((serviceData: any) => (
-          <Service key={serviceData.id} {...serviceData} toggleService={toggleService} />
+          <Service key={serviceData.id} {...serviceData} toggleService={() => null} />
         ))}
       </Grid>
     </>

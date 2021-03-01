@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { HStack, Box, Heading, useRadioGroup } from '@chakra-ui/core'
+import { HStack, Box, Heading, useRadioGroup } from '@chakra-ui/react'
 
 import { RadioCard } from 'components'
 import { Lipsum } from '../config'

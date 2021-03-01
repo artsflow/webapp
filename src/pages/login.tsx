@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { Magic } from 'magic-sdk'
-import { OAuthExtension } from '@magic-ext/oauth'
-import { useRouter } from 'next/router'
+import React, { useState, useCallback } from 'react'
+// import { useRouter } from 'next/router'
 import Link from 'next/link'
 import {
   Text,
@@ -11,32 +9,20 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { CheckIcon } from '@chakra-ui/icons'
 
 import Logo from 'svg/artsflow.svg'
 import GoogleButton from 'svg/google-signin.svg'
 import { Container } from 'components'
-import { useUser, useIsMounted } from 'hooks'
-import { loginWithEmail } from 'services/auth'
-
-const NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: string = process.env
-  .NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
 
 const validateEmail = (str: string): boolean => !!str.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)
 
 export default function Login(): JSX.Element {
-  const router = useRouter()
-  const { user } = useUser()
-  const [isLoggingIn, setIsLoggingIn] = useState(false)
+  // const router = useRouter()
+  const [isLoggingIn] = useState(false)
   const [isEmailValid, setEmailValid] = useState(false)
   const [emailValue, setEmailValue] = useState('')
-  const [errorMsg, setErrorMsg] = useState(undefined)
-  const isMounted = useIsMounted()
-
-  useEffect(() => {
-    if (user) router.push('/')
-  }, [user])
 
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,29 +32,12 @@ export default function Login(): JSX.Element {
     [emailValue]
   )
 
-  const login = useCallback(
-    async (email) => {
-      if (isMounted() && errorMsg) setErrorMsg(undefined)
-      const result = await loginWithEmail(email)
-
-      if (result.login.error) {
-        console.error('An unexpected error occurred:', result.login.error)
-        if (isMounted()) setErrorMsg(result.login.error)
-      } else {
-        router.push('/')
-      }
-    },
-    [errorMsg]
-  )
-
   const onLogin = useCallback(
     (e) => {
       e.preventDefault()
-      if (isLoggingIn) return
-      setIsLoggingIn(true)
-      login(emailValue).then(() => setIsLoggingIn(false))
+      console.log('onLogin')
     },
-    [login, isLoggingIn, emailValue]
+    [isLoggingIn, emailValue]
   )
 
   const onSubmit = useCallback(
@@ -80,14 +49,7 @@ export default function Login(): JSX.Element {
   )
 
   const onGoogleLogin = async () => {
-    const magic = new Magic(NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY, {
-      extensions: [new OAuthExtension()],
-    })
-
-    await magic.oauth.loginWithRedirect({
-      provider: 'google',
-      redirectURI: `${window.location.origin}/callback`,
-    })
+    console.log('onGoogleLogin')
   }
 
   return (

@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Grid, Box } from '@chakra-ui/core'
+import { Grid, Box } from '@chakra-ui/react'
 
 import { Footer, Header } from 'components'
 

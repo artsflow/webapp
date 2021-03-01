@@ -1,4 +1,4 @@
-import { Box, Text, Heading } from '@chakra-ui/core'
+import { Box, Text, Heading } from '@chakra-ui/react'
 
 export function Video() {
   return (

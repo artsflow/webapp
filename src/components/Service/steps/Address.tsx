@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Box, Heading } from '@chakra-ui/core'
+import { Box, Heading } from '@chakra-ui/react'
 
 import { AddressLookup } from 'components'
 import { Context } from '../machine'

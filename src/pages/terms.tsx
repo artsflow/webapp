@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/core'
+import { Text } from '@chakra-ui/react'
 import { Meta } from 'components'
 
 export default function Terms() {

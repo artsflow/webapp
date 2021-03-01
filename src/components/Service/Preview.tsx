@@ -9,7 +9,7 @@ import {
   HStack,
   VStack,
   Button,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import humanize from 'humanize-duration'
 import { RRuleSet, rrulestr } from 'rrule'
 import { format } from 'date-fns'

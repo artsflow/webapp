@@ -10,23 +10,8 @@ import {
   Image,
   IconButton,
   VStack,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
-import { gql } from 'graphql-request'
-
-import { client, clientWithProgressUpload } from 'services/client'
-
-const UPLOAD_IMAGE = gql`
-  mutation uploadImage($file: Upload!) {
-    uploadImage(file: $file)
-  }
-`
-
-const DELETE_IMAGE = gql`
-  mutation deleteImage($id: String!) {
-    deleteImage(id: $id)
-  }
-`
 
 interface ImageUploaderProps {
   onUpload: (f: string) => void
@@ -37,17 +22,18 @@ interface ImageUploaderProps {
 export function ImageUploader({ onUpload, onDelete, imageId }: ImageUploaderProps) {
   const [fileName, setFileName] = useState(imageId)
   const [isLoading, setIsLoading] = useState(false)
-  const [progress, setProgress] = useState(0)
+  const [progress] = useState(0)
 
   const handleDelete = useCallback(async () => {
+    console.log('handleDelete', fileName)
     setFileName('')
-    await client.request(DELETE_IMAGE, { id: fileName })
+    // await client.request(DELETE_IMAGE, { id: fileName })
     onDelete(fileName)
   }, [fileName])
 
-  const onProgress = (ev: ProgressEvent) => {
-    setProgress(ev.loaded / ev.total)
-  }
+  // const onProgress = (ev: ProgressEvent) => {
+  //   setProgress(ev.loaded / ev.total)
+  // }
 
   const onDrop = useCallback(async ([file]) => {
     setIsLoading(true)
@@ -66,11 +52,13 @@ export function ImageUploader({ onUpload, onDelete, imageId }: ImageUploaderProp
       }
     )
 
-    const progressUploadClient = clientWithProgressUpload(onProgress)
-    const { uploadImage } = await progressUploadClient.request(UPLOAD_IMAGE, { file: resizedImage })
+    console.log(resizedImage) // check heic vs webp
 
+    // const progressUploadClient = clientWithProgressUpload(onProgress)
+    // const { uploadImage } = await progressUploadClient.request(UPLOAD_IMAGE, { file: resizedImage })
+    const uploadImage = 'img'
     setIsLoading(false)
-    setFileName(uploadImage)
+    // setFileName(uploadImage)
     onUpload(uploadImage)
   }, [])
 

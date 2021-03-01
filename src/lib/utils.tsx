@@ -1,5 +1,5 @@
 import { loremIpsum } from 'react-lorem-ipsum'
-import { Box, Text, createStandaloneToast } from '@chakra-ui/core'
+import { Box, Text, createStandaloneToast } from '@chakra-ui/react'
 
 const toast = createStandaloneToast()
 

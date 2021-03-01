@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Flex } from '@chakra-ui/core'
+import { Flex } from '@chakra-ui/react'
 import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd'
 import { XYCoord } from 'dnd-core'
 

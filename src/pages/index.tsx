@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Text, Box } from '@chakra-ui/core'
+import { Text, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
-import { useUser, useFirstRender } from 'hooks'
+import { useFirstRender } from 'hooks'
 
 export default function Home(): JSX.Element {
   const router = useRouter()
   const [initialized, setInitialized] = useState(false)
   const isFirstRender = useFirstRender()
-  const { user, loading: userLoading } = useUser()
+  const { user, loading: userLoading } = {} as any
 
   useEffect(() => {
     if (user && !userLoading && !initialized) {

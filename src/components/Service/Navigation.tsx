@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Button, HStack, Box, Text, VStack, Tooltip } from '@chakra-ui/core'
+import { Button, HStack, Box, Text, VStack, Tooltip } from '@chakra-ui/react'
 
 import { Context } from './machine'
 import { steps } from './config'
@@ -45,20 +45,18 @@ interface StepPagesProps {
   onClick: (e: string) => void
 }
 
-const StepPages = ({ current, onClick }: StepPagesProps) => {
-  return (
-    <HStack>
-      {steps.map((s) => (
-        <Tooltip key={s} hasArrow label={s} aria-label={s} shouldWrapChildren>
-          <Box
-            p="1"
-            w="4"
-            cursor="pointer"
-            bg={current === s ? 'black' : 'grey'}
-            onClick={() => onClick(s)}
-          />
-        </Tooltip>
-      ))}
-    </HStack>
-  )
-}
+const StepPages = ({ current, onClick }: StepPagesProps) => (
+  <HStack>
+    {steps.map((s) => (
+      <Tooltip key={s} hasArrow label={s} aria-label={s} shouldWrapChildren>
+        <Box
+          p="1"
+          w="4"
+          cursor="pointer"
+          bg={current === s ? 'black' : 'grey'}
+          onClick={() => onClick(s)}
+        />
+      </Tooltip>
+    ))}
+  </HStack>
+)

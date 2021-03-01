@@ -1,25 +1,14 @@
-import { Grid, Box, Link, Button, HStack } from '@chakra-ui/core'
+import { Grid, Box, Link, Button, HStack } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { useRouter } from 'next/router'
-import useSWR from 'swr'
+// import { useRouter } from 'next/router'
 
-import { useUser, GET_ME } from 'hooks'
 import Logo from 'svg/artsflow.svg'
 
-import { logout } from 'services/auth'
-import { client } from 'services/client'
-
 export function Header() {
-  const { user } = useUser()
-  const router = useRouter()
-  const { mutate } = useSWR(GET_ME, (query) => client.request(query))
-
-  if (!user) return <div />
-
+  // const router = useRouter()
   const handleLogout = async () => {
-    await logout()
-    mutate()
-    router.push('/')
+    console.log('handleLogout')
+    // router.push('/')
   }
 
   return (
@@ -40,7 +29,7 @@ export function Header() {
         </NextLink>
       </HStack>
       <Box mx="8" ml="auto">
-        {user?.email}
+        user
       </Box>
       <Box>
         <Button onClick={handleLogout}>Logout</Button>

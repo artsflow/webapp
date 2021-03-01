@@ -11,7 +11,7 @@ import {
   Button,
   Select,
   IconButton,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons'
 import { isEmpty, uniq, pick, difference } from 'lodash'
 import { RRule, RRuleSet, Weekday, rrulestr } from 'rrule'

@@ -1,4 +1,4 @@
-import { Box, Heading } from '@chakra-ui/core'
+import { Box, Heading } from '@chakra-ui/react'
 import { Meta, Service } from 'components'
 
 export default function ManageService() {
