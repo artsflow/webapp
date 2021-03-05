@@ -1,15 +1,22 @@
+import { useContext } from 'react'
 import { Grid, Box, Link, Button, HStack } from '@chakra-ui/react'
 import NextLink from 'next/link'
-// import { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 import Logo from 'svg/artsflow.svg'
+import { UserContext } from 'lib/context'
+import { auth } from 'lib/firebase'
 
 export function Header() {
-  // const router = useRouter()
+  const router = useRouter()
+  const { user } = useContext(UserContext)
+
   const handleLogout = async () => {
-    console.log('handleLogout')
-    // router.push('/')
+    auth.signOut()
+    router.push('/')
   }
+
+  if (!user) return <Box />
 
   return (
     <Grid as="nav" py="4" px="4" gridTemplateColumns="auto auto 1fr auto" alignItems="center">

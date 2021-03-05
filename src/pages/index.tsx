@@ -1,26 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Text, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-
-import { useFirstRender } from 'hooks'
+import { UserContext } from 'lib/context'
 
 export default function Home(): JSX.Element {
   const router = useRouter()
   const [initialized, setInitialized] = useState(false)
-  const isFirstRender = useFirstRender()
-  const { user, loading: userLoading } = {} as any
+  const { user } = useContext(UserContext)
 
   useEffect(() => {
-    if (user && !userLoading && !initialized) {
+    if (user && !initialized) {
       setInitialized(true)
     }
-  }, [user, userLoading, initialized])
+  }, [user, initialized])
 
   useEffect(() => {
-    if (!(user || userLoading) && !isFirstRender) {
+    if (!user) {
       router.push('/login')
     }
-  }, [user, userLoading])
+  }, [user])
 
   return (
     <Box justifyContent="center">
