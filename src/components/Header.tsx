@@ -1,46 +1,78 @@
 import { useContext } from 'react'
-import { Grid, Box, Link, Button, HStack } from '@chakra-ui/react'
+import {
+  Grid,
+  Box,
+  Link,
+  Button,
+  Text,
+  Avatar,
+  VStack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+} from '@chakra-ui/react'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
-import { useRouter } from 'next/router'
 
 import Logo from 'svg/artsflow.svg'
-import { UserContext } from 'lib/context'
 import { auth } from 'lib/firebase'
+import { useRouter } from 'next/router'
+import { UserContext } from 'lib/context'
 
 export function Header() {
-  const router = useRouter()
   const { user } = useContext(UserContext)
+  const router = useRouter()
+
+  console.log(user)
 
   const handleLogout = async () => {
     auth.signOut()
     router.push('/')
   }
 
-  if (!user) return <Box />
-
   return (
-    <Grid as="nav" py="4" px="4" gridTemplateColumns="auto auto 1fr auto" alignItems="center">
-      <Box mx="8">
+    <Grid
+      as="nav"
+      py="4"
+      px="2rem"
+      gridTemplateColumns="auto 1fr auto"
+      alignItems="center"
+      bg="white"
+      boxShadow="outline"
+    >
+      <Box>
         <NextLink href="/">
           <Link>
             <Logo width="107px" height="24px" />
           </Link>
         </NextLink>
       </Box>
-      <HStack mx="8" spacing="8">
-        <NextLink href="/service/add">
-          <Link>Add Service</Link>
-        </NextLink>
-        <NextLink href="/list">
-          <Link>List services</Link>
-        </NextLink>
-      </HStack>
-      <Box mx="8" ml="auto">
-        user
-      </Box>
-      <Box>
-        <Button onClick={handleLogout}>Logout</Button>
-      </Box>
+      <VStack ml="auto" mr="4" spacing="0" alignItems="flex-end">
+        <Text fontSize="14px" fontWeight="bold">
+          {user.displayName}
+        </Text>
+        <Text fontSize="12px" color="#8e8e93">
+          Practitioner
+        </Text>
+      </VStack>
+      <Menu>
+        <MenuButton
+          as={Button}
+          variant="unstyled"
+          display="flex"
+          flexDirection="row"
+          rightIcon={<ChevronDownIcon color="#8e8e93" />}
+        >
+          <Avatar name={user.displayName} width="36px" height="36px" src={user.photoURL} />
+        </MenuButton>
+        <MenuList>
+          <MenuItem>My Profile</MenuItem>
+          <MenuDivider />
+          <MenuItem onClick={handleLogout}>Log out</MenuItem>
+        </MenuList>
+      </Menu>
     </Grid>
   )
 }
