@@ -25,9 +25,7 @@ export function Header() {
   const { user } = useContext(UserContext)
   const router = useRouter()
 
-  console.log(user)
-
-  const handleLogout = async () => {
+  const handleLogout = () => {
     auth.signOut()
     router.push('/')
   }
@@ -39,8 +37,8 @@ export function Header() {
       px="2rem"
       gridTemplateColumns="auto 1fr auto"
       alignItems="center"
-      bg="white"
-      boxShadow="outline"
+      boxShadow="0px 3px 8px -1px rgba(50, 50, 71, 0.05)"
+      zIndex="1"
     >
       <Box>
         <NextLink href="/">

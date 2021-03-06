@@ -1,8 +1,9 @@
+import { useEffect, useContext } from 'react'
 import Head from 'next/head'
-import { Grid, Box } from '@chakra-ui/react'
-import { useContext } from 'react'
+import { Grid, Box, HStack, VStack } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 
-import { Footer, Header } from 'components'
+import { Footer, Header, SidePanel } from 'components'
 import { UserContext } from 'lib/context'
 
 interface Props {
@@ -11,7 +12,15 @@ interface Props {
 
 export function Layout({ children }: Props) {
   const { user } = useContext(UserContext)
+  const router = useRouter()
+
   const SelectedLayout = user ? AuthLayout : UnAuthLayout
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login')
+    }
+  }, [user])
 
   return (
     <>
@@ -26,9 +35,12 @@ export function Layout({ children }: Props) {
 const AuthLayout = ({ children }: Props) => (
   <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
     <Header />
-    <Box as="main" px={[4, 32]} p="100px" pos="relative" bg="#E5E5E5">
-      {children}
-    </Box>
+    <HStack as="main" bg="#E5E5E5">
+      <SidePanel />
+      <VStack h="100%" p="40px">
+        {children}
+      </VStack>
+    </HStack>
   </Grid>
 )
 
