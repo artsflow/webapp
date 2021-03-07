@@ -1,6 +1,9 @@
-import { VStack, List, ListItem, ListIcon, Link as ChakraLink } from '@chakra-ui/react'
+import { useState } from 'react'
+import { VStack, List, ListItem, ListIcon, Link as ChakraLink, IconButton } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+
+import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons'
 
 import DashboardIcon from 'svg/icons/dashboard.svg'
 import DashboardSelectedIcon from 'svg/icons/dashboard-selected.svg'
@@ -33,9 +36,33 @@ const menu = [
 export const SidePanel = () => {
   const router = useRouter()
   const selected = getSelectedIndex(router.route)
+  const [isCollapsed, setCollapsed] = useState(false)
+
+  const toggleCollapse = () => {
+    setCollapsed(!isCollapsed)
+  }
 
   return (
-    <VStack bg="white" w="240px" h="100%" alignItems="flex-start" pt="2rem">
+    <VStack
+      bg="white"
+      w={isCollapsed ? '52px' : '240px'}
+      h="100%"
+      alignItems="flex-start"
+      pt="2rem"
+      pos="relative"
+    >
+      <IconButton
+        pos="absolute"
+        variant="ghost"
+        bg="#D2D2D4"
+        aria-label="Collapse panel"
+        icon={isCollapsed ? <ChevronRightIcon color="white" /> : <ChevronLeftIcon color="white" />}
+        onClick={toggleCollapse}
+        isRound
+        size="xs"
+        right="-12px"
+        top="15px"
+      />
       <List spacing="0.8rem">
         {menu.map((item: any, index: number) => {
           const isSelected = selected === index
@@ -47,12 +74,13 @@ export const SidePanel = () => {
               display="flex"
               alignItems="center"
               borderLeft={`3px solid ${isSelected ? '#47BCC8' : '#FFF'}`}
-              px="calc(2rem - 3px)"
+              px={isCollapsed ? 'calc(1rem - 3px)' : 'calc(2rem - 3px)'}
             >
               <Link as={`/${item.id}`} href={`/${item.id}`}>
                 <ChakraLink
                   color={isSelected ? '#47BCC8' : 'black'}
                   fontWeight={isSelected ? 'bold' : 'normal'}
+                  title={item.text}
                 >
                   <ListIcon
                     as={isSelected ? item.iconSelected : item.icon}
@@ -60,7 +88,7 @@ export const SidePanel = () => {
                     h="20px"
                     color="#47BCC8"
                   />
-                  {item.text}
+                  {isCollapsed ? '' : item.text}
                 </ChakraLink>
               </Link>
             </ListItem>
