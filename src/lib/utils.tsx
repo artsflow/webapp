@@ -1,5 +1,6 @@
 import { loremIpsum } from 'react-lorem-ipsum'
-import { Box, Text, createStandaloneToast } from '@chakra-ui/react'
+import { Box, Text, createStandaloneToast, forwardRef } from '@chakra-ui/react'
+import { motion, isValidMotionProp } from 'framer-motion'
 
 const toast = createStandaloneToast()
 
@@ -28,3 +29,14 @@ export const showAlert = ({ title, description, status = 'error' }: AlertProps) 
     isClosable: true,
     position: 'top',
   })
+
+export const motionComponent = (Component: any) =>
+  motion.custom(
+    // @ts-ignore
+    forwardRef((props, ref) => {
+      const chakraProps = Object.fromEntries(
+        Object.entries(props).filter(([key]) => !isValidMotionProp(key))
+      )
+      return <Component ref={ref} {...chakraProps} />
+    })
+  )

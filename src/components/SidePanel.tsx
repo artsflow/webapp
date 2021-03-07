@@ -1,5 +1,14 @@
 import { useState } from 'react'
-import { VStack, List, ListItem, ListIcon, Link as ChakraLink, IconButton } from '@chakra-ui/react'
+import {
+  Text,
+  VStack,
+  List,
+  ListItem,
+  ListIcon,
+  Link as ChakraLink,
+  IconButton,
+} from '@chakra-ui/react'
+
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -11,6 +20,8 @@ import ActivitiesIcon from 'svg/icons/activities.svg'
 import ActivitiesSelectedIcon from 'svg/icons/activities-selected.svg'
 import CalendarIcon from 'svg/icons/calendar.svg'
 import CalendarSelectedIcon from 'svg/icons/calendar-selected.svg'
+
+import { motionComponent } from 'lib/utils'
 
 const menu = [
   {
@@ -33,6 +44,9 @@ const menu = [
   },
 ]
 
+const MotionVStack = motionComponent(VStack)
+const MotionText = motionComponent(Text)
+
 export const SidePanel = () => {
   const router = useRouter()
   const selected = getSelectedIndex(router.route)
@@ -43,9 +57,9 @@ export const SidePanel = () => {
   }
 
   return (
-    <VStack
+    <MotionVStack
       bg="white"
-      w={isCollapsed ? '52px' : '240px'}
+      animate={{ width: isCollapsed ? '52px' : '240px' }}
       h="100%"
       alignItems="flex-start"
       pt="2rem"
@@ -81,6 +95,9 @@ export const SidePanel = () => {
                   color={isSelected ? '#47BCC8' : 'black'}
                   fontWeight={isSelected ? 'bold' : 'normal'}
                   title={item.text}
+                  display="flex"
+                  alignItems="center"
+                  pos="relative"
                 >
                   <ListIcon
                     as={isSelected ? item.iconSelected : item.icon}
@@ -88,14 +105,24 @@ export const SidePanel = () => {
                     h="20px"
                     color="#47BCC8"
                   />
-                  {isCollapsed ? '' : item.text}
+                  <MotionText
+                    pos="absolute"
+                    left="30px"
+                    width="100px"
+                    animate={{
+                      opacity: isCollapsed ? '0' : '1',
+                      marginLeft: isCollapsed ? '-150px' : '0',
+                    }}
+                  >
+                    {item.text}
+                  </MotionText>
                 </ChakraLink>
               </Link>
             </ListItem>
           )
         })}
       </List>
-    </VStack>
+    </MotionVStack>
   )
 }
 
