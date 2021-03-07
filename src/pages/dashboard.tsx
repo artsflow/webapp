@@ -4,7 +4,7 @@ import { Text, Box } from '@chakra-ui/react'
 export default function Dashboard(): JSX.Element {
   return (
     <Box>
-      <Text>dashboard</Text>
+      <Text>Dashboard coming soon...</Text>
     </Box>
   )
 }
