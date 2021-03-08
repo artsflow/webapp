@@ -51,7 +51,7 @@ const UnAuthLayout = ({ children }: Props) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (!user && !loading) {
+    if (!user && !loading && !UNAUTH_ROUTES.includes(router.route)) {
       router.push('/login')
     }
   }, [user, loading, router.route])
