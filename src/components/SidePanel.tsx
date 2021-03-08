@@ -46,6 +46,7 @@ const menu = [
 
 const MotionVStack = motionComponent(VStack)
 const MotionText = motionComponent(Text)
+const MotionListItem = motionComponent(ListItem)
 
 export const SidePanel = () => {
   const router = useRouter()
@@ -82,13 +83,13 @@ export const SidePanel = () => {
           const isSelected = selected === index
 
           return (
-            <ListItem
+            <MotionListItem
               key={item.id}
               flexDir="row"
               display="flex"
               alignItems="center"
               borderLeft={`3px solid ${isSelected ? '#47BCC8' : '#FFF'}`}
-              px={isCollapsed ? 'calc(1rem - 3px)' : 'calc(2rem - 3px)'}
+              animate={{ paddingLeft: isCollapsed ? '13px' : '29px' }}
             >
               <Link as={`/${item.id}`} href={`/${item.id}`}>
                 <ChakraLink
@@ -118,7 +119,7 @@ export const SidePanel = () => {
                   </MotionText>
                 </ChakraLink>
               </Link>
-            </ListItem>
+            </MotionListItem>
           )
         })}
       </List>
