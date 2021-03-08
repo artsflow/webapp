@@ -1,23 +1,25 @@
 import { useEffect, useContext } from 'react'
 import Head from 'next/head'
-import { Grid, Box, HStack, VStack } from '@chakra-ui/react'
+import { Grid, Box, HStack, VStack, Spinner, Center } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import { Footer, Header, SidePanel } from 'components'
 import { UserContext } from 'lib/context'
+
+const UNAUTH_ROUTES = ['/login', '/terms']
 
 interface Props {
   children: JSX.Element
 }
 
 export function Layout({ children }: Props) {
-  const { user } = useContext(UserContext)
+  const { user, loading } = useContext(UserContext)
   const router = useRouter()
 
   const SelectedLayout = user ? AuthLayout : UnAuthLayout
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !loading) {
       router.push('/login')
     }
   }, [user])
@@ -32,6 +34,12 @@ export function Layout({ children }: Props) {
   )
 }
 
+const Loading = () => (
+  <Center h="100%">
+    <Spinner />
+  </Center>
+)
+
 const AuthLayout = ({ children }: Props) => (
   <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
     <Header />
@@ -44,11 +52,20 @@ const AuthLayout = ({ children }: Props) => (
   </Grid>
 )
 
-const UnAuthLayout = ({ children }: Props) => (
-  <Grid as="article" minHeight="100%" gridTemplateRows="1fr auto" gridTemplateColumns="100%">
-    <Box as="main" px={[4, 32]} p="100px" pos="relative">
-      {children}
-    </Box>
-    <Footer />
-  </Grid>
-)
+const UnAuthLayout = ({ children }: Props) => {
+  const { loading } = useContext(UserContext)
+  const router = useRouter()
+
+  if (!UNAUTH_ROUTES.includes(router.route)) {
+    return <Loading />
+  }
+
+  return (
+    <Grid as="article" minHeight="100%" gridTemplateRows="1fr auto" gridTemplateColumns="100%">
+      <Box as="main" px={[4, 32]} p="100px" pos="relative">
+        {loading ? <Loading /> : children}
+      </Box>
+      <Footer />
+    </Grid>
+  )
+}

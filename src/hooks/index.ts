@@ -4,7 +4,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, firestore } from 'lib/firebase'
 
 export function useUserData() {
-  const [user] = useAuthState(auth)
+  const [user, loading] = useAuthState(auth)
   const [username, setUsername] = useState(null)
 
   useEffect(() => {
@@ -22,5 +22,5 @@ export function useUserData() {
     return unsubscribe
   }, [user])
 
-  return { user, username }
+  return { user, username, loading }
 }
