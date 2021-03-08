@@ -1,4 +1,3 @@
-import React from 'react'
 import { Text, Box } from '@chakra-ui/react'
 
 export default function Home(): JSX.Element {
