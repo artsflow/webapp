@@ -30,6 +30,8 @@ import { useRouter } from 'next/router'
 import { UserContext } from 'lib/context'
 import { Notifications } from 'components'
 
+import { version } from '../../package.json'
+
 export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user } = useContext(UserContext)
@@ -45,7 +47,7 @@ export function Header() {
       as="nav"
       py="4"
       px="2rem"
-      gridTemplateColumns="auto 1fr auto auto"
+      gridTemplateColumns="auto auto 1fr auto auto"
       alignItems="center"
       boxShadow="0px 3px 8px -1px rgba(50, 50, 71, 0.05)"
       zIndex="1"
@@ -57,6 +59,11 @@ export function Header() {
           </Link>
         </NextLink>
       </Box>
+      <HStack mt="10px" pl="1rem">
+        <Text fontSize="10px" color="gray.500">
+          v{version} alpha
+        </Text>
+      </HStack>
       <HStack ml="auto" spacing="1rem" borderRight="1px solid #ECEDF1" mr="1.5rem" pr="1.5rem">
         <RoundButton icon={<Icon as={ChatIcon} />} onClick={() => router.push('/chat')} />
         <RoundButton icon={<Icon as={BellIcon} />} onClick={onOpen} />
