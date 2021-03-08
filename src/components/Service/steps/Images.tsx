@@ -1,5 +1,5 @@
 import { useContext, useCallback } from 'react'
-import { Box, SimpleGrid, Heading, Icon } from '@chakra-ui/core'
+import { Box, SimpleGrid, Heading, Icon } from '@chakra-ui/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { RiImageLine } from 'react-icons/ri'

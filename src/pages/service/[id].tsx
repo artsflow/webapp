@@ -1,13 +1,10 @@
-import { Box, Heading } from '@chakra-ui/core'
+import { Box, Heading } from '@chakra-ui/react'
 import { Meta, Service } from 'components'
 import { useRouter } from 'next/router'
 
-import { useService, fetchService } from 'hooks/services'
-
-export default function ManageService({ initialData }: any) {
+export default function ManageService() {
   const { query } = useRouter()
   const { id } = query
-  const { data } = useService(id as string, initialData)
 
   return (
     <>
@@ -16,18 +13,8 @@ export default function ManageService({ initialData }: any) {
         <Heading size="md" mb="2">
           Edit Service
         </Heading>
-        <Service id={id} data={data} />
+        <Service id={id} data={null} />
       </Box>
     </>
   )
-}
-
-export async function getServerSideProps(context: any) {
-  const {
-    query: { id },
-    req,
-  } = context
-
-  const initialData = await fetchService(id, req.headers.cookie)
-  return { props: { initialData } }
 }

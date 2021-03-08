@@ -2,33 +2,27 @@ import * as React from 'react'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { wrap } from 'popmotion'
-import { Flex, BoxProps } from '@chakra-ui/core'
+import { Flex, BoxProps } from '@chakra-ui/react'
 
 const variants = {
-  enter: (direction: number) => {
-    return {
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
-    }
-  },
+  enter: (direction: number) => ({
+    x: direction > 0 ? 1000 : -1000,
+    opacity: 0,
+  }),
   center: {
     zIndex: 1,
     x: 0,
     opacity: 1,
   },
-  exit: (direction: number) => {
-    return {
-      zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0,
-    }
-  },
+  exit: (direction: number) => ({
+    zIndex: 0,
+    x: direction < 0 ? 1000 : -1000,
+    opacity: 0,
+  }),
 }
 
 const swipeConfidenceThreshold = 10000
-const swipePower = (offset: number, velocity: number) => {
-  return Math.abs(offset) * velocity
-}
+const swipePower = (offset: number, velocity: number) => Math.abs(offset) * velocity
 
 export function ImageGallery({ images }: { images: string[] }) {
   const [[page, direction], setPage] = useState([0, 0])

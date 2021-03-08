@@ -1,34 +1,12 @@
-import { gql } from 'graphql-request'
 import { useState, useCallback } from 'react'
-import { Box, Text, Button, Input, HStack, FormLabel, List, ListItem } from '@chakra-ui/core'
+import { Box, Text, Button, Input, HStack, FormLabel, List, ListItem } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
 import GoogleMap from 'google-map-react'
 import { isEmpty } from 'lodash'
 
 import { GCP_MAPS_KEY } from 'lib/config'
-import { client } from 'services/client'
 
 const ALLOWED_COUNTRIES = ['GB']
-
-const GET_ADDRESS = gql`
-  query getAddress($input: String!) {
-    getAddress(input: $input) {
-      id
-      streetNumber
-      streetName
-      municipality
-      extendedPostalCode
-      country
-      countryCode
-      freeformAddress
-      position {
-        lat
-        lon
-        geohash
-      }
-    }
-  }
-`
 
 export const AddressLookup = ({ address = {}, onAddress }: any) => {
   const [selectedAddress, setSelectedAddress]: any = useState(address)
@@ -39,8 +17,8 @@ export const AddressLookup = ({ address = {}, onAddress }: any) => {
   const handleClick = useCallback(async () => {
     if (!lookupAddress) return
     setLoading(true)
-    const result = await client.request(GET_ADDRESS, { input: lookupAddress })
-    setAddresses(result.getAddress)
+    // const result = await client.request(GET_ADDRESS, { input: lookupAddress })
+    setAddresses([])
     setSelectedAddress({})
     setLoading(false)
   }, [lookupAddress])

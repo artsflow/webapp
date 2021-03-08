@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@chakra-ui/core'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useMachine } from '@xstate/react'
 
 import {

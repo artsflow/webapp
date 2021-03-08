@@ -10,7 +10,7 @@ import {
   InputRightAddon,
   InputLeftAddon,
   InputGroup,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import humanize from 'humanize-duration'
 
 import { Context } from '../machine'

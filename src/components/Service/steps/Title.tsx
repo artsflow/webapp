@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Box, Input, InputGroup, InputRightElement, Heading } from '@chakra-ui/core'
+import { Box, Input, InputGroup, InputRightElement, Heading } from '@chakra-ui/react'
 
 import { Context } from '../machine'
 import { TITLE_LENGTH, Lipsum } from '../config'

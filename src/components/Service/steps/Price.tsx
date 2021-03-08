@@ -8,7 +8,7 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 
 import { Context } from '../machine'
 import { Lipsum } from '../config'

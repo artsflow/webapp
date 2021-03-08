@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { Box, Text, Heading, Button } from '@chakra-ui/core'
+import { Box, Text, Heading, Button } from '@chakra-ui/react'
 
 import { Context } from '../machine'
 

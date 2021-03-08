@@ -1,42 +1,60 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import { Magic } from 'magic-sdk'
-import { OAuthExtension } from '@magic-ext/oauth'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import {
   Text,
   Box,
-  Button,
   Input,
+  Button,
+  Spinner,
   InputGroup,
   InputLeftElement,
   InputRightElement,
-} from '@chakra-ui/core'
+  VStack,
+} from '@chakra-ui/react'
 import { CheckIcon } from '@chakra-ui/icons'
 
 import Logo from 'svg/artsflow.svg'
 import GoogleButton from 'svg/google-signin.svg'
 import { Container } from 'components'
-import { useUser, useIsMounted } from 'hooks'
-import { loginWithEmail } from 'services/auth'
-
-const NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY: string = process.env
-  .NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY as string
+import { auth, googleAuthProvider } from 'lib/firebase'
+import { UserContext } from 'lib/context'
 
 const validateEmail = (str: string): boolean => !!str.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)
 
 export default function Login(): JSX.Element {
   const router = useRouter()
-  const { user } = useUser()
-  const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const [isLoggingIn, setLogginIn] = useState(false)
   const [isEmailValid, setEmailValid] = useState(false)
   const [emailValue, setEmailValue] = useState('')
-  const [errorMsg, setErrorMsg] = useState(undefined)
-  const isMounted = useIsMounted()
+  const { oobCode } = router.query
+  const { user } = useContext(UserContext)
 
   useEffect(() => {
-    if (user) router.push('/')
+    if (user) {
+      router.push('/')
+    }
   }, [user])
+
+  useEffect(() => {
+    if (oobCode && auth.isSignInWithEmailLink(window.location.href)) {
+      let email = window.localStorage.getItem('emailForSignIn')
+
+      if (!email) {
+        email = window.prompt('Please provide your email for confirmation') as string
+      }
+
+      auth
+        .signInWithEmailLink(email, window.location.href)
+        .then((result) => {
+          window.localStorage.removeItem('emailForSignIn')
+          console.log('RESULT:', result)
+        })
+        .catch((error) => {
+          console.error('email_auth_error:', error)
+        })
+    }
+  }, [oobCode])
 
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,29 +64,15 @@ export default function Login(): JSX.Element {
     [emailValue]
   )
 
-  const login = useCallback(
-    async (email) => {
-      if (isMounted() && errorMsg) setErrorMsg(undefined)
-      const result = await loginWithEmail(email)
-
-      if (result.login.error) {
-        console.error('An unexpected error occurred:', result.login.error)
-        if (isMounted()) setErrorMsg(result.login.error)
-      } else {
-        router.push('/')
-      }
-    },
-    [errorMsg]
-  )
-
   const onLogin = useCallback(
     (e) => {
       e.preventDefault()
-      if (isLoggingIn) return
-      setIsLoggingIn(true)
-      login(emailValue).then(() => setIsLoggingIn(false))
+      console.log('onLogin')
+      auth.sendSignInLinkToEmail(emailValue, { url: window.location.href, handleCodeInApp: true })
+      window.localStorage.setItem('emailForSignIn', emailValue)
+      setLogginIn(true)
     },
-    [login, isLoggingIn, emailValue]
+    [isLoggingIn, emailValue]
   )
 
   const onSubmit = useCallback(
@@ -80,14 +84,8 @@ export default function Login(): JSX.Element {
   )
 
   const onGoogleLogin = async () => {
-    const magic = new Magic(NEXT_PUBLIC_MAGIC_PUBLISHABLE_KEY, {
-      extensions: [new OAuthExtension()],
-    })
-
-    await magic.oauth.loginWithRedirect({
-      provider: 'google',
-      redirectURI: `${window.location.origin}/callback`,
-    })
+    console.log('onGoogleLogin')
+    await auth.signInWithPopup(googleAuthProvider)
   }
 
   return (
@@ -99,27 +97,43 @@ export default function Login(): JSX.Element {
       </Link>
       <Box>
         <form onSubmit={onSubmit}>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em" children="@" />
-            <Input
-              borderColor="af.teal"
-              placeholder="hello@artsflow.com"
-              type="email"
-              onChange={handleEmailChange}
-              value={emailValue}
-            />
-            <InputRightElement children={<CheckIcon color={isEmailValid ? 'af.teal' : 'grey'} />} />
-          </InputGroup>
-          <Button
-            w="full"
-            bg="af.pink"
-            mt="2"
-            disabled={!isEmailValid || isLoggingIn}
-            isLoading={isLoggingIn}
-            onClick={onLogin}
-          >
-            Continue with email
-          </Button>
+          {isLoggingIn ? (
+            <VStack h="90px" justifyContent="center">
+              <Text textAlign="center">Check your email now</Text>
+              <Spinner color="af.pink" />
+            </VStack>
+          ) : (
+            <Box h="90px">
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  color="gray.300"
+                  fontSize="1.2em"
+                  children="@"
+                />
+                <Input
+                  borderColor="af.teal"
+                  placeholder="hello@artsflow.com"
+                  type="email"
+                  onChange={handleEmailChange}
+                  value={emailValue}
+                />
+                <InputRightElement
+                  children={<CheckIcon color={isEmailValid ? 'af.teal' : 'grey'} />}
+                />
+              </InputGroup>
+              <Button
+                w="full"
+                bg="af.pink"
+                mt="2"
+                disabled={!isEmailValid || isLoggingIn}
+                isLoading={isLoggingIn}
+                onClick={onLogin}
+              >
+                Continue with email
+              </Button>
+            </Box>
+          )}
           <Text textAlign="center" py="2">
             or
           </Text>

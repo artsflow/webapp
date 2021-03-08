@@ -1,46 +1,26 @@
-import { useCallback, useEffect, useRef } from 'react'
-import { gql } from 'graphql-request'
-import useSWR from 'swr'
+import { useState, useEffect } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
-import { client } from 'services/client'
+import { auth, firestore } from 'lib/firebase'
 
-export const GET_ME = gql`
-  query getMe {
-    getMe {
-      email
-      firstName
-      lastName
-      picture
-    }
-  }
-`
-
-export function useUser() {
-  const { data, isValidating } = useSWR(GET_ME, (query) => client.request(query))
-  const user = data?.getMe?.email ? data?.getMe : null
-  return { user, loading: isValidating }
-}
-
-export function useIsMounted() {
-  const isMountedRef = useRef(false)
+export function useUserData() {
+  const [user, loading] = useAuthState(auth)
+  const [username, setUsername] = useState(null)
 
   useEffect(() => {
-    isMountedRef.current = true
+    let unsubscribe
 
-    return () => {
-      isMountedRef.current = false
+    if (user) {
+      const ref = firestore.collection('users').doc(user.uid)
+      unsubscribe = ref.onSnapshot((doc) => {
+        setUsername(doc.data()?.username)
+      })
+    } else {
+      setUsername(null)
     }
-  }, [])
 
-  return useCallback(() => isMountedRef.current, [])
-}
+    return unsubscribe
+  }, [user])
 
-export function useFirstRender() {
-  const firstRender = useRef(true)
-
-  useEffect(() => {
-    firstRender.current = false
-  }, [])
-
-  return firstRender.current
+  return { user, username, loading }
 }

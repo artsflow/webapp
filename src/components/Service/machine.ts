@@ -2,9 +2,11 @@ import { createMachine, assign } from 'xstate'
 import { createContext } from 'react'
 import { isEmpty } from 'lodash'
 
-import { updateService, addService } from 'hooks/services'
 import { showAlert } from 'lib/utils'
 import { TITLE_LENGTH, DESCRIPTION_LENGTH, DURATION_MIN, DURATION_MAX } from './config'
+
+const updateService = () => console.log('updateService')
+const addService = () => console.log('addService')
 
 export const defaultContext: ServiceContext = {
   id: '',
