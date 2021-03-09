@@ -20,6 +20,7 @@ import { BsEye, BsLock } from 'react-icons/bs'
 import { useDropzone } from 'react-dropzone'
 
 import { UserContext } from 'lib/context'
+import { getImageKitUrl } from 'lib/utils'
 import { auth, storage, STATE_CHANGED } from 'lib/firebase'
 import { updateProfile, updateAvatarUrl } from 'api'
 import CameraSvg from 'svg/icons/camera.svg'
@@ -126,7 +127,7 @@ export default function Profile(): JSX.Element {
             name={displayName}
             width="90px"
             height="90px"
-            src={photoURL}
+            src={getImageKitUrl(photoURL, { w: 90, h: 90 })}
             bg="af.pink"
             color="white"
             pos="absolute"

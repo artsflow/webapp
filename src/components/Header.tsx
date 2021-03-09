@@ -29,6 +29,7 @@ import { auth } from 'lib/firebase'
 import { useRouter } from 'next/router'
 import { UserContext } from 'lib/context'
 import { Notifications } from 'components'
+import { getImageKitUrl } from 'lib/utils'
 
 import { version } from '../../package.json'
 
@@ -103,7 +104,7 @@ export function Header() {
             bg="af.pink"
             color="white"
             fontSize="xs"
-            src={profile?.photoURL}
+            src={getImageKitUrl(profile?.photoURL, { w: 36, h: 36 })}
           />
         </MenuButton>
         <MenuList>
