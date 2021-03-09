@@ -69,12 +69,24 @@ export function Header() {
         <RoundButton icon={<Icon as={BellIcon} />} onClick={onOpen} />
       </HStack>
       <VStack mr="4" spacing="0" alignItems="flex-end">
-        <Text fontSize="14px" fontWeight="bold">
-          {user.displayName}
-        </Text>
-        <Text fontSize="12px" color="#8e8e93">
-          Practitioner
-        </Text>
+        {user.displayName ? (
+          <>
+            <Text fontSize="14px" fontWeight="bold">
+              {user.displayName}
+            </Text>
+            <Text fontSize="12px" color="#8e8e93">
+              Practitioner
+            </Text>
+          </>
+        ) : (
+          <NextLink href="/profile">
+            <Link>
+              <Text fontSize="sm" fontWeight="bold" color="af.teal">
+                Complete your profile
+              </Text>
+            </Link>
+          </NextLink>
+        )}
       </VStack>
       <Menu>
         <MenuButton

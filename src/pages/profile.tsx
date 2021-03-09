@@ -9,12 +9,14 @@ import {
   Avatar,
   Input,
   VStack,
+  useToast,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 
 import { UserContext } from 'lib/context'
 
 import CameraSvg from 'svg/icons/camera.svg'
+import { updateProfile } from 'api'
 
 type Inputs = {
   firstName: string
@@ -25,8 +27,31 @@ type Inputs = {
 
 export default function Profile(): JSX.Element {
   const { user } = useContext(UserContext)
-  const { register, handleSubmit, errors } = useForm<Inputs>()
-  const onSubmit = (data: Inputs) => console.log(data)
+  const { register, handleSubmit, errors, formState } = useForm<Inputs>()
+  const toast = useToast()
+
+  const onSubmit = async (data: Inputs) => {
+    if (formState.isSubmitted) {
+      const result = await updateProfile(data)
+      if (result) {
+        toast({
+          title: 'Information updated',
+          status: 'success',
+          duration: 9000,
+          isClosable: true,
+          position: 'top',
+        })
+      } else {
+        toast({
+          title: 'Information not updated',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+          position: 'top',
+        })
+      }
+    }
+  }
 
   const [fistName, lastName] = user.displayName?.split(' ') || ''
   // console.log(user)
@@ -88,6 +113,9 @@ export default function Profile(): JSX.Element {
                 name="address"
                 ref={register({ maxLength: 120 })}
               />
+              <Text fontSize="xs" color="gray.500" pl="1rem">
+                the address will be kept private
+              </Text>
             </VStack>
             <VStack alignItems="flex-start" w="calc(66.66% - 1rem)">
               <Text fontWeight="bold">Short description</Text>
@@ -96,6 +124,9 @@ export default function Profile(): JSX.Element {
                 name="bio"
                 ref={register({ maxLength: 420 })}
               />
+              <Text fontSize="xs" color="gray.500" pl="1rem">
+                public information
+              </Text>
             </VStack>
           </HStack>
           <Button type="submit" bg="#47BCC8" color="white">

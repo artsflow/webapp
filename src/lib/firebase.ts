@@ -2,6 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
+import 'firebase/functions'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAqtqxeQK5-uLGC7iON1Ta-Q8QxXD0qIZ4',
@@ -11,6 +12,7 @@ const firebaseConfig = {
   messagingSenderId: '804828781243',
   appId: '1:804828781243:web:1e37a98f1384cfd1afa79e',
   measurementId: 'G-03GSHJRZVE',
+  // region: 'europe-west2',
 }
 
 if (!firebase.apps.length) {
@@ -48,3 +50,33 @@ export function postToJSON(doc: any) {
     updatedAt: data?.updatedAt.toMillis() || 0,
   }
 }
+
+// functions
+export const functions = firebase.app().functions('europe-west2')
+
+export const firebaseCallable = async (func: string, params: any) => {
+  console.info(`>>> callable: ${func}`, params)
+
+  try {
+    const result = await functions.httpsCallable(func, { timeout: 5000 })(params)
+    return result
+  } catch (e) {
+    console.error(`firebaseCallable:error:${func}: ${JSON.stringify(e)}`)
+    return null
+  }
+}
+
+// emulators
+// export const setFirebaseEmulators = async () => {
+//   if (__DEV__) {
+//     console.info('____DEV____settings')
+//     firestore.settings({
+//       host: 'https://firestore.ngrok.42tech.co',
+//       ssl: true,
+//       // persistence: true,
+//       cacheSizeBytes: 2048576,
+//     })
+
+//     functions.useFunctionsEmulator('https://functions.ngrok.42tech.co')
+//   }
+// }
