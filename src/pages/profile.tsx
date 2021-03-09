@@ -244,7 +244,7 @@ export default function Profile(): JSX.Element {
             bg="#47BCC8"
             color="white"
             isLoading={isLoading}
-            disabled={!isDirty}
+            disabled={!isDirty || isLoading}
           >
             Update details
           </Button>
