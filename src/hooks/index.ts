@@ -4,23 +4,40 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, firestore } from 'lib/firebase'
 
 export function useUserData() {
-  const [user, loading] = useAuthState(auth)
-  const [username, setUsername] = useState(null)
+  const [authState, loading] = useAuthState(auth)
+  const [user, setUser] = useState({}) as any
+  const [profile, setProfile] = useState({}) as any
+  console.log('useUserData')
 
   useEffect(() => {
     let unsubscribe
 
-    if (user) {
-      const ref = firestore.collection('users').doc(user.uid)
+    if (authState) {
+      const ref = firestore.collection('users').doc(authState.uid)
       unsubscribe = ref.onSnapshot((doc) => {
-        setUsername(doc.data()?.username)
+        setUser(doc.data())
       })
     } else {
-      setUsername(null)
+      setUser({})
     }
 
     return unsubscribe
-  }, [user])
+  }, [authState])
 
-  return { user, username, loading }
+  useEffect(() => {
+    let unsubscribe
+
+    if (authState) {
+      const ref = firestore.collection('profiles').doc(authState.uid)
+      unsubscribe = ref.onSnapshot((doc) => {
+        setProfile(doc.data())
+      })
+    } else {
+      setProfile({})
+    }
+
+    return unsubscribe
+  }, [authState])
+
+  return { authState, user, profile, loading }
 }

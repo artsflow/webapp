@@ -28,13 +28,13 @@ export default function Login(): JSX.Element {
   const [isEmailValid, setEmailValid] = useState(false)
   const [emailValue, setEmailValue] = useState('')
   const { oobCode } = router.query
-  const { user } = useContext(UserContext)
+  const { authState } = useContext(UserContext)
 
   useEffect(() => {
-    if (user) {
+    if (authState) {
       router.push('/')
     }
-  }, [user])
+  }, [authState])
 
   useEffect(() => {
     if (oobCode && auth.isSignInWithEmailLink(window.location.href)) {

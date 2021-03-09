@@ -34,7 +34,7 @@ import { version } from '../../package.json'
 
 export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { user } = useContext(UserContext)
+  const { user, profile } = useContext(UserContext)
   const router = useRouter()
 
   const handleLogout = () => {
@@ -96,7 +96,7 @@ export function Header() {
           flexDirection="row"
           rightIcon={<ChevronDownIcon color="#8e8e93" />}
         >
-          <Avatar name={user.displayName} width="36px" height="36px" src={user.photoURL} />
+          <Avatar name={user.displayName} width="36px" height="36px" src={profile.photoURL} />
         </MenuButton>
         <MenuList>
           <MenuItem onClick={() => router.push('/profile')}>My Profile</MenuItem>

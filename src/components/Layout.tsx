@@ -13,16 +13,16 @@ interface Props {
 }
 
 export function Layout({ children }: Props) {
-  const { user, loading } = useContext(UserContext)
+  const { authState, loading } = useContext(UserContext)
   const router = useRouter()
 
-  const SelectedLayout = user ? AuthLayout : UnAuthLayout
+  const SelectedLayout = authState ? AuthLayout : UnAuthLayout
 
   useEffect(() => {
-    if (!user && !loading) {
+    if (!authState && !loading) {
       router.push('/login')
     }
-  }, [user])
+  }, [authState])
 
   return (
     <>
@@ -47,14 +47,14 @@ const AuthLayout = ({ children }: Props) => (
 )
 
 const UnAuthLayout = ({ children }: Props) => {
-  const { user, loading } = useContext(UserContext)
+  const { authState, loading } = useContext(UserContext)
   const router = useRouter()
 
   useEffect(() => {
-    if (!user && !loading && !UNAUTH_ROUTES.includes(router.route)) {
+    if (!authState && !loading && !UNAUTH_ROUTES.includes(router.route)) {
       router.push('/login')
     }
-  }, [user, loading, router.route])
+  }, [authState, loading, router.route])
 
   if (!UNAUTH_ROUTES.includes(router.route)) {
     return <Loading />
