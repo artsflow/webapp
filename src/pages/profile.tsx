@@ -10,8 +10,13 @@ import {
   Input,
   VStack,
   useToast,
+  InputGroup,
+  InputRightElement,
+  Icon,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+
+import { BsEye, BsLock } from 'react-icons/bs'
 
 import { UserContext } from 'lib/context'
 
@@ -86,53 +91,78 @@ export default function Profile(): JSX.Element {
           <HStack spacing="1.5rem">
             <VStack alignItems="flex-start" w="full">
               <Text fontWeight="bold">First name</Text>
-              <Input
-                placeholder="First name"
-                defaultValue={firstName}
-                name="firstName"
-                ref={register({ required: true, maxLength: 20, pattern: /^[A-Za-z]+$/i })}
-              />
+              <InputGroup>
+                <Input
+                  placeholder="First name"
+                  defaultValue={firstName}
+                  name="firstName"
+                  ref={register({ required: true, maxLength: 20, pattern: /^[A-Za-z]+$/i })}
+                />
+                <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
+              </InputGroup>
             </VStack>
             <VStack alignItems="flex-start" w="full">
               <Text fontWeight="bold">Last name</Text>
-              <Input
-                placeholder="Last name"
-                defaultValue={lastName}
-                name="lastName"
-                ref={register({ required: true, maxLength: 40, pattern: /^[A-Za-z]+$/i })}
-              />
+              <InputGroup>
+                <Input
+                  placeholder="Last name"
+                  defaultValue={lastName}
+                  name="lastName"
+                  ref={register({ required: true, maxLength: 40, pattern: /^[A-Za-z]+$/i })}
+                />
+                <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
+              </InputGroup>
             </VStack>
             <VStack alignItems="flex-start" w="full">
               <Text fontWeight="bold">Email</Text>
-              <Input placeholder="Email" readOnly disabled bg="#FAFAFA" defaultValue={user.email} />
+              <InputGroup>
+                <Input
+                  placeholder="Email"
+                  readOnly
+                  disabled
+                  bg="#FAFAFA"
+                  defaultValue={user.email}
+                />
+                <InputRightElement children={<Icon as={BsLock} color="gray.300" />} />
+              </InputGroup>
             </VStack>
           </HStack>
-          <HStack spacing="1.5rem" mt="1rem" mb="1.5rem">
+          <HStack spacing="1.5rem" mt="1rem">
             <VStack alignItems="flex-start" w="calc(33.33% - 1rem)">
               <Text fontWeight="bold">Address</Text>
-              <Input
-                placeholder="Enter your address"
-                defaultValue={user.address}
-                name="address"
-                ref={register({ maxLength: 120 })}
-              />
-              <Text fontSize="xs" color="gray.500" pl="1rem">
-                the address will be kept private
-              </Text>
+              <InputGroup>
+                <Input
+                  placeholder="Enter your address"
+                  defaultValue={user.address}
+                  name="address"
+                  ref={register({ maxLength: 120 })}
+                />
+                <InputRightElement children={<Icon as={BsLock} color="gray.300" />} />
+              </InputGroup>
             </VStack>
             <VStack alignItems="flex-start" w="calc(66.66% - 1rem)">
               <Text fontWeight="bold">Short description</Text>
-              <Input
-                placeholder="a little about you"
-                defaultValue={bio}
-                name="bio"
-                ref={register({ maxLength: 420 })}
-              />
-              <Text fontSize="xs" color="gray.500" pl="1rem">
-                public information
-              </Text>
+              <InputGroup>
+                <Input
+                  placeholder="a little about you"
+                  defaultValue={bio}
+                  name="bio"
+                  ref={register({ maxLength: 420 })}
+                />
+                <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
+              </InputGroup>
             </VStack>
           </HStack>
+          <VStack py="1.5rem" mb="1.5rem" alignItems="flex-start" color="gray.400">
+            <Text fontSize="xs">
+              <Icon as={BsEye} mr="0.7rem" />
+              public information on my profile
+            </Text>
+            <Text fontSize="xs">
+              <Icon as={BsLock} mr="0.7rem" />
+              data is private
+            </Text>
+          </VStack>
           <Button
             type="submit"
             bg="#47BCC8"
