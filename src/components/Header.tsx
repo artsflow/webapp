@@ -69,10 +69,10 @@ export function Header() {
         <RoundButton icon={<Icon as={BellIcon} />} onClick={onOpen} />
       </HStack>
       <VStack mr="4" spacing="0" alignItems="flex-end">
-        {user.displayName ? (
+        {user?.displayName ? (
           <>
             <Text fontSize="14px" fontWeight="bold">
-              {user.displayName}
+              {user?.displayName}
             </Text>
             <Text fontSize="12px" color="#8e8e93">
               Practitioner
@@ -96,7 +96,7 @@ export function Header() {
           flexDirection="row"
           rightIcon={<ChevronDownIcon color="#8e8e93" />}
         >
-          <Avatar name={user.displayName} width="36px" height="36px" src={profile.photoURL} />
+          <Avatar name={user?.displayName} width="36px" height="36px" src={profile?.photoURL} />
         </MenuButton>
         <MenuList>
           <MenuItem onClick={() => router.push('/profile')}>My Profile</MenuItem>
