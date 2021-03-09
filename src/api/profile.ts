@@ -9,3 +9,6 @@ interface ProfileData {
 
 export const updateProfile = (profileData: ProfileData) =>
   firebaseCallable('updateProfile', profileData)
+
+export const updateAvatarUrl = (photoURL: string) =>
+  firebaseCallable('updateAvatarUrl', { photoURL })

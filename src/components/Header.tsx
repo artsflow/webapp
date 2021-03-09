@@ -96,7 +96,15 @@ export function Header() {
           flexDirection="row"
           rightIcon={<ChevronDownIcon color="#8e8e93" />}
         >
-          <Avatar name={user?.displayName} width="36px" height="36px" src={profile?.photoURL} />
+          <Avatar
+            name={user?.displayName}
+            width="36px"
+            height="36px"
+            bg="af.pink"
+            color="white"
+            fontSize="xs"
+            src={profile?.photoURL}
+          />
         </MenuButton>
         <MenuList>
           <MenuItem onClick={() => router.push('/profile')}>My Profile</MenuItem>

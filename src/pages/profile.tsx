@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useCallback } from 'react'
 import {
   Text,
   Heading,
@@ -12,16 +12,17 @@ import {
   useToast,
   InputGroup,
   InputRightElement,
+  CircularProgress,
   Icon,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
-
 import { BsEye, BsLock } from 'react-icons/bs'
+import { useDropzone } from 'react-dropzone'
 
 import { UserContext } from 'lib/context'
-
+import { auth, storage, STATE_CHANGED } from 'lib/firebase'
+import { updateProfile, updateAvatarUrl } from 'api'
 import CameraSvg from 'svg/icons/camera.svg'
-import { updateProfile } from 'api'
 
 type Inputs = {
   firstName: string
@@ -32,12 +33,61 @@ type Inputs = {
 
 export default function Profile(): JSX.Element {
   const [isLoading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [isCompressing, setCompressing] = useState(false)
+  const [progress, setProgress] = useState(0)
   const { user, profile } = useContext(UserContext)
   const { register, handleSubmit, formState, reset } = useForm<Inputs>()
   const toast = useToast()
 
   const { firstName, lastName, displayName, bio, photoURL } = profile
   const { isDirty } = formState
+
+  const onDrop = useCallback(async ([file]) => {
+    console.log('onDrop')
+    setCompressing(true)
+
+    const heic2any = (await import('heic2any')).default
+    // @ts-ignore
+    const { readAndCompressImage } = await import('browser-image-resizer')
+
+    const resizedImage = await readAndCompressImage(
+      file.type === 'image/heic' ? await heic2any({ blob: file }) : file,
+      {
+        quality: 0.9,
+        maxWidth: 2400,
+        maxHeight: 2400,
+        debug: true,
+        mimeType: 'image/webp',
+      }
+    )
+
+    setCompressing(false)
+    // console.log(resizedImage, file) // check heic vs webp
+    const extension = resizedImage.type.replace('image/', '')
+
+    const ref = storage.ref(`uploads/${auth.currentUser?.uid}/${Date.now()}.${extension}`)
+    setUploading(true)
+    const task = ref.put(resizedImage)
+
+    task.on(STATE_CHANGED, (snapshot) => {
+      const pct = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0)
+      setProgress(parseInt(pct, 10))
+    })
+
+    task
+      .then(() => ref.getDownloadURL())
+      .then(async (url) => {
+        console.log(url)
+        setUploading(false)
+        await updateAvatarUrl(url)
+      })
+  }, [])
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: 'image/jpeg, image/png, image/heic, image/webp',
+  })
 
   const onSubmit = async (data: Inputs) => {
     reset()
@@ -71,8 +121,33 @@ export default function Profile(): JSX.Element {
       <Text color="#616167">Edit and add to your profile here.</Text>
 
       <Box bg="white" shadow="sm" px="1.5rem" py="2rem" mt="80px" rounded="12px">
-        <Box mt="-75px" pb="2rem" pos="relative" w="90px">
-          <Avatar name={displayName} width="90px" height="90px" src={photoURL} />
+        <Box mt="-75px" mb="75px" pb="2rem" pos="relative" w="90px">
+          <Avatar
+            name={displayName}
+            width="90px"
+            height="90px"
+            src={photoURL}
+            bg="af.pink"
+            color="white"
+            pos="absolute"
+            left="0"
+            top="0"
+          />
+          <CircularProgress
+            min={0}
+            max={100}
+            value={progress}
+            size="114px"
+            left="-12px"
+            top="-12px"
+            thickness="4px"
+            color="af.teal"
+            trackColor="white"
+            pos="absolute"
+            isIndeterminate={isCompressing}
+            display={uploading ? 'block' : 'none'}
+          />
+          <input {...getInputProps()} />
           <IconButton
             variant="ghost"
             border="2px solid #F9F9F9"
@@ -84,7 +159,7 @@ export default function Profile(): JSX.Element {
             right="-10px"
             top="45px"
             icon={<CameraSvg width="20px" height="20px" />}
-            // onClick={onClick}
+            {...getRootProps()}
           />
         </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
