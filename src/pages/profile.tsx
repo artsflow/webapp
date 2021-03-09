@@ -91,10 +91,10 @@ export default function Profile(): JSX.Element {
   })
 
   const onSubmit = async (data: Inputs) => {
-    reset()
     setLoading(true)
     const result = await updateProfile(data)
     setLoading(false)
+    reset()
     if (result) {
       toast({
         title: 'Information updated',
