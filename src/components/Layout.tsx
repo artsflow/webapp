@@ -39,7 +39,7 @@ const AuthLayout = ({ children }: Props) => (
     <Header />
     <HStack as="main" bg="#E5E5E5">
       <SidePanel />
-      <VStack h="100%" p="40px">
+      <VStack h="100%" p="40px" w="100%" alignItems="flex-start">
         {children}
       </VStack>
     </HStack>
