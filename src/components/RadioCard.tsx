@@ -16,14 +16,13 @@ export function RadioCard(props: any) {
         borderRadius="12px"
         boxShadow="lg"
         fontSize="sm"
+        borderWidth="1px"
+        borderColor="white"
         bg="white"
         _checked={{
-          bg: 'teal.600',
-          color: 'white',
-          borderColor: 'teal.600',
-        }}
-        _focus={{
-          boxShadow: 'outline',
+          bg: '#e7f3f4',
+          color: '#47bcc8',
+          borderColor: '#47bcc8',
         }}
         px="20px"
         py="12px"
