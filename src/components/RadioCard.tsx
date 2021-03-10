@@ -8,14 +8,15 @@ export function RadioCard(props: any) {
   const checkbox = getCheckboxProps()
 
   return (
-    <Box as="label" mb="4">
+    <Box as="label" mb="1rem" mr="1rem">
       <input {...input} />
       <Box
         {...checkbox}
         cursor="pointer"
-        borderWidth="1px"
-        borderRadius="md"
-        boxShadow="md"
+        borderRadius="12px"
+        boxShadow="lg"
+        fontSize="sm"
+        bg="white"
         _checked={{
           bg: 'teal.600',
           color: 'white',
@@ -24,8 +25,8 @@ export function RadioCard(props: any) {
         _focus={{
           boxShadow: 'outline',
         }}
-        px={5}
-        py={3}
+        px="20px"
+        py="12px"
       >
         {children}
       </Box>

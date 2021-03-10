@@ -1,4 +1,5 @@
 import { Heading } from '@chakra-ui/react'
+
 import { Meta } from 'components'
 
 export function Error404() {

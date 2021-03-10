@@ -66,9 +66,9 @@ const AuthLayout = ({ children }: Props) => {
   return (
     <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
       <Header />
-      <HStack as="main" bg="#E5E5E5">
+      <HStack as="main" bg="#F9F9F9" spacing="0">
         <SidePanel />
-        <VStack h="100%" p="40px" w="100%" alignItems="flex-start">
+        <VStack h="100%" w="100%" alignItems="flex-start" spacing="0">
           {children}
         </VStack>
       </HStack>

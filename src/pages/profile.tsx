@@ -115,7 +115,7 @@ export default function Profile(): JSX.Element {
   }
 
   return (
-    <Box w="100%">
+    <Box w="100%" p="40px">
       <Heading size="md" mb="1rem">
         My profile
       </Heading>

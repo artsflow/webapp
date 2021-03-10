@@ -65,6 +65,7 @@ export const SidePanel = () => {
       alignItems="flex-start"
       pt="2rem"
       pos="relative"
+      boxShadow="0px 3px 8px -1px rgba(50, 50, 71, 0.05)"
     >
       <IconButton
         pos="absolute"
