@@ -79,7 +79,7 @@ export function Details() {
             <Error
               errors={errors}
               name="title"
-              message={`Title should have minimum ${TITLE_MIN_LENGTH} characters`}
+              message={`Title between ${TITLE_MIN_LENGTH} and ${TITLE_MAX_LENGTH} characters`}
             />
           </Container>
 
@@ -114,7 +114,7 @@ export function Details() {
             <Error
               errors={errors}
               name="description"
-              message={`Description should have minimum ${DESCRIPTION_MIN_LENGTH} characters`}
+              message={`Description between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters`}
             />
           </Container>
 
@@ -154,7 +154,7 @@ export function Details() {
             <Error
               errors={errors}
               name="whatToBring"
-              message={`What to bring should have minimum ${DESCRIPTION_MIN_LENGTH} characters`}
+              message={`What to bring between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters`}
             />
           </Container>
         </Flex>
