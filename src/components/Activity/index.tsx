@@ -1,17 +1,25 @@
 import React from 'react'
 import { Flex } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { StateMachineProvider, createStore } from 'little-state-machine'
 
-import { Category, Details } from './steps'
 import { Preview } from './Preview'
-import { Navigation } from './Navigation'
-import { getCurrentStep } from './config'
+import { Category, Details } from './steps'
+
+import { getCurrentStep, DevTool } from './utils'
+
+createStore({
+  category: '',
+  title: '',
+  desciption: '',
+  whatToBring: '',
+})
 
 interface StepsMap {
   [key: string]: React.FC
 }
 
-const stepsMap: StepsMap = {
+export const stepsMap: StepsMap = {
   category: Category,
   details: Details,
 }
@@ -22,18 +30,20 @@ export function Activity(): JSX.Element {
   const Screen = stepsMap[currentStep]
 
   return (
-    <Flex justifyContent="space-between" w="full" h="full">
-      <Flex
-        justifyContent="space-between"
-        alignItems="flex-start"
-        direction="column"
-        flex="1"
-        h="full"
-      >
-        <Screen />
-        <Navigation />
+    <StateMachineProvider>
+      {process.env.NODE_ENV !== 'production' && <DevTool />}
+      <Flex justifyContent="space-between" w="full" h="full">
+        <Flex
+          justifyContent="space-between"
+          alignItems="flex-start"
+          direction="column"
+          flex="1"
+          h="full"
+        >
+          <Screen />
+        </Flex>
+        <Preview />
       </Flex>
-      <Preview />
-    </Flex>
+    </StateMachineProvider>
   )
 }
