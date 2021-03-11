@@ -137,8 +137,7 @@ export function Details() {
                 shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
                 name="whatToBring"
                 ref={register({
-                  required: true,
-                  minLength: DESCRIPTION_MIN_LENGTH,
+                  required: false,
                   maxLength: DESCRIPTION_MAX_LENGTH,
                 })}
                 onChange={() => handleChange('whatToBring')}
@@ -154,7 +153,7 @@ export function Details() {
             <Error
               errors={errors}
               name="whatToBring"
-              message={`What to bring between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters`}
+              message={`What to bring no more than ${DESCRIPTION_MAX_LENGTH} characters`}
             />
           </Container>
         </Flex>
