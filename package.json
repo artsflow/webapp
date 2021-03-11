@@ -1,6 +1,6 @@
 {
   "name": "artsflow-saas",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "private": true,
   "scripts": {
     "dev": "next dev --port=4042",
@@ -31,6 +31,7 @@
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
     "@hapi/iron": "^6.0.0",
+    "@hookform/error-message": "^0.0.5",
     "@types/cookie": "^0.4.0",
     "@types/google-map-react": "^2.1.0",
     "@types/humanize-duration": "^3.18.1",

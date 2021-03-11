@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 import { getCurrentStep, getPrevStep, getNextStep } from './utils'
 
-export function Navigation({ isValid }: any): JSX.Element {
+export function Navigation({ isValid, onClick }: any): JSX.Element {
   const router = useRouter()
 
   const currentStep = getCurrentStep(router.asPath.split('/')[3])
@@ -12,6 +12,7 @@ export function Navigation({ isValid }: any): JSX.Element {
   const nextStep = getNextStep(currentStep)
 
   const navigate = (step: string, dir: string) => {
+    if (onClick) onClick()
     if (!isValid && dir === 'next') return
     const url = `/activities/add/${step}`
     router.push(url, url, { shallow: true })

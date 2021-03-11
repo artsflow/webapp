@@ -12,6 +12,7 @@ import {
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { useStateMachine } from 'little-state-machine'
 import { useForm } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 
 import { update } from '../utils'
 import { Navigation } from '../Navigation'
@@ -23,10 +24,17 @@ const DESCRIPTION_MAX_LENGTH = 1000
 
 export function Details() {
   const { state, actions } = useStateMachine({ update }) as any
-  const { register, formState, getValues } = useForm({ defaultValues: state, mode: 'onBlur' })
+  const { register, formState, getValues, errors, trigger } = useForm({
+    defaultValues: state,
+    mode: 'onBlur',
+  })
   const { isValid } = formState
 
   const handleChange = (field: string) => actions.update({ [field]: getValues(field) })
+
+  const handleTrigger = async () => {
+    await trigger()
+  }
 
   return (
     <>
@@ -39,104 +47,137 @@ export function Details() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
           </Text>
 
-          <HStack>
+          <Container>
             <Text fontWeight="bold" alignItems="center">
               Activity Title
             </Text>
-          </HStack>
-          <InputGroup mb="1rem">
-            <Input
-              my="4"
-              pr="60px"
-              placeholder="Add activity title..."
-              bg="white"
-              border="none"
-              shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-              autoFocus
+            <InputGroup>
+              <Input
+                my="4"
+                pr="60px"
+                placeholder="Add activity title..."
+                bg="white"
+                border="none"
+                shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
+                autoFocus
+                name="title"
+                ref={register({
+                  required: true,
+                  minLength: TITLE_MIN_LENGTH,
+                  maxLength: TITLE_MAX_LENGTH,
+                })}
+                onChange={() => handleChange('title')}
+              />
+              <InputRightElement
+                my="4"
+                mr="2"
+                fontSize="xs"
+                children={`${state.title?.length} / ${TITLE_MAX_LENGTH}`}
+                color="gray.400"
+              />
+            </InputGroup>
+            <Error
+              errors={errors}
               name="title"
-              ref={register({
-                required: true,
-                minLength: TITLE_MIN_LENGTH,
-                maxLength: TITLE_MAX_LENGTH,
-              })}
-              onChange={() => handleChange('title')}
+              message={`Title should have minimum ${TITLE_MIN_LENGTH} characters`}
             />
-            <InputRightElement
-              my="4"
-              mr="2"
-              fontSize="xs"
-              children={`${state.title.length} / ${TITLE_MAX_LENGTH}`}
-              color="gray.400"
-            />
-          </InputGroup>
+          </Container>
 
-          <HStack>
+          <Container>
             <Text fontWeight="bold" alignItems="center">
               Description
             </Text>
-          </HStack>
-          <InputGroup mb="1rem">
-            <Textarea
-              my="4"
-              placeholder="Enter description..."
-              rows={7}
-              bg="white"
-              border="none"
-              shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
+            <InputGroup>
+              <Textarea
+                my="4"
+                placeholder="Enter description..."
+                rows={7}
+                bg="white"
+                border="none"
+                shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
+                name="description"
+                ref={register({
+                  required: true,
+                  minLength: DESCRIPTION_MIN_LENGTH,
+                  maxLength: DESCRIPTION_MAX_LENGTH,
+                })}
+                onChange={() => handleChange('description')}
+              />
+              <InputRightElement
+                mt="-2rem"
+                w="80px"
+                color="gray.400"
+                fontSize="xs"
+                children={`${state.description?.length} / ${DESCRIPTION_MAX_LENGTH}`}
+              />
+            </InputGroup>
+            <Error
+              errors={errors}
               name="description"
-              ref={register({
-                required: true,
-                minLength: DESCRIPTION_MIN_LENGTH,
-                maxLength: DESCRIPTION_MAX_LENGTH,
-              })}
-              onChange={() => handleChange('description')}
+              message={`Description should have minimum ${DESCRIPTION_MIN_LENGTH} characters`}
             />
-            <InputRightElement
-              mt="1rem"
-              mr="3px"
-              w="80px"
-              color="gray.400"
-              fontSize="xs"
-              children={`${state.description.length} / ${DESCRIPTION_MAX_LENGTH}`}
-            />
-          </InputGroup>
+          </Container>
 
-          <HStack>
-            <Text fontWeight="bold" alignItems="center">
-              What to bring
-            </Text>
-            <Tooltip label="More info here about what what to bring..." fontSize="md">
-              <QuestionOutlineIcon color="gray.400" />
-            </Tooltip>
-          </HStack>
-          <InputGroup>
-            <Textarea
-              my="4"
-              placeholder="List what to bring"
-              rows={7}
-              bg="white"
-              border="none"
-              shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
+          <Container>
+            <HStack>
+              <Text fontWeight="bold" alignItems="center">
+                What to bring
+              </Text>
+              <Tooltip label="More info here about what what to bring..." fontSize="md">
+                <QuestionOutlineIcon color="gray.400" />
+              </Tooltip>
+            </HStack>
+            <InputGroup>
+              <Textarea
+                my="4"
+                placeholder="List what to bring..."
+                rows={7}
+                bg="white"
+                border="none"
+                shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
+                name="whatToBring"
+                ref={register({
+                  required: true,
+                  minLength: DESCRIPTION_MIN_LENGTH,
+                  maxLength: DESCRIPTION_MAX_LENGTH,
+                })}
+                onChange={() => handleChange('whatToBring')}
+              />
+              <InputRightElement
+                mt="-2rem"
+                w="80px"
+                color="gray.400"
+                fontSize="xs"
+                children={`${state.whatToBring?.length} / ${DESCRIPTION_MAX_LENGTH}`}
+              />
+            </InputGroup>
+            <Error
+              errors={errors}
               name="whatToBring"
-              ref={register({
-                required: true,
-                minLength: DESCRIPTION_MIN_LENGTH,
-                maxLength: DESCRIPTION_MAX_LENGTH,
-              })}
-              onChange={() => handleChange('whatToBring')}
+              message={`What to bring should have minimum ${DESCRIPTION_MIN_LENGTH} characters`}
             />
-            <InputRightElement
-              mt="1rem"
-              mr="3px"
-              w="80px"
-              color="gray.400"
-              fontSize="xs"
-              children={`${state.whatToBring.length} / ${DESCRIPTION_MAX_LENGTH}`}
-            />
-          </InputGroup>
+          </Container>
         </Flex>
       </Flex>
-      <Navigation isValid={isValid} />
+      <Navigation isValid={isValid} onClick={handleTrigger} />
     </>
   )
 }
+
+const Container = ({ children }: any) => (
+  <Flex
+    direction="column"
+    alignItems="flex-start"
+    w="full"
+    pos="relative"
+    pb="1rem"
+    children={children}
+  />
+)
+
+const Error = (props: any) => (
+  <ErrorMessage
+    as={<Text color="red.400" fontSize="xs" pos="absolute" bottom="0" right="0" />}
+    {...props}
+  />
+)

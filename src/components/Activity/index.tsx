@@ -11,7 +11,7 @@ import { getCurrentStep, DevTool } from './utils'
 createStore({
   category: '',
   title: '',
-  desciption: '',
+  description: '',
   whatToBring: '',
 })
 
