@@ -20,7 +20,7 @@ export default class MyDocument extends Document {
           <link rel="preload" href="/fonts/Manrope-Bold.ttf" as="font" crossOrigin="anonymous" />
           <script
             type="text/javascript"
-            src={`https://maps.google.com/maps/api/js?key=${GCP_MAPS_KEY}`}
+            src={`https://maps.google.com/maps/api/js?key=${GCP_MAPS_KEY}&libraries=places`}
             async
           />
         </Head>

@@ -15,24 +15,14 @@ import { RRuleSet, rrulestr } from 'rrule'
 import { format } from 'date-fns'
 import { isEmpty } from 'lodash'
 
-import { AddressInfo, ImageGallery } from 'components'
+import { ImageGallery } from 'components'
 import { MockiPhone } from './Phone'
 import { Context } from './machine'
 import { ruleText } from './steps/Frequency'
 
 export function Preview() {
   const { context } = useContext(Context) as any
-  const {
-    title,
-    description,
-    category,
-    duration,
-    capacity,
-    price,
-    address,
-    frequency,
-    images,
-  } = context
+  const { title, description, category, duration, capacity, price, frequency, images } = context
 
   const rruleSet = new RRuleSet()
   frequency.rrules.forEach((r: string) => rruleSet.rrule(rrulestr(r)))
@@ -95,8 +85,6 @@ export function Preview() {
           <SkeletonText noOfLines={6} startColor="grey" endColor="grey" />
         )}
       </Box>
-
-      {address.position && <AddressInfo {...address} withAddress={false} defaultZoom={13} />}
 
       {!isEmpty(frequency.rrules) && (
         <VStack p="4" mb="8" align="flex-start">

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 export const steps = [
   'category',
   'details',
-  // 'address',
+  'location',
   // 'images',
   // 'video',
   // 'duration',

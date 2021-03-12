@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { StateMachineProvider, createStore } from 'little-state-machine'
 
 import { Preview } from './Preview'
-import { Category, Details } from './steps'
+import { Category, Details, Location } from './steps'
 
 import { getCurrentStep, DevTool } from './utils'
 
@@ -13,6 +13,10 @@ createStore({
   title: '',
   description: '',
   whatToBring: '',
+  locationAddress: '',
+  locationDetails: '',
+  locationGeocode: {},
+  locationPlaceId: '',
 })
 
 interface StepsMap {
@@ -22,6 +26,7 @@ interface StepsMap {
 export const stepsMap: StepsMap = {
   category: Category,
   details: Details,
+  location: Location,
 }
 
 export function Activity(): JSX.Element {
