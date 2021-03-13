@@ -13,6 +13,7 @@ export function Preview(): JSX.Element {
 
   const titleSelected = !title && !!category
   const descriptionSelected = !description && !titleSelected && !!category
+  const mapVisible = locationGeocode.lat && title && description
 
   return (
     <Flex
@@ -31,7 +32,7 @@ export function Preview(): JSX.Element {
           <Category text={category} />
           <Title text={title} isSelected={titleSelected} />
           <Description text={description} isSelected={descriptionSelected} />
-          <Map {...locationGeocode} />
+          {mapVisible && <Map {...locationGeocode} />}
         </VStack>
       </MockiPhone>
     </Flex>

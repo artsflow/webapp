@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Flex } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { StateMachineProvider, createStore } from 'little-state-machine'
@@ -6,7 +6,7 @@ import { StateMachineProvider, createStore } from 'little-state-machine'
 import { Preview } from './Preview'
 import { Category, Details, Location } from './steps'
 
-import { getCurrentStep, DevTool } from './utils'
+import { steps, getCurrentStep, DevTool } from './utils'
 
 createStore({
   category: '',
@@ -30,9 +30,20 @@ export const stepsMap: StepsMap = {
 }
 
 export function Activity(): JSX.Element {
-  const { asPath } = useRouter()
-  const currentStep = getCurrentStep(asPath.split('/')[3])
+  const { asPath, push } = useRouter()
+  const [, , , step, id] = asPath.split('/')
+  console.log(step, id)
+  const currentStep = getCurrentStep(step)
   const Screen = stepsMap[currentStep]
+
+  useEffect(() => {
+    console.log('effect', step)
+    if (!steps.includes(step)) {
+      const url = `/activities/add`
+      push(url, url, { shallow: true })
+      console.log('!!!!')
+    }
+  }, [step])
 
   return (
     <StateMachineProvider>
