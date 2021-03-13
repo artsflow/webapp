@@ -39,11 +39,9 @@ export function Activity(): JSX.Element {
   const Screen = stepsMap[currentStep]
 
   useEffect(() => {
-    console.log('effect', step)
     if (!steps.includes(step)) {
-      const url = `/activities/add`
+      const url = `/activities/add/category`
       push(url, url, { shallow: true })
-      console.log('!!!!')
     }
   }, [step])
 

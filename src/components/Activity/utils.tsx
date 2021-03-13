@@ -26,3 +26,16 @@ export const DevTool = dynamic(() => import('./DevTool'), { ssr: false })
 export const getPrevStep = (s: string) => steps[steps.indexOf(s) - 1]
 export const getNextStep = (s: string) => steps[steps.indexOf(s) + 1]
 export const getCurrentStep = (s: string) => steps[steps.indexOf(s)] || steps[0]
+
+export const getLastStep = (step: string, state: any) => {
+  const { images, locationGeocode, description, title, category } = state
+
+  let lastStep = step
+
+  if (images.length === 0) lastStep = 'images'
+  if (!locationGeocode.lat) lastStep = 'location'
+  if (!description || !title) lastStep = 'details'
+  if (!category) lastStep = 'category'
+
+  return lastStep
+}
