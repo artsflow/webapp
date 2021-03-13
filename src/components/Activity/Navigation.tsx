@@ -1,8 +1,8 @@
 import React from 'react'
-import { Flex, Button } from '@chakra-ui/react'
+import { Flex, Button, HStack, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
-import { getCurrentStep, getPrevStep, getNextStep } from './utils'
+import { steps, getCurrentStep, getPrevStep, getNextStep } from './utils'
 
 export function Navigation({ isValid, onClick }: any): JSX.Element {
   const router = useRouter()
@@ -20,12 +20,27 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
 
   return (
     <Flex bg="white" w="100%" justifyContent="space-between" p="1.5rem">
-      {prevStep && (
-        <Button bg="#edf8fa" color="#47BCC8" onClick={() => navigate(prevStep, 'prev')}>
-          Back
-        </Button>
+      {prevStep ? (
+        <Box w="70px">
+          <Button bg="#edf8fa" color="#47BCC8" onClick={() => navigate(prevStep, 'prev')}>
+            Back
+          </Button>
+        </Box>
+      ) : (
+        <Box w="70px" />
       )}
-      <Button bg="#47BCC8" color="white" ml="auto" onClick={() => navigate(nextStep, 'next')}>
+      <HStack spacing="12px">
+        {steps.map((s) => (
+          <Box
+            key={s}
+            w="5px"
+            h="5px"
+            rounded="full"
+            bg={s === currentStep ? 'af.teal' : 'gray.400'}
+          />
+        ))}
+      </HStack>
+      <Button bg="#47BCC8" color="white" onClick={() => navigate(nextStep, 'next')}>
         Continue
       </Button>
     </Flex>
