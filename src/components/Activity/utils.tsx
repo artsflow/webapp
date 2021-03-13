@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 
 export const steps = [
   'category',
@@ -25,7 +26,6 @@ export const DevTool = dynamic(() => import('./DevTool'), { ssr: false })
 
 export const getPrevStep = (s: string) => steps[steps.indexOf(s) - 1]
 export const getNextStep = (s: string) => steps[steps.indexOf(s) + 1]
-export const getCurrentStep = (s: string) => steps[steps.indexOf(s)] || steps[0]
 
 export const getLastStep = (step: string, state: any) => {
   const { images, locationGeocode, description, title, category } = state
@@ -38,4 +38,11 @@ export const getLastStep = (step: string, state: any) => {
   if (!category) lastStep = 'category'
 
   return lastStep
+}
+
+export const useCurrentStep = () => {
+  const { asPath } = useRouter()
+  const [, , , step] = asPath.split('/')
+  const currentStep = steps[steps.indexOf(step)] || steps[0]
+  return [currentStep, step]
 }

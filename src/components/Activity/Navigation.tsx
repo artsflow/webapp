@@ -2,12 +2,12 @@ import React from 'react'
 import { Flex, Button, HStack, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
-import { steps, getCurrentStep, getPrevStep, getNextStep } from './utils'
+import { steps, useCurrentStep, getPrevStep, getNextStep } from './utils'
 
 export function Navigation({ isValid, onClick }: any): JSX.Element {
   const router = useRouter()
 
-  const currentStep = getCurrentStep(router.asPath.split('/')[3])
+  const [currentStep] = useCurrentStep()
   const prevStep = getPrevStep(currentStep)
   const nextStep = getNextStep(currentStep)
 

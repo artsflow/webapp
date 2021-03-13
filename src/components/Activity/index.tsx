@@ -6,7 +6,7 @@ import { StateMachineProvider, createStore } from 'little-state-machine'
 import { Preview } from './Preview'
 import { Category, Details, Location, Images } from './steps'
 
-import { steps, getCurrentStep, DevTool } from './utils'
+import { steps, useCurrentStep, DevTool } from './utils'
 
 createStore({
   category: '',
@@ -32,18 +32,16 @@ export const stepsMap: StepsMap = {
 }
 
 export function Activity(): JSX.Element {
-  const { asPath, push } = useRouter()
-  const [, , , step, id] = asPath.split('/')
-  console.log(step, id)
-  const currentStep = getCurrentStep(step)
-  const Screen = stepsMap[currentStep]
+  const [currentStep, stepFromUrl] = useCurrentStep()
+  const { push } = useRouter()
+  const Screen = stepsMap[currentStep] || <Flex />
 
   useEffect(() => {
-    if (!steps.includes(step)) {
+    if (!steps.includes(stepFromUrl)) {
       const url = `/activities/add/category`
       push(url, url, { shallow: true })
     }
-  }, [step])
+  }, [currentStep])
 
   return (
     <StateMachineProvider>

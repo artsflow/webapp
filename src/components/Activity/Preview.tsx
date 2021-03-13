@@ -6,14 +6,17 @@ import GoogleMap from 'google-map-react'
 import ImgSvg from 'svg/icons/img.svg'
 import { GCP_MAPS_KEY } from 'lib/config'
 import { MockiPhone } from './Phone'
+import { useCurrentStep } from './utils'
 
 export function Preview(): JSX.Element {
   const { state } = useStateMachine() as any
+  const [currentStep] = useCurrentStep()
   const { category, title, description, locationGeocode } = state
 
   const titleSelected = !title && !!category
   const descriptionSelected = !description && !titleSelected && !!category
   const mapVisible = locationGeocode.lat && title && description
+  const imageSelected = currentStep === 'images'
 
   return (
     <Flex
@@ -27,7 +30,7 @@ export function Preview(): JSX.Element {
         Activity Preview
       </Heading>
       <MockiPhone>
-        <MockImg />
+        <MockImg isSelected={imageSelected} />
         <VStack alignItems="flex-start" p="22px">
           <Category text={category} />
           <Title text={title} isSelected={titleSelected} />
@@ -39,10 +42,10 @@ export function Preview(): JSX.Element {
   )
 }
 
-const MockImg = () => (
+const MockImg = ({ isSelected }: any) => (
   <VStack
     h="180px"
-    bg="#E2E4E7"
+    bg={isSelected ? '#E17BAF' : '#E2E4E7'}
     justifyContent="space-between"
     alignItems="center"
     pt="10px"
