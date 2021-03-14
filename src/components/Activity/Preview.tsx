@@ -5,13 +5,15 @@ import GoogleMap from 'google-map-react'
 
 import ImgSvg from 'svg/icons/img.svg'
 import { GCP_MAPS_KEY } from 'lib/config'
+import { getImageKitUrl } from 'lib/utils'
+import { ImageGallery } from 'components'
 import { MockiPhone } from './Phone'
 import { useCurrentStep } from './utils'
 
 export function Preview(): JSX.Element {
   const { state } = useStateMachine() as any
   const [currentStep] = useCurrentStep()
-  const { category, title, description, locationGeocode } = state
+  const { category, title, description, locationGeocode, images } = state
 
   const titleSelected = !title && !!category
   const descriptionSelected = !description && !titleSelected && !!category
@@ -30,7 +32,15 @@ export function Preview(): JSX.Element {
         Activity Preview
       </Heading>
       <MockiPhone>
-        <MockImg isSelected={imageSelected} />
+        {images.length ? (
+          <ImageGallery
+            images={images.map((url: string) =>
+              getImageKitUrl(url, { w: 240, h: 180, tr: 'fo-auto' })
+            )}
+          />
+        ) : (
+          <MockImg isSelected={imageSelected} />
+        )}
         <VStack alignItems="flex-start" p="22px">
           <Category text={category} />
           <Title text={title} isSelected={titleSelected} />
@@ -62,6 +72,7 @@ const MockImg = ({ isSelected }: any) => (
     <Icon as={ImgSvg} w="100px" h="100px" />
     <HStack>
       <Box w="4px" h="4px" rounded="full" bg="white" />
+      <Box w="4px" h="4px" rounded="full" bg="gray.300" />
       <Box w="4px" h="4px" rounded="full" bg="gray.300" />
       <Box w="4px" h="4px" rounded="full" bg="gray.300" />
       <Box w="4px" h="4px" rounded="full" bg="gray.300" />

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { wrap } from 'popmotion'
-import { Flex, BoxProps } from '@chakra-ui/react'
+import { Flex, HStack, Box } from '@chakra-ui/react'
 
 const variants = {
   enter: (direction: number) => ({
@@ -34,7 +34,7 @@ export function ImageGallery({ images }: { images: string[] }) {
   }
 
   return (
-    <>
+    <Flex h="180px" pos="relative">
       <AnimatePresence initial={false} custom={direction}>
         <motion.img
           style={{ position: 'absolute' }}
@@ -63,34 +63,17 @@ export function ImageGallery({ images }: { images: string[] }) {
           }}
         />
       </AnimatePresence>
-      <Button title="‣" right="15px" onClick={() => paginate(1)} />
-      <Button title="‣" left="15px" transform="scale(-1)" onClick={() => paginate(-1)} />
-    </>
+      <HStack pos="absolute" left="0" right="0" bottom="20px" zIndex="2" justifyContent="center">
+        {images.map((img, i) => (
+          <Box
+            key={img}
+            w="4px"
+            h="4px"
+            rounded="full"
+            bg={i === imageIndex ? 'af.teal' : 'gray.300'}
+          />
+        ))}
+      </HStack>
+    </Flex>
   )
 }
-
-interface ButtonProps extends BoxProps {
-  title: string
-  onClick: () => void
-}
-const Button = ({ title, onClick, ...rest }: ButtonProps) => (
-  <Flex
-    onClick={onClick}
-    top="calc(50% - 15px)"
-    pos="absolute"
-    bg="white"
-    w="30px"
-    h="30px"
-    borderRadius="15px"
-    justifyContent="center"
-    alignItems="center"
-    userSelect="none"
-    cursor="pointer"
-    fontSize="32px"
-    color="#7e7e7e"
-    zIndex="2"
-    {...rest}
-  >
-    <Flex mt="-7px">{title}</Flex>
-  </Flex>
-)
