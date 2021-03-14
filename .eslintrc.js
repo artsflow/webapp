@@ -77,6 +77,12 @@ module.exports = {
     ],
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['error'],
+    'no-restricted-syntax': [
+      'error',
+      // 'FunctionExpression',
+      'WithStatement',
+      "BinaryExpression[operator='in']",
+    ],
   },
   settings: {
     react: {

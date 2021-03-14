@@ -66,6 +66,29 @@ export const firebaseCallable = async (func: string, params: any) => {
   }
 }
 
+export const uploadTask = async ({ path, blob, onProgres }: any) =>
+  new Promise((resolve, reject) => {
+    const storageRef = storage.ref(path)
+    const task = storageRef.put(blob)
+
+    task.on(
+      STATE_CHANGED,
+      (snapshot) => {
+        const progress = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0)
+        if (onProgres) onProgres(progress)
+      },
+      (error) => {
+        console.error('upload_error', error)
+        reject()
+      },
+      () => {
+        task.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          resolve(downloadURL)
+        })
+      }
+    )
+  })
+
 // emulators
 // export const setFirebaseEmulators = async () => {
 //   if (__DEV__) {

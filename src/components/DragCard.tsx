@@ -18,6 +18,7 @@ interface DragItem {
   id: string
   type: string
 }
+
 export const DragCard: React.FC<CardProps> = ({ id, children, index, moveCard }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [, drop] = useDrop({
@@ -72,6 +73,7 @@ export const DragCard: React.FC<CardProps> = ({ id, children, index, moveCard })
   })
 
   const [{ isDragging }, drag] = useDrag({
+    type: ItemTypes.CARD,
     item: { type: ItemTypes.CARD, id, index },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
@@ -80,15 +82,9 @@ export const DragCard: React.FC<CardProps> = ({ id, children, index, moveCard })
 
   const opacity = isDragging ? 0 : 1
   drag(drop(ref))
+
   return (
-    <Flex
-      ref={ref}
-      opacity={opacity}
-      cursor="move"
-      border="1px solid lightgrey"
-      alignItems="center"
-      justifyContent="center"
-    >
+    <Flex ref={ref} opacity={opacity} cursor="move" transform="translate(0, 0)">
       {children}
     </Flex>
   )
