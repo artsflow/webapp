@@ -89,7 +89,9 @@ export function Location() {
                       ...base,
                       border: '0px',
                       padding: '5px',
-                      boxShadow: isFocused ? '0px 0px 0px 1px #47BCC8' : 'none',
+                      boxShadow: isFocused
+                        ? '0px 0px 0px 1px #47BCC8'
+                        : '0px 3px 8px rgba(50, 50, 71, 0.05)',
                     }),
                     menu: (base) => ({
                       ...base,

@@ -1,14 +1,14 @@
-import { Box, useRadio } from '@chakra-ui/react'
+import { Box, useCheckbox } from '@chakra-ui/react'
 
-export function RadioCard(props: any) {
-  const { getInputProps, getCheckboxProps } = useRadio(props)
+export function CheckboxCard(props: any) {
+  const { getInputProps, getCheckboxProps } = useCheckbox(props)
   const { children } = props
 
   const input = getInputProps()
   const checkbox = getCheckboxProps()
 
   return (
-    <Box as="label" mb="1rem" mr="1rem">
+    <Box as="label" mb="1rem">
       <input {...input} />
       <Box
         {...checkbox}
