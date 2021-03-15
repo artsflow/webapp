@@ -92,6 +92,11 @@ export const UpcomingDates = ({ onClose, isOpen }: any) => {
                     </Tr>
                   )
                 })}
+                <Tr>
+                  <Td colSpan={4} textAlign="center">
+                    ...
+                  </Td>
+                </Tr>
               </Tbody>
             </Table>
           </Flex>
