@@ -20,7 +20,7 @@ import { RadioCard } from 'components'
 import { Navigation } from '../Navigation'
 import { update } from '../utils'
 
-const DURATIONS = [15, 30, 60, 120, 'custom']
+const DURATIONS = ['15', '30', '60', '120', 'custom']
 const DURATUION_TEXT = {
   15: '15 minutes',
   30: '30 minutes',
@@ -36,17 +36,17 @@ const DURATION_MAX = 360
 export function Duration() {
   const { state, actions } = useStateMachine({ update }) as any
   const { duration } = state
-  const [isCustom, setCustom] = useState(!DURATIONS.includes(duration) && !!duration)
-
+  const [isCustom, setCustom] = useState(!DURATIONS.includes(duration.toString()) && !!duration)
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'duration',
-    defaultValue: DURATIONS.includes(duration) || duration === 0 ? duration : 'custom',
+    defaultValue:
+      DURATIONS.includes(duration.toString()) || duration === 0 ? duration.toString() : 'custom',
     onChange: (value) => {
       if (value === 'custom') {
         setCustom(true)
       } else {
         setCustom(false)
-        actions.update({ duration: value })
+        actions.update({ duration: Number(value) })
       }
     },
   })
