@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Text,
   VStack,
@@ -11,6 +11,7 @@ import {
 
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useWindowSize } from 'rooks'
 
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons'
 
@@ -52,10 +53,20 @@ export const SidePanel = () => {
   const router = useRouter()
   const selected = getSelectedIndex(router.route)
   const [isCollapsed, setCollapsed] = useState(false)
+  const { outerWidth } = useWindowSize()
 
   const toggleCollapse = () => {
     setCollapsed(!isCollapsed)
   }
+
+  useEffect(() => {
+    if (Number(outerWidth) < 1220 && !isCollapsed) {
+      setCollapsed(true)
+    }
+    if (Number(outerWidth) > 1440 && isCollapsed) {
+      setCollapsed(false)
+    }
+  }, [outerWidth])
 
   return (
     <MotionVStack

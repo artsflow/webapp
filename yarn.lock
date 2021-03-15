@@ -9554,6 +9554,11 @@ rollup@^2.25.0:
   optionalDependencies:
     fsevents "~2.3.1"
 
+rooks@^4.9.2:
+  version "4.9.2"
+  resolved "https://registry.yarnpkg.com/rooks/-/rooks-4.9.2.tgz#cd8a980dc43c405c4b53ebe8ab622541baea88fa"
+  integrity sha512-e9lUxRxSrzQuijHaB7id5j0Mh0ZKxxbRNjQ/d/VlOOKjQNj51Z+CEjnJuj1aNvtfLkB7nJBkG1UZpY2s6Tcvaw==
+
 rrule@^2.6.8:
   version "2.6.8"
   resolved "https://registry.yarnpkg.com/rrule/-/rrule-2.6.8.tgz#c61714f246e7676e8efa16c2baabac199f20f6db"

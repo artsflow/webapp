@@ -1,6 +1,6 @@
 {
   "name": "artsflow-saas",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "private": true,
   "scripts": {
     "dev": "next dev --port=4042",
@@ -71,6 +71,7 @@
     "react-icons": "^4.2.0",
     "react-lorem-ipsum": "^1.4.9",
     "react-select": "^4.2.1",
+    "rooks": "^4.9.2",
     "rrule": "^2.6.8",
     "uuid": "^8.3.2",
     "xstate": "^4.16.2"
