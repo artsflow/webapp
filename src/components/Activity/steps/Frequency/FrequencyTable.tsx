@@ -1,16 +1,18 @@
 import { Button, Table, Thead, Tbody, Tr, Th, Td, Icon, useDisclosure } from '@chakra-ui/react'
 import { capitalize } from 'lodash'
 import { rrulestr } from 'rrule'
-import { format } from 'date-fns'
+import { format, addMinutes } from 'date-fns'
+import { useStateMachine } from 'little-state-machine'
 
 import TrashcanIcon from 'svg/icons/trashcan.svg'
 import { UpcomingDates } from './UpcomingDates'
 
-const ruleText = (r: string) => {
+const ruleText = (r: string, duration: number) => {
   const rule = rrulestr(r)
-  const time = format(rule.options.dtstart, 'HH:mm')
+  const from = format(rule.options.dtstart, 'HH:mm')
+  const to = format(addMinutes(rule.options.dtstart, duration), 'HH:mm')
   const [freq, days] = rule.toText().replace(' for 10 times', '').split(' on ')
-  return { freq, days, time }
+  return { freq, days, time: `${from} - ${to}` }
 }
 
 interface FrequencyTableProps {
@@ -19,6 +21,7 @@ interface FrequencyTableProps {
 }
 
 export const FrequencyTable = (props: FrequencyTableProps) => {
+  const { state } = useStateMachine() as any
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { rrules, onDelete } = props
 
@@ -41,7 +44,7 @@ export const FrequencyTable = (props: FrequencyTableProps) => {
         </Thead>
         <Tbody>
           {rrules.map((rule: string) => {
-            const { freq, days, time } = ruleText(rule)
+            const { freq, days, time } = ruleText(rule, state.duration)
             return (
               <Tr key={rule}>
                 <Td fontSize="xs">{capitalize(freq)}</Td>
