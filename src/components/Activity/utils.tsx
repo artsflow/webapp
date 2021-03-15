@@ -6,7 +6,7 @@ export const steps = [
   'details',
   'location',
   'images',
-  // 'duration',
+  'duration',
   // 'frequency',
   // 'capacity',
   // 'price',
