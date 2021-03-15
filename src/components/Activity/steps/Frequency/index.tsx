@@ -64,7 +64,7 @@ export function Frequency() {
       freq: RRule.WEEKLY,
       interval,
       dtstart,
-      count: 10,
+      count: 15,
     })
 
     actions.update({
