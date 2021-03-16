@@ -1,5 +1,7 @@
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
+import { rrulestr } from 'rrule'
+import { format, addMinutes } from 'date-fns'
 
 export const steps = [
   'category',
@@ -10,7 +12,7 @@ export const steps = [
   'frequency',
   'capacity',
   'price',
-  // 'complete',
+  'published',
 ]
 
 export const DURATION_STEP = 15
@@ -26,23 +28,19 @@ export const DevTool = dynamic(() => import('./DevTool'), { ssr: false })
 
 export const getPrevStep = (s: string) => steps[steps.indexOf(s) - 1]
 export const getNextStep = (s: string) => steps[steps.indexOf(s) + 1]
-
-export const getLastStep = (step: string, state: any) => {
-  const { images, locationGeocode, description, title, category } = state
-
-  let lastStep = step
-
-  if (images.length === 0) lastStep = 'images'
-  if (!locationGeocode.lat) lastStep = 'location'
-  if (!description || !title) lastStep = 'details'
-  if (!category) lastStep = 'category'
-
-  return lastStep
-}
+export const isLastStep = (s: string) => steps.indexOf(s) === steps.length - 2
 
 export const useCurrentStep = () => {
   const { asPath } = useRouter()
   const [, , , step] = asPath.split('/')
   const currentStep = steps[steps.indexOf(step)] || steps[0]
   return [currentStep, step]
+}
+
+export const ruleText = (r: string, duration: number) => {
+  const rule = rrulestr(r)
+  const from = format(rule.options.dtstart, 'HH:mm')
+  const to = format(addMinutes(rule.options.dtstart, duration), 'HH:mm')
+  const [freq, days] = rule.toText().replace(' for 15 times', '').split(' on ')
+  return { freq, days, time: `${from} - ${to}` }
 }

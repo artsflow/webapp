@@ -10,7 +10,7 @@ import { ImageGallery } from 'components'
 import { MockiPhone } from './Phone'
 import { useCurrentStep } from './utils'
 
-export function Preview(): JSX.Element {
+export function Preview() {
   const { state } = useStateMachine() as any
   const [currentStep] = useCurrentStep()
   const { category, title, description, locationGeocode, images } = state
@@ -19,6 +19,8 @@ export function Preview(): JSX.Element {
   const descriptionSelected = !description && !titleSelected && !!category
   const mapVisible = locationGeocode.lat && title && description
   const imageSelected = currentStep === 'images'
+
+  if (currentStep === 'published') return null
 
   return (
     <Flex
@@ -34,9 +36,7 @@ export function Preview(): JSX.Element {
       <MockiPhone>
         {images.length ? (
           <ImageGallery
-            images={images.map((url: string) =>
-              getImageKitUrl(url, { w: 240, h: 180, tr: 'fo-auto' })
-            )}
+            images={images.map((url: string) => getImageKitUrl(url, { w: 240, h: 180 }))}
           />
         ) : (
           <MockImg isSelected={imageSelected} />

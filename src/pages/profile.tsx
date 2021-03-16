@@ -127,7 +127,7 @@ export default function Profile(): JSX.Element {
             name={displayName}
             width="90px"
             height="90px"
-            src={getImageKitUrl(photoURL, { w: 90, h: 90 })}
+            src={getImageKitUrl(photoURL, { w: 90, h: 90, tr: 'fo-face' })}
             bg="af.pink"
             color="white"
             pos="absolute"

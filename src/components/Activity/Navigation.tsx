@@ -2,7 +2,7 @@ import React from 'react'
 import { Flex, Button, HStack, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
-import { steps, useCurrentStep, getPrevStep, getNextStep } from './utils'
+import { steps, useCurrentStep, getPrevStep, getNextStep, isLastStep } from './utils'
 
 export function Navigation({ isValid, onClick }: any): JSX.Element {
   const router = useRouter()
@@ -41,7 +41,7 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
         ))}
       </HStack>
       <Button bg="#47BCC8" color="white" onClick={() => navigate(nextStep, 'next')}>
-        Continue
+        {isLastStep(currentStep) ? 'Publish' : 'Continue'}
       </Button>
     </Flex>
   )

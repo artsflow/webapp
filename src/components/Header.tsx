@@ -104,7 +104,7 @@ export function Header() {
             bg="af.pink"
             color="white"
             fontSize="xs"
-            src={getImageKitUrl(profile?.photoURL, { w: 36, h: 36 })}
+            src={getImageKitUrl(profile?.photoURL, { w: 36, h: 36, tr: 'fo-face' })}
           />
         </MenuButton>
         <MenuList>

@@ -129,7 +129,7 @@ export function Images() {
                       bg="white"
                       pos="relative"
                     >
-                      <Image src={getImageKitUrl(url, { w: 172, h: 130, tr: 'fo-auto' })} />
+                      <Image src={getImageKitUrl(url, { w: 172, h: 130 })} />
                       <IconButton
                         aria-label="Delete image"
                         isRound

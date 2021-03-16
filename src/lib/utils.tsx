@@ -42,7 +42,7 @@ export const motionComponent = (Component: any) =>
   )
 
 export const getImageKitUrl = (url: string, options: any = {}) => {
-  const { w = '150', h = '150', tr = 'fo-face' } = options
+  const { w = '150', h = '150', tr = 'fo-auto' } = options
   if (url?.includes('firebasestorage.googleapis.com')) {
     return url.replace(
       'firebasestorage.googleapis.com',

@@ -4,7 +4,17 @@ import { useRouter } from 'next/router'
 import { StateMachineProvider, createStore } from 'little-state-machine'
 
 import { Preview } from './Preview'
-import { Category, Details, Location, Images, Duration, Frequency, Capacity, Price } from './steps'
+import {
+  Category,
+  Details,
+  Location,
+  Images,
+  Duration,
+  Frequency,
+  Capacity,
+  Price,
+  Published,
+} from './steps'
 
 import { steps, useCurrentStep, DevTool } from './utils'
 
@@ -41,6 +51,7 @@ export const stepsMap: StepsMap = {
   frequency: Frequency,
   capacity: Capacity,
   price: Price,
+  published: Published,
 }
 
 export function Activity(): JSX.Element {
