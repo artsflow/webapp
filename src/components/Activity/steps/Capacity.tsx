@@ -34,7 +34,7 @@ export function Capacity() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
           </Text>
 
-          <Text fontWeight="bold" alignItems="center">
+          <Text fontWeight="bold" fontSize="sm">
             Select capacity
           </Text>
 

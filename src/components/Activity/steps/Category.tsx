@@ -39,13 +39,13 @@ export function Category() {
           <Heading size="md" mb="1rem">
             Select Category
           </Heading>
-          <Text color="#616167">
+          <Text color="#616167" mb="2rem">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
           </Text>
-          <Heading pt="2rem" pb="0.5rem" fontSize="md">
+          <Text fontWeight="bold" fontSize="sm">
             Choose a category
-          </Heading>
-          <Flex {...group} mt="8" wrap="wrap" maxW="600px">
+          </Text>
+          <Flex {...group} mt="4" wrap="wrap" maxW="600px">
             {CATEGORIES.map((value) => {
               const radio = getRadioProps({ value })
               return (

@@ -9,7 +9,7 @@ export const steps = [
   'duration',
   'frequency',
   'capacity',
-  // 'price',
+  'price',
   // 'complete',
 ]
 
