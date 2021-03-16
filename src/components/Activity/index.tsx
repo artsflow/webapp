@@ -16,27 +16,9 @@ import {
   Published,
 } from './steps'
 
-import { steps, useCurrentStep, DevTool } from './utils'
+import { initialStore, steps, useCurrentStep, DevTool } from './utils'
 
-createStore({
-  category: '',
-  title: '',
-  description: '',
-  whatToBring: '',
-  locationAddress: '',
-  locationDetails: '',
-  locationGeocode: {},
-  locationPlaceId: '',
-  images: [],
-  duration: 0,
-  frequency: {
-    rrules: [],
-    exdate: [],
-  },
-  capacity: 1,
-  price: 5,
-  type: 'Paid',
-})
+createStore(initialStore)
 
 interface StepsMap {
   [key: string]: React.FC

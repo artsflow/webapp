@@ -22,9 +22,11 @@ export function Location() {
   const { isValid } = formState
 
   const {
-    locationAddress,
-    locationGeocode: { lat, lng },
-    locationDetails,
+    location: {
+      address,
+      details,
+      geocode: { lat, lng },
+    },
   } = state
 
   useEffect(() => {
@@ -32,11 +34,13 @@ export function Location() {
       geocodeByPlaceId(place.value.place_id)
         .then((results) => {
           actions.update({
-            locationAddress: place?.value.description,
-            locationPlaceId: place.value.place_id,
-            locationGeocode: {
-              lat: results[0].geometry.location.lat(),
-              lng: results[0].geometry.location.lng(),
+            location: {
+              address: place?.value.description,
+              placeId: place.value.place_id,
+              geocode: {
+                lat: results[0].geometry.location.lat(),
+                lng: results[0].geometry.location.lng(),
+              },
             },
           })
           trigger()
@@ -45,7 +49,8 @@ export function Location() {
     }
   }, [place])
 
-  const handleChange = (field: string) => actions.update({ [field]: getValues(field) })
+  const handleChange = (field: string) =>
+    actions.update({ location: { ...state.location, [field]: getValues(field) } })
 
   const handleTrigger = async () => {
     await trigger()
@@ -125,7 +130,7 @@ export function Location() {
                 </GoogleMap>
               </Box>
             )}
-            <Box w="full" py="1rem" pos="relative" display={locationAddress ? 'block' : 'none'}>
+            <Box w="full" py="1rem" pos="relative" display={address ? 'block' : 'none'}>
               <Text fontWeight="bold" alignItems="center">
                 Activity address
               </Text>
@@ -136,25 +141,25 @@ export function Location() {
                 bg="white"
                 border="none"
                 shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-                name="locationAddress"
-                value={locationAddress}
+                name="address"
+                value={address}
                 ref={register({
                   required: true,
                   minLength: 20,
                   maxLength: 200,
                 })}
-                onChange={() => handleChange('locationAddress')}
+                onChange={() => handleChange('address')}
               />
-              <Box marginTop={locationAddress ? '-10px' : '40px'}>
+              <Box marginTop={address ? '-10px' : '40px'}>
                 <Error
                   errors={errors}
-                  name="locationAddress"
+                  name="address"
                   message="Address between 20 and 200 characters"
                 />
               </Box>
             </Box>
 
-            <Box w="full" pos="relative" display={locationAddress ? 'block' : 'none'}>
+            <Box w="full" pos="relative" display={address ? 'block' : 'none'}>
               <Text fontWeight="bold" alignItems="center">
                 Additional details (optional)
               </Text>
@@ -165,18 +170,18 @@ export function Location() {
                 bg="white"
                 border="none"
                 shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-                value={locationDetails}
-                name="locationDetails"
+                value={details}
+                name="details"
                 ref={register({
                   required: false,
                   maxLength: 200,
                 })}
-                onChange={() => handleChange('locationDetails')}
+                onChange={() => handleChange('details')}
               />
               <Box mt="20px">
                 <Error
                   errors={errors}
-                  name="locationDetails"
+                  name="details"
                   message="Additional details longer than 200 characters"
                 />
               </Box>

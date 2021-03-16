@@ -13,11 +13,17 @@ import { useCurrentStep } from './utils'
 export function Preview() {
   const { state } = useStateMachine() as any
   const [currentStep] = useCurrentStep()
-  const { category, title, description, locationGeocode, images } = state
+  const {
+    category,
+    title,
+    description,
+    location: { geocode },
+    images,
+  } = state
 
   const titleSelected = !title && !!category
   const descriptionSelected = !description && !titleSelected && !!category
-  const mapVisible = locationGeocode.lat && title && description
+  const mapVisible = geocode.lat && title && description
   const imageSelected = currentStep === 'images'
 
   if (currentStep === 'published') return null
@@ -45,7 +51,7 @@ export function Preview() {
           <Category text={category} />
           <Title text={title} isSelected={titleSelected} />
           <Description text={description} isSelected={descriptionSelected} />
-          {mapVisible && <Map {...locationGeocode} />}
+          {mapVisible && <Map {...geocode} />}
         </VStack>
       </MockiPhone>
     </Flex>

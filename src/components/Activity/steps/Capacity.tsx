@@ -43,7 +43,7 @@ export function Capacity() {
             bg="white"
             border="1px solid white"
             shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-            w="180px"
+            w="160px"
             rounded="6px"
           >
             <Input

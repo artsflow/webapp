@@ -3,6 +3,28 @@ import { useRouter } from 'next/router'
 import { rrulestr } from 'rrule'
 import { format, addMinutes } from 'date-fns'
 
+export const initialStore = {
+  category: '',
+  title: '',
+  description: '',
+  whatToBring: '',
+  location: {
+    address: '',
+    details: '',
+    geocode: {},
+    placeId: '',
+  },
+  images: [],
+  duration: 0,
+  frequency: {
+    rrules: [],
+    exdate: [],
+  },
+  capacity: 1,
+  price: 5,
+  type: 'Paid',
+}
+
 export const steps = [
   'category',
   'details',
