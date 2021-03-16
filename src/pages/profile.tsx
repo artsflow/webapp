@@ -93,6 +93,7 @@ export default function Profile(): JSX.Element {
   const onSubmit = async (data: Inputs) => {
     setLoading(true)
     const result = await updateProfile(data)
+    console.log(result)
     setLoading(false)
     reset()
     if (result) {

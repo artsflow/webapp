@@ -1,18 +1,7 @@
-import { loremIpsum } from 'react-lorem-ipsum'
-import { Box, Text, createStandaloneToast, forwardRef } from '@chakra-ui/react'
+import { createStandaloneToast, forwardRef } from '@chakra-ui/react'
 import { motion, isValidMotionProp } from 'framer-motion'
 
 const toast = createStandaloneToast()
-
-export const LoremIpsum = ({ p = 2 }) => (
-  <Box>
-    {loremIpsum({ p, avgSentencesPerParagraph: 4 }).map((text) => (
-      <Text my="2" key={text}>
-        {text}
-      </Text>
-    ))}
-  </Box>
-)
 
 interface AlertProps {
   title: string
