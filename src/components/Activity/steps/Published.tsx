@@ -10,12 +10,16 @@ import {
   VStack,
   Icon,
   Tooltip,
+  Link,
+  useClipboard,
+  Input,
 } from '@chakra-ui/react'
 import { useStateMachine } from 'little-state-machine'
 import { useRouter } from 'next/router'
 import { RRuleSet, rrulestr } from 'rrule'
 import { format, addMinutes } from 'date-fns'
 import { IoRepeat } from 'react-icons/io5'
+import { BsLink } from 'react-icons/bs'
 import { capitalize } from 'lodash'
 import Confetti from 'react-dom-confetti'
 
@@ -37,13 +41,20 @@ const config = {
   colors: ['#45BCC8', '#765EA6', '#E27CB0', '#FCCE36'],
 }
 
+const afUrl = 'https://artsflow.com'
+
 export function Published() {
   const [confettiActive, setConfettiActive] = useState(false)
+  const [url, setUrl] = useState(afUrl)
+  const { hasCopied, onCopy } = useClipboard(url)
   const { state } = useStateMachine({ update }) as any
   const router = useRouter()
 
+  const id = 'azsxdc'
+
   useEffect(() => {
     setConfettiActive(true)
+    setUrl(`${url}/a/${id}`)
   }, [])
 
   return (
@@ -58,13 +69,24 @@ export function Published() {
         spacing="1rem"
       >
         <Confetti active={confettiActive} config={config} />
-        <ActivityCard {...state} />
+        <ActivityCard {...state} id={id} />
         <Heading fontSize="1.5rem" pt="2rem">
           Awesome, your activity was publised!
         </Heading>
         <Text color="#616167" my="1rem">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
         </Text>
+
+        <Text color="#616167" fontSize="sm">
+          Below is your activity link. Share it and get bookings
+        </Text>
+        <Flex mb={2}>
+          <Input value={url} isReadOnly fontSize="sm" w="240px" />
+          <Button onClick={onCopy} ml={2} fontSize="sm" w="80px">
+            {hasCopied ? 'Copied' : 'Copy'}
+          </Button>
+        </Flex>
+
         <Button
           bg="af.teal"
           color="white"
@@ -81,7 +103,7 @@ export function Published() {
 }
 
 const ActivityCard = (props: any) => {
-  const { title, category, images, duration, frequency, type, price } = props
+  const { title, category, images, duration, frequency, type, price, id } = props
   const { rrules } = frequency
   const rruleSet = new RRuleSet()
   rrules.forEach((r: string) => rruleSet.rrule(rrulestr(r)))
@@ -141,18 +163,22 @@ const ActivityCard = (props: any) => {
         </VStack>
       </HStack>
       <HStack justifyContent="space-between" w="full" alignItems="flex-end">
-        <HStack spacing="1rem">
-          <Text fontSize="xs" color="#616167">
+        <HStack spacing="1rem" alignItems="flex-end">
+          <Text fontSize="xs" color="#616167" pb="2px">
             {category}
           </Text>
-          <Flex w="1px" bg="#F3F3F3" h="10px" />
-          <Text fontSize="xs" color="#616167">
+          <Separator />
+          <Text fontSize="xs" color="#616167" pb="2px">
             {isPaid ? `£${price}` : type}
           </Text>
-          <Flex w="1px" bg="#F3F3F3" h="10px" />
+          <Separator />
           <Tooltip label={freqLabel} placement="top" closeOnClick hasArrow shouldWrapChildren>
             <Icon as={IoRepeat} color="#616167" />
           </Tooltip>
+          <Separator />
+          <Link href={`${afUrl}/a/${id}`} isExternal>
+            <Icon as={BsLink} h="16px" w="16px" />
+          </Link>
         </HStack>
         <Tag color="af.teal" fontSize="xs" bg="#edf8fa" px="10px" py="8px" rounded="100px">
           Active
@@ -161,3 +187,5 @@ const ActivityCard = (props: any) => {
     </VStack>
   )
 }
+
+const Separator = () => <Flex w="1px" bg="#F3F3F3" h="10px" mb="4px" />
