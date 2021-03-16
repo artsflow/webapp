@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
   Image,
   Tag,
@@ -16,14 +17,34 @@ import { RRuleSet, rrulestr } from 'rrule'
 import { format, addMinutes } from 'date-fns'
 import { IoRepeat } from 'react-icons/io5'
 import { capitalize } from 'lodash'
+import Confetti from 'react-dom-confetti'
 
 import { getImageKitUrl } from 'lib/utils'
 import { ruleText } from 'components/Activity/utils'
 import { update } from '../utils'
 
+const config = {
+  angle: 90,
+  spread: 200,
+  startVelocity: 69,
+  elementCount: 188,
+  dragFriction: 0.15,
+  duration: 8200,
+  stagger: 6,
+  width: '12px',
+  height: '12px',
+  perspective: '942px',
+  colors: ['#45BCC8', '#765EA6', '#E27CB0', '#FCCE36'],
+}
+
 export function Published() {
+  const [confettiActive, setConfettiActive] = useState(false)
   const { state } = useStateMachine({ update }) as any
   const router = useRouter()
+
+  useEffect(() => {
+    setConfettiActive(true)
+  }, [])
 
   return (
     <>
@@ -36,6 +57,7 @@ export function Published() {
         w="100%"
         spacing="1rem"
       >
+        <Confetti active={confettiActive} config={config} />
         <ActivityCard {...state} />
         <Heading fontSize="1.5rem" pt="2rem">
           Awesome, your activity was publised!
