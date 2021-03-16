@@ -1,6 +1,6 @@
 {
   "name": "artsflow-saas",
-  "version": "0.1.41",
+  "version": "0.1.42",
   "private": true,
   "scripts": {
     "dev": "next dev --port=4042",
@@ -44,6 +44,7 @@
     "dnd-core": "^12.0.1",
     "firebase": "^8.2.9",
     "framer-motion": "^3.9.1",
+    "geofire-common": "^5.2.0",
     "google-map-react": "^2.1.9",
     "heic2any": "^0.0.3",
     "humanize-duration": "^3.25.1",

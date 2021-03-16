@@ -7,6 +7,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import GoogleMap from 'google-map-react'
 import { components } from 'react-select'
 import { SearchIcon } from '@chakra-ui/icons'
+import { geohashForLocation } from 'geofire-common'
 
 import { GCP_MAPS_KEY } from 'lib/config'
 import { update } from '../utils'
@@ -33,14 +34,18 @@ export function Location() {
     if (place?.value) {
       geocodeByPlaceId(place.value.place_id)
         .then((results) => {
+          const placeLat = results[0].geometry.location.lat()
+          const placeLng = results[0].geometry.location.lng()
+
           actions.update({
             location: {
               address: place?.value.description,
               placeId: place.value.place_id,
               geocode: {
-                lat: results[0].geometry.location.lat(),
-                lng: results[0].geometry.location.lng(),
+                lat: placeLat,
+                lng: placeLng,
               },
+              geohash: geohashForLocation([placeLat, placeLng]),
             },
           })
           trigger()

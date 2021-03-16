@@ -12,6 +12,7 @@ export const initialStore = {
     address: '',
     details: '',
     geocode: {},
+    geohash: '',
     placeId: '',
   },
   images: [],
