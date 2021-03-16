@@ -13,8 +13,8 @@ import {
   Link,
   useClipboard,
   Input,
+  Skeleton,
 } from '@chakra-ui/react'
-import { useStateMachine } from 'little-state-machine'
 import { useRouter } from 'next/router'
 import { RRuleSet, rrulestr } from 'rrule'
 import { format, addMinutes } from 'date-fns'
@@ -22,10 +22,12 @@ import { IoRepeat } from 'react-icons/io5'
 import { BsLink } from 'react-icons/bs'
 import { capitalize } from 'lodash'
 import Confetti from 'react-dom-confetti'
+import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
+import { useTimeoutWhen } from 'rooks'
 
 import { getImageKitUrl } from 'lib/utils'
+import { firestore } from 'lib/firebase'
 import { ruleText } from 'components/Activity/utils'
-import { update } from '../utils'
 
 const config = {
   angle: 90,
@@ -47,15 +49,18 @@ export function Published() {
   const [confettiActive, setConfettiActive] = useState(false)
   const [url, setUrl] = useState(afUrl)
   const { hasCopied, onCopy } = useClipboard(url)
-  const { state } = useStateMachine({ update }) as any
   const router = useRouter()
+  useTimeoutWhen(() => setConfettiActive(true), 1000)
 
-  const id = 'azsxdc'
+  const id = router.asPath.split('/')[4]
+  const [activity, loading, error] = useDocumentDataOnce(firestore.doc(`/activities/${id}`))
 
   useEffect(() => {
-    setConfettiActive(true)
     setUrl(`${url}/a/${id}`)
   }, [])
+
+  // TODO: display error message
+  if (error) return null
 
   return (
     <>
@@ -69,7 +74,7 @@ export function Published() {
         spacing="1rem"
       >
         <Confetti active={confettiActive} config={config} />
-        <ActivityCard {...state} id={id} />
+        <ActivityCard {...activity} id={id} loading={!activity || loading} />
         <Heading fontSize="1.5rem" pt="2rem">
           Awesome, your activity was publised!
         </Heading>
@@ -103,7 +108,10 @@ export function Published() {
 }
 
 const ActivityCard = (props: any) => {
-  const { title, category, images, duration, frequency, type, price, id } = props
+  const { title, category, images, duration, frequency, type, price, id, loading } = props
+
+  if (loading) return <Skeleton width="360px" height="200px" />
+
   const { rrules } = frequency
   const rruleSet = new RRuleSet()
   rrules.forEach((r: string) => rruleSet.rrule(rrulestr(r)))

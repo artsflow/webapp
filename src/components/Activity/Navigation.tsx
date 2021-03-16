@@ -1,10 +1,22 @@
-import React from 'react'
+import { useState } from 'react'
 import { Flex, Button, HStack, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { useStateMachine } from 'little-state-machine'
 
-import { steps, useCurrentStep, getPrevStep, getNextStep, isLastStep } from './utils'
+import { addActivity } from 'api'
+import {
+  steps,
+  update,
+  useCurrentStep,
+  getPrevStep,
+  getNextStep,
+  isLastStep,
+  initialStore,
+} from './utils'
 
 export function Navigation({ isValid, onClick }: any): JSX.Element {
+  const { state, actions } = useStateMachine({ update }) as any
+  const [isLoading, setLoading] = useState(false)
   const router = useRouter()
 
   const [currentStep] = useCurrentStep()
@@ -18,11 +30,29 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
     router.push(url, url, { shallow: true })
   }
 
+  const handleClick = async () => {
+    if (isLastStep(currentStep)) {
+      setLoading(true)
+      const result = await addActivity(state)
+      setLoading(false)
+      const url = `/activities/add/${nextStep}/${result?.data}`
+      router.push(url, url, { shallow: true })
+      actions.update(initialStore)
+    } else {
+      navigate(nextStep, 'next')
+    }
+  }
+
   return (
     <Flex bg="white" w="100%" justifyContent="space-between" p="1.5rem">
       {prevStep ? (
         <Box w="70px">
-          <Button bg="#edf8fa" color="#47BCC8" onClick={() => navigate(prevStep, 'prev')}>
+          <Button
+            bg="#edf8fa"
+            color="#47BCC8"
+            onClick={() => navigate(prevStep, 'prev')}
+            isLoading={isLoading}
+          >
             Back
           </Button>
         </Box>
@@ -40,7 +70,7 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
           />
         ))}
       </HStack>
-      <Button bg="#47BCC8" color="white" onClick={() => navigate(nextStep, 'next')}>
+      <Button bg="#47BCC8" color="white" onClick={handleClick} isLoading={isLoading}>
         {isLastStep(currentStep) ? 'Publish' : 'Continue'}
       </Button>
     </Flex>
