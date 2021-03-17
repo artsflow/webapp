@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Flex } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { StateMachineProvider, createStore } from 'little-state-machine'
+import { StateMachineProvider, createStore, useStateMachine } from 'little-state-machine'
 
 import { Preview } from './Preview'
 import {
@@ -16,7 +16,7 @@ import {
   Published,
 } from './steps'
 
-import { initialStore, steps, useCurrentStep, DevTool } from './utils'
+import { initialStore, resetStore, steps, useCurrentStep, DevTool } from './utils'
 
 createStore(initialStore)
 
@@ -62,7 +62,20 @@ export function Activity(): JSX.Element {
           <Screen />
         </Flex>
         <Preview />
+        <StoreChecker />
       </Flex>
     </StateMachineProvider>
   )
+}
+
+const StoreChecker = () => {
+  const { state, actions } = useStateMachine({ resetStore }) as any
+
+  useEffect(() => {
+    if (state.meta.actionType === 'edit') {
+      actions.resetStore()
+    }
+  }, [])
+
+  return null
 }

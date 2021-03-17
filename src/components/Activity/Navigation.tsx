@@ -6,17 +6,17 @@ import { useStateMachine } from 'little-state-machine'
 import { addActivity } from 'api'
 import {
   steps,
-  update,
+  resetStore,
+  cleanStore,
   useCurrentStep,
   getPrevStep,
   getNextStep,
   isLastStep,
-  initialStore,
   isValidState,
 } from './utils'
 
 export function Navigation({ isValid, onClick }: any): JSX.Element {
-  const { state, actions } = useStateMachine({ update }) as any
+  const { state, actions } = useStateMachine({ resetStore }) as any
   const [isLoading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -34,11 +34,11 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
   const handleClick = async () => {
     if (isLastStep(currentStep)) {
       setLoading(true)
-      const result = await addActivity(state)
+      const result = await addActivity(cleanStore(state))
       setLoading(false)
       const url = `/activities/add/${nextStep}/${result?.data}`
       router.push(url, url, { shallow: true })
-      actions.update(initialStore)
+      actions.resetStore()
     } else {
       navigate(nextStep, 'next')
     }
@@ -67,7 +67,7 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
         <Box w="70px" />
       )}
       <HStack spacing="12px">
-        {steps.map((s) => (
+        {steps.slice(0, 8).map((s) => (
           <Box
             key={s}
             w="5px"

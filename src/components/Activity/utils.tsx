@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { rrulestr } from 'rrule'
 import { format, addMinutes } from 'date-fns'
+import { omit } from 'lodash'
 
 export const initialStore = {
   category: '',
@@ -24,6 +25,9 @@ export const initialStore = {
   capacity: 1,
   price: 5,
   type: 'Paid',
+  meta: {
+    actionType: 'add',
+  },
 }
 
 export const steps = [
@@ -46,6 +50,10 @@ export const update = (state: any, payload: any) => ({
   ...state,
   ...payload,
 })
+
+export const resetStore = () => initialStore
+
+export const cleanStore = (state: any) => omit(state, ['meta'])
 
 export const DevTool = dynamic(() => import('./DevTool'), { ssr: false })
 

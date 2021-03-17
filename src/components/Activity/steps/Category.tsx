@@ -26,7 +26,7 @@ export function Category() {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'category',
-    defaultValue: state.category,
+    value: state.category,
     onChange: (category) => actions.update({ category }),
   })
 
