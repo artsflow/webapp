@@ -53,7 +53,7 @@ export const update = (state: any, payload: any) => ({
 
 export const resetStore = () => initialStore
 
-export const cleanStore = (state: any) => omit(state, ['meta'])
+export const cleanStore = (state: any) => omit(state, ['meta', 'userId'])
 
 export const DevTool = dynamic(() => import('./DevTool'), { ssr: false })
 

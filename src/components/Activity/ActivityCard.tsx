@@ -110,7 +110,7 @@ export const ActivityCard = (props: any) => {
             {category}
           </Text>
           <Separator />
-          <Text fontSize="xs" color="#616167" pb="2px">
+          <Text fontSize="xs" color={isPaid ? '#616167' : 'af.pink'} pb="2px">
             {isPaid ? `£${price}` : type}
           </Text>
           <Separator />

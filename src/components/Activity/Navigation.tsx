@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Flex, Button, HStack, Box } from '@chakra-ui/react'
+import { Flex, Button, HStack, Box, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useStateMachine } from 'little-state-machine'
 
-import { addActivity } from 'api'
+import { addActivity, editActivity } from 'api'
 import {
   steps,
   resetStore,
@@ -19,10 +19,13 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
   const { state, actions } = useStateMachine({ resetStore }) as any
   const [isLoading, setLoading] = useState(false)
   const router = useRouter()
+  const toast = useToast()
 
   const [currentStep] = useCurrentStep()
   const prevStep = getPrevStep(currentStep)
   const nextStep = getNextStep(currentStep)
+
+  const isEdit = state.meta.actionType === 'edit'
 
   const navigate = (step: string, dir: string) => {
     if (onClick) onClick()
@@ -44,11 +47,53 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
     }
   }
 
+  const handleSave = async () => {
+    setLoading(true)
+    const id = router.asPath.split('/')[3]
+    const data = { ...cleanStore(state), id }
+    const result = await editActivity(data)
+
+    if (result) {
+      toast({
+        title: 'Information updated',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      })
+    } else {
+      toast({
+        title: 'Information not updated',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      })
+    }
+
+    setLoading(false)
+    router.back()
+  }
+
   useEffect(() => {
     if (!isValidState(state)) {
       router.push('/activities/add')
     }
   }, [currentStep])
+
+  if (isEdit)
+    return (
+      <Flex bg="white" w="100%" justifyContent="space-between" p="1.5rem">
+        <Box w="70px">
+          <Button bg="#edf8fa" color="#47BCC8" onClick={() => router.back()} isLoading={isLoading}>
+            Back
+          </Button>
+        </Box>
+        <Button bg="#47BCC8" color="white" onClick={handleSave} isLoading={isLoading}>
+          Save
+        </Button>
+      </Flex>
+    )
 
   return (
     <Flex bg="white" w="100%" justifyContent="space-between" p="1.5rem">

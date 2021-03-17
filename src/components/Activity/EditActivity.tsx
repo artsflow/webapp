@@ -8,21 +8,7 @@ import { StateMachineProvider, useStateMachine } from 'little-state-machine'
 import { steps, update } from 'components/Activity/utils'
 import { firestore } from 'lib/firebase'
 import { Preview } from './Preview'
-
-interface StepsMap {
-  [key: string]: string
-}
-
-const stepsMap: StepsMap = {
-  category: 'Category',
-  details: 'Title & description',
-  location: 'Location',
-  images: 'Images',
-  duration: 'Duration',
-  frequency: 'Frequency',
-  capacity: 'Capacity',
-  price: 'Price',
-}
+import { stepsMap } from './index'
 
 export function EditActivity(): JSX.Element {
   const router = useRouter()
@@ -31,6 +17,8 @@ export function EditActivity(): JSX.Element {
   useEffect(() => {
     console.log('step change:', step)
   }, [step])
+
+  const StepScreen = stepsMap[step] || <Flex />
 
   return (
     <StateMachineProvider>
@@ -42,12 +30,27 @@ export function EditActivity(): JSX.Element {
           flex="1"
           h="full"
         >
-          <EditButtons />
+          {step ? <StepScreen /> : <EditButtons />}
         </Flex>
         <Preview />
       </Flex>
     </StateMachineProvider>
   )
+}
+
+interface StepsMapButtons {
+  [key: string]: string
+}
+
+const stepsMapButtons: StepsMapButtons = {
+  category: 'Category',
+  details: 'Title & description',
+  location: 'Location',
+  images: 'Images',
+  duration: 'Duration',
+  frequency: 'Frequency',
+  capacity: 'Capacity',
+  price: 'Price',
 }
 
 const EditButtons = () => {
@@ -56,12 +59,17 @@ const EditButtons = () => {
   const id = router.asPath.split('/')[3]
 
   const [activity] = useDocumentData(firestore.doc(`/activities/${id}`))
+  const [location] = useDocumentData(firestore.doc(`/locations/${id}`))
 
   useEffect(() => {
     if (activity) {
-      actions.update({ ...activity, meta: { actionType: 'edit' } })
+      actions.update({
+        ...activity,
+        meta: { actionType: 'edit' },
+        location,
+      })
     }
-  }, [activity])
+  }, [activity, location])
 
   const handleEdit = (step: string) => {
     const url = `/activities/edit/${id}/${step}`
@@ -90,7 +98,7 @@ const EditButtons = () => {
             pos="relative"
             onClick={() => handleEdit(s)}
           >
-            {stepsMap[s]}
+            {stepsMapButtons[s]}
           </StyledButton>
         ))}
       </VStack>

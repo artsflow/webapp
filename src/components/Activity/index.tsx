@@ -39,7 +39,7 @@ export const stepsMap: StepsMap = {
 export function Activity(): JSX.Element {
   const [currentStep, stepFromUrl] = useCurrentStep()
   const { push } = useRouter()
-  const Screen = stepsMap[currentStep] || <Flex />
+  const StepScreen = stepsMap[currentStep] || <Flex />
 
   useEffect(() => {
     if (!steps.includes(stepFromUrl)) {
@@ -59,7 +59,7 @@ export function Activity(): JSX.Element {
           flex="1"
           h="full"
         >
-          <Screen />
+          <StepScreen />
         </Flex>
         <Preview />
         <StoreChecker />
