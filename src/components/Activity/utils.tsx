@@ -67,3 +67,7 @@ export const ruleText = (r: string, duration: number) => {
   const [freq, days] = rule.toText().replace(' for 15 times', '').split(' on ')
   return { freq, days, time: `${from} - ${to}` }
 }
+
+export const isValidState = (state: any) =>
+  // TODO: check against all state fields
+  !!state.category

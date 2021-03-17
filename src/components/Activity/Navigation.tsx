@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Flex, Button, HStack, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useStateMachine } from 'little-state-machine'
@@ -12,6 +12,7 @@ import {
   getNextStep,
   isLastStep,
   initialStore,
+  isValidState,
 } from './utils'
 
 export function Navigation({ isValid, onClick }: any): JSX.Element {
@@ -42,6 +43,12 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
       navigate(nextStep, 'next')
     }
   }
+
+  useEffect(() => {
+    if (!isValidState(state)) {
+      router.push('/activities/add')
+    }
+  }, [currentStep])
 
   return (
     <Flex bg="white" w="100%" justifyContent="space-between" p="1.5rem">
