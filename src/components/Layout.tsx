@@ -16,9 +16,8 @@ interface Props {
 
 export function Layout({ children }: Props) {
   const { authState, user, loading } = useContext(UserContext)
-  const router = useRouter()
-  console.log(user)
   const SelectedLayout = authState ? AuthLayout : UnAuthLayout
+  const router = useRouter()
 
   useEffect(() => {
     if (!authState && !loading) {

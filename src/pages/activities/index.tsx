@@ -1,10 +1,22 @@
-import React from 'react'
-import { Text, Box, Heading, HStack, VStack, Button } from '@chakra-ui/react'
+import React, { useContext } from 'react'
+import { Text, Flex, Box, Heading, HStack, VStack, Button, SimpleGrid } from '@chakra-ui/react'
 import Link from 'next/link'
+import { useCollectionDataOnce } from 'react-firebase-hooks/firestore'
 
 import { Meta } from 'components'
+import { firestore } from 'lib/firebase'
+import { UserContext } from 'lib/context'
+import { ActivityCard } from 'components/Activity/ActivityCard'
 
 export default function Activities(): JSX.Element {
+  const { user } = useContext(UserContext)
+  const [activities] = useCollectionDataOnce(
+    user.id && firestore.collection('activities').where('userId', '==', user.id),
+    {
+      idField: 'id',
+    }
+  )
+
   return (
     <>
       <Meta title="My Activities" />
@@ -24,6 +36,13 @@ export default function Activities(): JSX.Element {
             </Link>
           </VStack>
         </HStack>
+        <Flex>
+          <SimpleGrid columns={[1, 1, 1, 2, 3, 3]} spacing="1.5rem" mt="2rem">
+            {activities?.map((activity) => (
+              <ActivityCard key={activity.id} {...activity} />
+            ))}
+          </SimpleGrid>
+        </Flex>
       </Box>
     </>
   )

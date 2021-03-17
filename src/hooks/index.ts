@@ -21,7 +21,7 @@ export function useUserData() {
     if (authState) {
       const ref = firestore.collection('users').doc(authState.uid)
       unsubscribe = ref.onSnapshot((doc) => {
-        setUser(doc.data())
+        setUser({ ...doc.data(), id: authState.uid })
         setUserLoading(false)
       })
     } else {
