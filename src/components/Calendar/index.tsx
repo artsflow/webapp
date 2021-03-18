@@ -28,7 +28,7 @@ export function Calendar(props: any) {
       startAccessor="start"
       views={['day', 'work_week', 'month', 'agenda']}
       endAccessor="end"
-      style={{ height: 500 }}
+      style={{ height: '700px' }}
       components={{
         toolbar: Toolbar,
       }}
