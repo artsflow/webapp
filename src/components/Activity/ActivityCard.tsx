@@ -42,7 +42,7 @@ import { setActivityStatus, deleteActivity } from 'api'
 export const ActivityCard = (props: any) => {
   const { title, category, images, duration, frequency, type, price, id, loading, status } = props
 
-  if (loading) return <Skeleton width="360px" height="200px" />
+  if (loading) return <Skeleton rounded="12px" width="360px" height="200px" />
 
   const { rrules } = frequency
   const rruleSet = new RRuleSet()
