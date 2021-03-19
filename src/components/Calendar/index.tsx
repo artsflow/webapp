@@ -26,13 +26,27 @@ export function Calendar(props: any) {
       localizer={localizer}
       defaultView="work_week"
       startAccessor="start"
-      views={['day', 'work_week', 'month', 'agenda']}
+      views={['month', 'work_week', 'day', 'agenda']}
       endAccessor="end"
       style={{ height: '700px' }}
+      eventPropGetter={eventPropGetter}
       components={{
         toolbar: Toolbar,
       }}
       {...props}
     />
   )
+}
+
+const eventPropGetter = () => {
+  const style = {
+    backgroundColor: '#e0f4f7',
+    borderRadius: '8px',
+    fontSize: '12px',
+    color: 'black',
+    border: '1px solid #F3F3F3',
+  }
+  return {
+    style,
+  }
 }
