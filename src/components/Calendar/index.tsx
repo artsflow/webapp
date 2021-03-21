@@ -1,8 +1,5 @@
 import { Calendar as BigCalendar, dateFnsLocalizer } from 'react-big-calendar'
-import format from 'date-fns/format'
-import parse from 'date-fns/parse'
-import startOfWeek from 'date-fns/startOfWeek'
-import getDay from 'date-fns/getDay'
+import { getDay, format, parse, startOfWeek, startOfToday, addHours } from 'date-fns'
 import * as ukLocale from 'date-fns/locale/uk/index.js'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
@@ -15,7 +12,7 @@ const locales = {
 const localizer = dateFnsLocalizer({
   format,
   parse,
-  startOfWeek,
+  startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 1 }),
   getDay,
   locales,
 })
@@ -24,12 +21,14 @@ export function Calendar(props: any) {
   return (
     <BigCalendar
       localizer={localizer}
-      defaultView="work_week"
+      defaultView="week"
       startAccessor="start"
-      views={['month', 'work_week', 'day', 'agenda']}
+      views={['month', 'week', 'day', 'agenda']}
       endAccessor="end"
       style={{ height: '700px' }}
       eventPropGetter={eventPropGetter}
+      min={addHours(startOfToday(), 8)}
+      max={addHours(startOfToday(), 21)}
       components={{
         toolbar: Toolbar,
       }}
