@@ -48,7 +48,7 @@ const NotAuthorizedLayout = () => {
         <VStack as="main" px={[4, 32]} spacing="2rem">
           <Logo width="214px" height="48px" />
           <Text fontSize="sm" color="gray.500">
-            You're not a beta test user. Try again later.
+            Artsflow is invite-only for now. Please try again later.
           </Text>
           <Button onClick={handleLogout}>Log out</Button>
         </VStack>
