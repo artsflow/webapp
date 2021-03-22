@@ -62,6 +62,8 @@ export const ActivityCard = (props: any) => {
   const freqLabel = freqList.join('\n')
   const isActive = status === 'active'
 
+  const activityLink = `${artsflowUrl}/a/${id}`
+
   return (
     <VStack
       rounded="12px"
@@ -118,9 +120,17 @@ export const ActivityCard = (props: any) => {
             <Icon as={IoRepeat} color="#616167" />
           </Tooltip>
           <Separator />
-          <Link href={`${artsflowUrl}/a/${id}`} isExternal>
-            <Icon as={BsLink} h="16px" w="16px" />
-          </Link>
+          <Tooltip
+            label={`Your activity link (click to open): \n${activityLink}`}
+            placement="top"
+            closeOnClick
+            hasArrow
+            shouldWrapChildren
+          >
+            <Link href={activityLink} isExternal>
+              <Icon as={BsLink} h="16px" w="16px" />
+            </Link>
+          </Tooltip>
         </HStack>
         <Tag
           color={isActive ? 'af.teal' : 'white'}
