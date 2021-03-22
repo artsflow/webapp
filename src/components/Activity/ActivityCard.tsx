@@ -29,7 +29,6 @@ import {
 } from '@chakra-ui/react'
 import { RRuleSet, rrulestr } from 'rrule'
 import { format, addMinutes } from 'date-fns'
-import { IoRepeat } from 'react-icons/io5'
 import { BsLink, BsThreeDots } from 'react-icons/bs'
 import { capitalize } from 'lodash'
 import { useRouter } from 'next/router'
@@ -38,6 +37,7 @@ import { getImageKitUrl } from 'lib/utils'
 import { ruleText } from 'components/Activity/utils'
 import { artsflowUrl } from 'lib/config'
 import { setActivityStatus, deleteActivity } from 'api'
+import CalendarRepeatIcon from 'svg/icons/calendar-repeat.svg'
 
 export const ActivityCard = (props: any) => {
   const { title, category, images, duration, frequency, type, price, id, loading, status } = props
@@ -117,7 +117,7 @@ export const ActivityCard = (props: any) => {
           </Text>
           <Separator />
           <Tooltip label={freqLabel} placement="top" closeOnClick hasArrow shouldWrapChildren>
-            <Icon as={IoRepeat} color="#616167" />
+            <Icon as={CalendarRepeatIcon} color="#616167" />
           </Tooltip>
           <Separator />
           <Tooltip
