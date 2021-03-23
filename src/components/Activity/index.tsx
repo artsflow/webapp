@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Flex } from '@chakra-ui/react'
+import { Flex, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { StateMachineProvider, createStore, useStateMachine } from 'little-state-machine'
 
@@ -17,6 +17,7 @@ import {
 } from './steps'
 
 import { initialStore, resetStore, steps, useCurrentStep, DevTool } from './utils'
+import { InfoBulb } from './InfoBulb'
 
 createStore(initialStore)
 
@@ -56,9 +57,13 @@ export function Activity(): JSX.Element {
           justifyContent="space-between"
           alignItems="flex-start"
           direction="column"
+          pos="relative"
           flex="1"
           h="full"
         >
+          <Box pos="absolute" right="0" m="2rem">
+            <InfoBulb step={currentStep} />
+          </Box>
           <StepScreen />
         </Flex>
         <Preview />

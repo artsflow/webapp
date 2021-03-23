@@ -8,15 +8,12 @@ import { StateMachineProvider, useStateMachine } from 'little-state-machine'
 import { steps, update } from 'components/Activity/utils'
 import { firestore } from 'lib/firebase'
 import { Preview } from './Preview'
+import { InfoBulb } from './InfoBulb'
 import { stepsMap } from './index'
 
 export function EditActivity(): JSX.Element {
   const router = useRouter()
   const step = router.asPath.split('/')[4]
-
-  useEffect(() => {
-    console.log('step change:', step)
-  }, [step])
 
   const StepScreen = stepsMap[step] || <Flex />
 
@@ -27,9 +24,13 @@ export function EditActivity(): JSX.Element {
           justifyContent="space-between"
           alignItems="flex-start"
           direction="column"
+          pos="relative"
           flex="1"
           h="full"
         >
+          <Box pos="absolute" right="0" m="2rem">
+            <InfoBulb step={step || 'edit'} />
+          </Box>
           {step ? <StepScreen /> : <EditButtons />}
         </Flex>
         <Preview />
