@@ -96,9 +96,7 @@ export function Frequency() {
           <Heading size="md" mb="1rem">
             Frequency
           </Heading>
-          <Text color="#616167">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
-          </Text>
+          <Text color="#616167">Set your activity frequency.</Text>
           <HStack my="2rem">
             <VStack alignItems="flexStart">
               <Text fontSize="xs" fontWeight="bold">
@@ -159,9 +157,7 @@ export function Frequency() {
               <Heading size="md" mt="2rem" mb="1rem">
                 Frequency rules
               </Heading>
-              <Text color="#616167">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
-              </Text>
+              <Text color="#616167">Your activity frequency rules (add as many as you like).</Text>
               <FrequencyTable rrules={rrules} onDelete={handleDelete} />
             </>
           )}

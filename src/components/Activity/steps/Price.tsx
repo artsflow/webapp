@@ -54,7 +54,7 @@ export function Price() {
             Finally, the Price
           </Heading>
           <Text color="#616167" mb="2rem">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+            Set your activity price, or make it free to join.
           </Text>
           <Text fontWeight="bold" fontSize="sm">
             Activity Type

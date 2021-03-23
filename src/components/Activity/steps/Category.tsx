@@ -40,7 +40,7 @@ export function Category() {
             Select Category
           </Heading>
           <Text color="#616167" mb="2rem">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+            Select one of the art categories below.
           </Text>
           <Text fontWeight="bold" fontSize="sm">
             Choose a category

@@ -31,7 +31,7 @@ export function Capacity() {
             Capacity
           </Heading>
           <Text color="#616167" mb="2rem">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+            How many members can attend to your activity.
           </Text>
 
           <Text fontWeight="bold" fontSize="sm">

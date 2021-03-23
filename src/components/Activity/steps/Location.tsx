@@ -68,12 +68,10 @@ export function Location() {
           <Heading size="md" mb="1rem">
             Add Location
           </Heading>
-          <Text color="#616167" mb="2rem">
-            Please enter the full location information below.
-            <br />
-            The location address will not be public and only shared with users who joined.
+          <Text color="#616167">Please enter the full location information below.</Text>
+          <Text color="#616167" fontStyle="italic" mt="0.5rem" mb="2rem">
+            * The location address will not be public and only shared with users who joined.
           </Text>
-
           <Container w="520px">
             <Text fontWeight="bold" alignItems="center">
               Search for location
@@ -150,7 +148,7 @@ export function Location() {
                 value={address}
                 ref={register({
                   required: true,
-                  minLength: 20,
+                  minLength: 10,
                   maxLength: 200,
                 })}
                 onChange={() => handleChange('address')}
@@ -159,7 +157,7 @@ export function Location() {
                 <Error
                   errors={errors}
                   name="address"
-                  message="Address between 20 and 200 characters"
+                  message="Address must have between 10 and 200 characters"
                 />
               </Box>
             </Box>

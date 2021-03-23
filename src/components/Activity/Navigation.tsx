@@ -48,6 +48,9 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
   }
 
   const handleSave = async () => {
+    if (onClick) onClick()
+    if (!isValid) return
+
     setLoading(true)
     const id = router.asPath.split('/')[3]
     const data = { ...cleanStore(state), id }

@@ -53,15 +53,11 @@ export function Published() {
       >
         <Confetti active={confettiActive} config={config} />
         <ActivityCard {...activity} id={id} loading={!activity || loading} />
-        <Heading fontSize="1.5rem" pt="2rem">
+        <Heading fontSize="1.5rem" pt="2rem" mb="1rem">
           Awesome, your activity was publised!
         </Heading>
-        <Text color="#616167" my="1rem">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
-        </Text>
-
         <Text color="#616167" fontSize="sm">
-          Below is your activity link. Share it and get bookings
+          Below is your activity link. You can share it and accept bookings.
         </Text>
         <Flex mb={2}>
           <Input value={url} isReadOnly fontSize="sm" w="240px" />

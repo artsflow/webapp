@@ -20,7 +20,8 @@ import { Navigation } from '../Navigation'
 const TITLE_MIN_LENGTH = 20
 const TITLE_MAX_LENGTH = 80
 const DESCRIPTION_MIN_LENGTH = 200
-const DESCRIPTION_MAX_LENGTH = 1000
+const DESCRIPTION_MAX_LENGTH = 5000
+const WHATTOBRING_MAX_LENGTH = 1000
 
 export function Details() {
   const { state, actions } = useStateMachine({ update }) as any
@@ -39,12 +40,12 @@ export function Details() {
   return (
     <>
       <Flex justifyContent="space-between" alignItems="flex-start" p="40px">
-        <Flex direction="column" alignItems="flex-start">
+        <Flex direction="column" alignItems="flex-start" w="460px">
           <Heading size="md" mb="1rem">
             Add Details
           </Heading>
           <Text color="#616167" mb="2rem">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+            Add your activity details.
           </Text>
 
           <Container>
@@ -79,7 +80,7 @@ export function Details() {
             <Error
               errors={errors}
               name="title"
-              message={`Title between ${TITLE_MIN_LENGTH} and ${TITLE_MAX_LENGTH} characters`}
+              message={`Title must have between ${TITLE_MIN_LENGTH} and ${TITLE_MAX_LENGTH} characters`}
             />
           </Container>
 
@@ -114,7 +115,7 @@ export function Details() {
             <Error
               errors={errors}
               name="description"
-              message={`Description between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters`}
+              message={`Description hast have between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters`}
             />
           </Container>
 
@@ -147,13 +148,13 @@ export function Details() {
                 w="80px"
                 color="gray.400"
                 fontSize="xs"
-                children={`${state.whatToBring?.length} / ${DESCRIPTION_MAX_LENGTH}`}
+                children={`${state.whatToBring?.length} / ${WHATTOBRING_MAX_LENGTH}`}
               />
             </InputGroup>
             <Error
               errors={errors}
               name="whatToBring"
-              message={`What to bring no more than ${DESCRIPTION_MAX_LENGTH} characters`}
+              message={`What to bring no more than ${WHATTOBRING_MAX_LENGTH} characters`}
             />
           </Container>
         </Flex>

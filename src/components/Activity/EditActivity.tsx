@@ -83,7 +83,7 @@ const EditButtons = () => {
           What do you want to modify?
         </Heading>
         <Text color="#616167" mb="2rem">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+          Edit your activity sections by using the buttons below.
         </Text>
       </Flex>
       <VStack w="320px" spacing="0.5rem">
