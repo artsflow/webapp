@@ -32,26 +32,39 @@ export const help: HelpMap = {
   },
   location: {
     heading: 'Location',
-    info: 'Lorem ipsum here...',
+    info: (
+      <>
+        <Text>Add the location where your activity will take place.</Text>
+        <Text mt="1rem">
+          <b>Your privacy is enabled</b> by default, The exact address will be shared only with
+          people who booked your activity.
+        </Text>
+      </>
+    ),
   },
   images: {
     heading: 'Images',
-    info: 'Lorem ipsum here...',
+    info: 'Add the best images that describes your activity',
   },
   duration: {
     heading: 'Duration',
-    info: 'Lorem ipsum here...',
+    info: 'The total time of the activity',
   },
   frequency: {
     heading: 'Frequency',
-    info: 'Lorem ipsum here...',
+    info: (
+      <>
+        <Text>Set the dates and times of your activity</Text>
+        <Text>You can add multiple frequency rules.</Text>
+      </>
+    ),
   },
   capacity: {
     heading: 'Capacity',
-    info: 'Lorem ipsum here...',
+    info: 'Add the maximum capactiy of your activity',
   },
   price: {
     heading: 'Price',
-    info: 'Lorem ipsum here...',
+    info: 'Chose the price for each member or make it free',
   },
 }
