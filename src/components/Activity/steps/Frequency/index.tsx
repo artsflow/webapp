@@ -96,7 +96,7 @@ export function Frequency() {
           <Heading size="md" mb="1rem">
             Frequency
           </Heading>
-          <Text color="#616167">Set your activity frequency.</Text>
+          <Text color="#616167">Please choose the frequency of your activity.</Text>
           <HStack my="2rem">
             <VStack alignItems="flexStart">
               <Text fontSize="xs" fontWeight="bold">

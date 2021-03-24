@@ -45,7 +45,7 @@ export function Details() {
             Add Details
           </Heading>
           <Text color="#616167" mb="2rem">
-            Add your activity details.
+            Please add your activity details.
           </Text>
 
           <Container>

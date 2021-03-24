@@ -67,7 +67,7 @@ export function Duration() {
           <Heading size="md" mb="1rem">
             Duration
           </Heading>
-          <Text color="#616167">Set your activity duration.</Text>
+          <Text color="#616167">Please select or customise the duration of your activity.</Text>
           <Heading pt="2rem" fontSize="md">
             Select duration
           </Heading>

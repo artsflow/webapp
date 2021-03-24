@@ -31,7 +31,7 @@ export function Capacity() {
             Capacity
           </Heading>
           <Text color="#616167" mb="2rem">
-            How many members can attend to your activity.
+            Please select the total number of spaces available for your activity.
           </Text>
 
           <Text fontWeight="bold" fontSize="sm">

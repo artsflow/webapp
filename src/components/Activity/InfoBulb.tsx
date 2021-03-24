@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { VStack, Icon, IconButton, Heading, Text } from '@chakra-ui/react'
+import { Box, VStack, Icon, IconButton, Heading } from '@chakra-ui/react'
 import { useOutsideClick } from 'rooks'
 
 import BulbIcon from 'svg/icons/bulb.svg'
@@ -47,9 +47,9 @@ export const InfoBulb = ({ step }: any) => {
         spacing="1rem"
       >
         <Heading fontSize="1rem">{heading}</Heading>
-        <Text color="#616167" fontSize="0.875rem">
+        <Box color="#616167" fontSize="0.875rem">
           {info}
-        </Text>
+        </Box>
       </VStack>
     </VStack>
   )

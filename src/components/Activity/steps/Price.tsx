@@ -54,7 +54,7 @@ export function Price() {
             Finally, the Price
           </Heading>
           <Text color="#616167" mb="2rem">
-            Set your activity price, or make it free to join.
+            Please select whether your activity is free or paid for and enter the price.
           </Text>
           <Text fontWeight="bold" fontSize="sm">
             Activity Type

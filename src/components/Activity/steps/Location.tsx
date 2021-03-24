@@ -68,9 +68,8 @@ export function Location() {
           <Heading size="md" mb="1rem">
             Add Location
           </Heading>
-          <Text color="#616167">Please enter the full location information below.</Text>
-          <Text color="#616167" fontStyle="italic" mt="0.5rem" mb="2rem">
-            * The location address will not be public and only shared with users who joined.
+          <Text color="#616167">
+            Please add the location of your activity by searching for the address.
           </Text>
           <Container w="520px">
             <Text fontWeight="bold" alignItems="center">

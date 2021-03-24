@@ -40,7 +40,7 @@ export function Category() {
             Select Category
           </Heading>
           <Text color="#616167" mb="2rem">
-            Select one of the art categories below.
+            Please select a category for your activity.
           </Text>
           <Text fontWeight="bold" fontSize="sm">
             Choose a category
