@@ -71,7 +71,7 @@ export function Location() {
           <Text color="#616167">
             Please add the location of your activity by searching for the address.
           </Text>
-          <Container w="520px">
+          <Container w="520px" pt="2rem">
             <Text fontWeight="bold" alignItems="center">
               Search for location
             </Text>
