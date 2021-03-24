@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useRef, useState, useCallback, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import {
@@ -11,6 +11,16 @@ import {
   InputLeftElement,
   InputRightElement,
   VStack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react'
 import { CheckIcon } from '@chakra-ui/icons'
 
@@ -23,12 +33,15 @@ import { UserContext } from 'lib/context'
 const validateEmail = (str: string): boolean => !!str.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)
 
 export default function Login(): JSX.Element {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const router = useRouter()
   const [isLoggingIn, setLogginIn] = useState(false)
   const [isEmailValid, setEmailValid] = useState(false)
+  const [confirmEmailValue, setConfirmEmailValue] = useState('')
   const [emailValue, setEmailValue] = useState('')
   const { oobCode } = router.query
   const { authState } = useContext(UserContext)
+  const emailRef = useRef() as any
 
   useEffect(() => {
     if (authState) {
@@ -38,23 +51,33 @@ export default function Login(): JSX.Element {
 
   useEffect(() => {
     if (oobCode && auth.isSignInWithEmailLink(window.location.href)) {
-      let email = window.localStorage.getItem('emailForSignIn')
+      const email = window.localStorage.getItem('emailForSignIn')
 
-      if (!email) {
-        email = window.prompt('Please provide your email for confirmation') as string
+      if (email) {
+        auth
+          .signInWithEmailLink(email, window.location.href)
+          .then(() => {
+            window.localStorage.removeItem('emailForSignIn')
+          })
+          .catch((error) => {
+            console.error('email_auth_error1:', error)
+          })
+      } else {
+        onOpen()
       }
-
-      auth
-        .signInWithEmailLink(email, window.location.href)
-        .then((result) => {
-          window.localStorage.removeItem('emailForSignIn')
-          console.log('RESULT:', result)
-        })
-        .catch((error) => {
-          console.error('email_auth_error:', error)
-        })
     }
   }, [oobCode])
+
+  const handleConfirnmEmail = () => {
+    auth
+      .signInWithEmailLink(confirmEmailValue, window.location.href)
+      .then(() => {
+        window.localStorage.removeItem('emailForSignIn')
+      })
+      .catch((error) => {
+        console.error('email_auth_error2:', error)
+      })
+  }
 
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,10 +87,16 @@ export default function Login(): JSX.Element {
     [emailValue]
   )
 
+  const handleEmailConfirmChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setConfirmEmailValue(e.target.value)
+    },
+    [emailValue]
+  )
+
   const onLogin = useCallback(
     (e) => {
       e.preventDefault()
-      console.log('onLogin')
       auth.sendSignInLinkToEmail(emailValue, { url: window.location.href, handleCodeInApp: true })
       window.localStorage.setItem('emailForSignIn', emailValue)
       setLogginIn(true)
@@ -84,7 +113,6 @@ export default function Login(): JSX.Element {
   )
 
   const onGoogleLogin = async () => {
-    console.log('onGoogleLogin')
     await auth.signInWithPopup(googleAuthProvider)
   }
 
@@ -142,6 +170,35 @@ export default function Login(): JSX.Element {
           </Button>
         </form>
       </Box>
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirm your email:</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Email</FormLabel>
+              <Input
+                ref={emailRef}
+                type="email"
+                onChange={handleEmailConfirmChange}
+                value={confirmEmailValue}
+                placeholder="Email"
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button onClick={onClose} mr="1rem">
+              Cancel
+            </Button>
+            <Button onClick={handleConfirnmEmail} bg="af.pink" color="white">
+              Confirm
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   )
 }
