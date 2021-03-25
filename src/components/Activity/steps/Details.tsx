@@ -6,10 +6,8 @@ import {
   InputRightElement,
   Heading,
   Textarea,
-  Tooltip,
   HStack,
 } from '@chakra-ui/react'
-import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import { useStateMachine } from 'little-state-machine'
 import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
@@ -122,11 +120,8 @@ export function Details() {
           <Container>
             <HStack>
               <Text fontWeight="bold" alignItems="center">
-                What to bring
+                What to bring (optional)
               </Text>
-              <Tooltip label="More info here about what what to bring..." fontSize="md">
-                <QuestionOutlineIcon color="gray.400" />
-              </Tooltip>
             </HStack>
             <InputGroup>
               <Textarea
@@ -172,6 +167,7 @@ const Container = ({ children }: any) => (
     pos="relative"
     pb="1rem"
     children={children}
+    mb="1.5rem"
   />
 )
 

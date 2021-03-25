@@ -111,7 +111,7 @@ const Description = ({ text, isSelected }: any) =>
   text ? (
     <Box mb="0.5rem">
       <Box h="100px" overflow="hidden" pos="relative">
-        <Text fontSize="12px" color="#616167">
+        <Text fontSize="12px" color="#616167" overflowWrap="anywhere">
           {text}
         </Text>
         <Box
