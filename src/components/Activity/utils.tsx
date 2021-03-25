@@ -6,6 +6,7 @@ import { omit } from 'lodash'
 
 export const initialStore = {
   category: '',
+  categoryType: '',
   title: '',
   description: '',
   whatToBring: '',
