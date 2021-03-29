@@ -61,7 +61,7 @@ const EditButtons = () => {
 
   const [activity] = useDocumentData(firestore.doc(`/activities/${id}`))
   const [location] = useDocumentData(firestore.doc(`/locations/${id}`))
-
+  console.log(id, activity, location)
   useEffect(() => {
     if (activity) {
       actions.update({

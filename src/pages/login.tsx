@@ -96,8 +96,13 @@ export default function Login(): JSX.Element {
 
   const onLogin = useCallback(
     (e) => {
+      console.log('sendSignInLinkToEmail')
       e.preventDefault()
-      auth.sendSignInLinkToEmail(emailValue, { url: window.location.href, handleCodeInApp: true })
+      auth
+        .sendSignInLinkToEmail(emailValue, { url: window.location.href, handleCodeInApp: true })
+        .then((r) => console.info('sendSignInLinkToEmail:', r))
+        .catch((err) => console.error('sendSignInLinkToEmail', err))
+
       window.localStorage.setItem('emailForSignIn', emailValue)
       setLogginIn(true)
     },
@@ -127,7 +132,10 @@ export default function Login(): JSX.Element {
         <form onSubmit={onSubmit}>
           {isLoggingIn ? (
             <VStack h="90px" justifyContent="center">
-              <Text textAlign="center">Check your email now</Text>
+              <Text textAlign="center">
+                Please check your email at <b>{emailValue}</b>
+              </Text>
+              <Text textAlign="center">and click the verification link</Text>
               <Spinner color="af.pink" />
             </VStack>
           ) : (
