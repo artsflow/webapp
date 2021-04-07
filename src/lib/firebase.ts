@@ -17,6 +17,16 @@ const firebaseConfig = {
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig)
+
+  // emulators
+  if (process.env.NEXT_PUBLIC_EMULATOR) {
+    console.info('___using__emulators___')
+
+    firebase.auth().useEmulator('http://localhost:7042')
+    firebase.firestore().useEmulator('localhost', 9042)
+    firebase.firestore().settings({ host: 'localhost:9042', ssl: false, cacheSizeBytes: 2048576 })
+    firebase.app().functions('europe-west2').useEmulator('localhost', 8042)
+  }
 }
 
 // Auth exports
@@ -35,16 +45,6 @@ export const { STATE_CHANGED } = firebase.storage.TaskEvent
 
 // functions
 export const functions = firebase.app().functions('europe-west2')
-
-// emulators
-if (process.env.EMU) {
-  console.info('___using__emulators___')
-
-  auth.useEmulator('http://localhost:7042')
-  functions.useEmulator('localhost', 8042)
-  firestore.settings({ host: 'localhost:9042', ssl: false, cacheSizeBytes: 2048576 })
-  firestore.useEmulator('localhost', 9042)
-}
 
 /// Helper functions
 export async function getUserWithUsername(username: string) {
