@@ -88,7 +88,8 @@ export const SidePanel = () => {
         isRound
         size="xs"
         right="-12px"
-        top="15px"
+        bottom="32px"
+        zIndex="2"
       />
       <List spacing="0.8rem">
         {menu.map((item: any, index: number) => {
