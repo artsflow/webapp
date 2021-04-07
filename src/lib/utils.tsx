@@ -1,6 +1,8 @@
 import { createStandaloneToast, forwardRef } from '@chakra-ui/react'
 import { motion, isValidMotionProp } from 'framer-motion'
 
+export const isProd = process.env.NODE_ENV === 'production'
+
 const toast = createStandaloneToast()
 
 interface AlertProps {

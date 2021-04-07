@@ -33,6 +33,19 @@ export const { increment } = firebase.firestore.FieldValue
 export const storage = firebase.storage()
 export const { STATE_CHANGED } = firebase.storage.TaskEvent
 
+// functions
+export const functions = firebase.app().functions('europe-west2')
+
+// emulators
+if (process.env.EMU) {
+  console.info('___using__emulators___')
+
+  auth.useEmulator('http://localhost:7042')
+  functions.useEmulator('localhost', 8042)
+  firestore.settings({ host: 'localhost:9042', ssl: false, cacheSizeBytes: 2048576 })
+  firestore.useEmulator('localhost', 9042)
+}
+
 /// Helper functions
 export async function getUserWithUsername(username: string) {
   const usersRef = firestore.collection('users')
@@ -50,9 +63,6 @@ export function postToJSON(doc: any) {
     updatedAt: data?.updatedAt.toMillis() || 0,
   }
 }
-
-// functions
-export const functions = firebase.app().functions('europe-west2')
 
 export const firebaseCallable = async (func: string, params: any) => {
   console.info(`>>> callable: ${func}`, params)
@@ -88,18 +98,3 @@ export const uploadTask = async ({ path, blob, onProgres }: any) =>
       }
     )
   })
-
-// emulators
-// export const setFirebaseEmulators = async () => {
-//   if (__DEV__) {
-//     console.info('____DEV____settings')
-//     firestore.settings({
-//       host: 'https://firestore.ngrok.42tech.co',
-//       ssl: true,
-//       // persistence: true,
-//       cacheSizeBytes: 2048576,
-//     })
-
-//     functions.useFunctionsEmulator('https://functions.ngrok.42tech.co')
-//   }
-// }

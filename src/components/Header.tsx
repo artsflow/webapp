@@ -31,7 +31,9 @@ import { UserContext } from 'lib/context'
 import { Notifications } from 'components'
 import { getImageKitUrl } from 'lib/utils'
 
-import { version } from '../../package.json'
+import packageInfo from '../../package.json'
+
+const { version } = packageInfo
 
 export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
