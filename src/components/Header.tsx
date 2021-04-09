@@ -18,7 +18,7 @@ import {
   useDisclosure,
   Badge,
 } from '@chakra-ui/react'
-import { ChevronDownIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, WarningTwoIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
 
 import Logo from 'svg/artsflow.svg'
@@ -30,6 +30,7 @@ import { useRouter } from 'next/router'
 import { UserContext } from 'lib/context'
 import { Notifications } from 'components'
 import { getImageKitUrl } from 'lib/utils'
+import { useAccountStatus } from 'hooks'
 
 import packageInfo from '../../package.json'
 
@@ -39,6 +40,7 @@ export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user, profile } = useContext(UserContext)
   const router = useRouter()
+  const [status, loading] = useAccountStatus()
 
   const handleLogout = () => {
     auth.signOut()
@@ -50,7 +52,7 @@ export function Header() {
       as="nav"
       py="4"
       px="2rem"
-      gridTemplateColumns="auto auto 1fr auto auto"
+      gridTemplateColumns="auto 1fr auto 1fr auto auto"
       alignItems="center"
       boxShadow="0px 3px 8px -1px rgba(50, 50, 71, 0.05)"
       zIndex="1"
@@ -66,6 +68,20 @@ export function Header() {
         <Text fontSize="10px" color="gray.500">
           v{version} alpha
         </Text>
+      </HStack>
+      <HStack mt="10px" pl="1rem">
+        {!loading && !status.verified && (
+          <NextLink href="/">
+            <Link>
+              <HStack>
+                <WarningTwoIcon color="af.pink" />
+                <Text fontSize="12px" color="af.pink" fontWeight="bold">
+                  Account not verified
+                </Text>
+              </HStack>
+            </Link>
+          </NextLink>
+        )}
       </HStack>
       <HStack ml="auto" spacing="1rem" borderRight="1px solid #ECEDF1" mr="1.5rem" pr="1.5rem">
         <RoundButton icon={<Icon as={ChatIcon} />} onClick={() => router.push('/chat')} />

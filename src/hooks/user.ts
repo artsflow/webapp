@@ -2,6 +2,24 @@ import { useState, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 import { auth, firestore } from 'lib/firebase'
+import { getStripeAccountStatus } from 'api'
+
+export function useAccountStatus() {
+  const [status, setStatus] = useState({ verified: true }) as any
+  const [loading, setLoading] = useState(true)
+
+  const getStatus = async () => {
+    const s = await getStripeAccountStatus()
+    if (s) setStatus(s.data)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    getStatus()
+  }, [])
+
+  return [status, loading]
+}
 
 export function useUserData() {
   const [authState, authLoading] = useAuthState(auth)
