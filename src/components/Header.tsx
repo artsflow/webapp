@@ -70,7 +70,7 @@ export function Header() {
         </Text>
       </HStack>
       <HStack mt="10px" pl="1rem">
-        {!loading && !status.verified && (
+        {!loading && !status?.verified && (
           <NextLink href="/">
             <Link>
               <HStack>

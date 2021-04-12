@@ -21,6 +21,8 @@ import ActivitiesIcon from 'svg/icons/activities.svg'
 import ActivitiesSelectedIcon from 'svg/icons/activities-selected.svg'
 import CalendarIcon from 'svg/icons/calendar.svg'
 import CalendarSelectedIcon from 'svg/icons/calendar-selected.svg'
+import CardIcon from 'svg/icons/card.svg'
+import CardSelectedIcon from 'svg/icons/card-selected.svg'
 
 import { motionComponent } from 'lib/utils'
 
@@ -42,6 +44,12 @@ const menu = [
     text: 'Calendar',
     icon: CalendarIcon,
     iconSelected: CalendarSelectedIcon,
+  },
+  {
+    id: 'payouts',
+    text: 'Payouts',
+    icon: CardIcon,
+    iconSelected: CardSelectedIcon,
   },
 ]
 

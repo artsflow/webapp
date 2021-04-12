@@ -3,18 +3,22 @@ import { Heading, Text, Box, Link } from '@chakra-ui/react'
 
 import { useAccountStatus } from 'hooks'
 import { UserContext } from 'lib/context'
+import { Meta } from 'components'
 
 export default function Home(): JSX.Element {
   const { user } = useContext(UserContext)
   const [status, loading] = useAccountStatus()
 
   return (
-    <Box p="40px">
-      <Heading fontSize="lg" mb="1rem">
-        Welcome to Artsflow, {user.firstName}
-      </Heading>
-      {!loading && !status.verified && <OnboardingVerification url={status.onboardingUrl} />}
-    </Box>
+    <>
+      <Meta title="Artsflow" />
+      <Box p="40px">
+        <Heading fontSize="lg" mb="1rem">
+          Welcome to Artsflow, {user.firstName}
+        </Heading>
+        {!loading && !status?.verified && <OnboardingVerification url={status.onboardingUrl} />}
+      </Box>
+    </>
   )
 }
 

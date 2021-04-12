@@ -72,7 +72,7 @@ export const firebaseCallable = async (func: string, params: any) => {
     return result
   } catch (e) {
     console.error(`firebaseCallable:error:${func}: ${JSON.stringify(e)}`)
-    return null
+    return e
   }
 }
 

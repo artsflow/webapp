@@ -26,7 +26,7 @@ import { CheckIcon } from '@chakra-ui/icons'
 
 import Logo from 'svg/artsflow.svg'
 import GoogleButton from 'svg/google-signin.svg'
-import { Container } from 'components'
+import { Container, Meta } from 'components'
 import { auth, googleAuthProvider } from 'lib/firebase'
 import { UserContext } from 'lib/context'
 
@@ -122,91 +122,94 @@ export default function Login(): JSX.Element {
   }
 
   return (
-    <Container h="100%" justifyContent="center">
-      <Link href="/">
-        <a>
-          <Logo width="242px" />
-        </a>
-      </Link>
-      <Box>
-        <form onSubmit={onSubmit}>
-          {isLoggingIn ? (
-            <VStack h="90px" justifyContent="center">
-              <Text textAlign="center">
-                Please check your email at <b>{emailValue}</b>
-              </Text>
-              <Text textAlign="center">and click the verification link</Text>
-              <Spinner color="af.pink" />
-            </VStack>
-          ) : (
-            <Box h="90px">
-              <InputGroup>
-                <InputLeftElement
-                  pointerEvents="none"
-                  color="gray.300"
-                  fontSize="1.2em"
-                  children="@"
-                />
+    <>
+      <Meta title="Login" />
+      <Container h="100%" justifyContent="center">
+        <Link href="/">
+          <a>
+            <Logo width="242px" />
+          </a>
+        </Link>
+        <Box>
+          <form onSubmit={onSubmit}>
+            {isLoggingIn ? (
+              <VStack h="90px" justifyContent="center">
+                <Text textAlign="center">
+                  Please check your email at <b>{emailValue}</b>
+                </Text>
+                <Text textAlign="center">and click the verification link</Text>
+                <Spinner color="af.pink" />
+              </VStack>
+            ) : (
+              <Box h="90px">
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    color="gray.300"
+                    fontSize="1.2em"
+                    children="@"
+                  />
+                  <Input
+                    borderColor="af.teal"
+                    placeholder="hello@artsflow.com"
+                    type="email"
+                    onChange={handleEmailChange}
+                    value={emailValue}
+                  />
+                  <InputRightElement
+                    children={<CheckIcon color={isEmailValid ? 'af.teal' : 'grey'} />}
+                  />
+                </InputGroup>
+                <Button
+                  w="full"
+                  bg="af.pink"
+                  mt="2"
+                  disabled={!isEmailValid || isLoggingIn}
+                  isLoading={isLoggingIn}
+                  onClick={onLogin}
+                >
+                  Continue with email
+                </Button>
+              </Box>
+            )}
+            <Text textAlign="center" py="2">
+              or
+            </Text>
+            <Button variant="link" outline="none" w="full" p="0" onClick={onGoogleLogin}>
+              <GoogleButton />
+            </Button>
+          </form>
+        </Box>
+
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Confirm your email:</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              <FormControl>
+                <FormLabel>Email</FormLabel>
                 <Input
-                  borderColor="af.teal"
-                  placeholder="hello@artsflow.com"
+                  ref={emailRef}
                   type="email"
-                  onChange={handleEmailChange}
-                  value={emailValue}
+                  onChange={handleEmailConfirmChange}
+                  value={confirmEmailValue}
+                  placeholder="Email"
                 />
-                <InputRightElement
-                  children={<CheckIcon color={isEmailValid ? 'af.teal' : 'grey'} />}
-                />
-              </InputGroup>
-              <Button
-                w="full"
-                bg="af.pink"
-                mt="2"
-                disabled={!isEmailValid || isLoggingIn}
-                isLoading={isLoggingIn}
-                onClick={onLogin}
-              >
-                Continue with email
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button onClick={onClose} mr="1rem">
+                Cancel
               </Button>
-            </Box>
-          )}
-          <Text textAlign="center" py="2">
-            or
-          </Text>
-          <Button variant="link" outline="none" w="full" p="0" onClick={onGoogleLogin}>
-            <GoogleButton />
-          </Button>
-        </form>
-      </Box>
-
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Confirm your email:</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Email</FormLabel>
-              <Input
-                ref={emailRef}
-                type="email"
-                onChange={handleEmailConfirmChange}
-                value={confirmEmailValue}
-                placeholder="Email"
-              />
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button onClick={onClose} mr="1rem">
-              Cancel
-            </Button>
-            <Button onClick={handleConfirnmEmail} bg="af.pink" color="white">
-              Confirm
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Container>
+              <Button onClick={handleConfirnmEmail} bg="af.pink" color="white">
+                Confirm
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Container>
+    </>
   )
 }
