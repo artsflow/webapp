@@ -17,13 +17,13 @@ import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 import NextLink from 'next/link'
 
-import { useAccountStatus, usePayoutsData } from 'hooks'
+import { useAccountStatus, usePayoutsData, useBalance } from 'hooks'
 import { addStripeExternalAccount } from 'api'
 import { Meta } from 'components'
 
 export default function Payouts() {
   const [status, loading] = useAccountStatus()
-  console.log(status)
+  // console.log(status)
   const isVerified = status?.verified === true
   const hasPayoutsEnabled = status?.payouts_enabled === true
 
@@ -49,17 +49,31 @@ export default function Payouts() {
             {` `}in order to access the payouts
           </Text>
         )}
+        {isVerified && hasPayoutsEnabled && <Balance />}
       </Box>
     </>
   )
 }
 
-const PayoutsData = () => {
-  const [data, loading] = usePayoutsData()
-  const { accounts = [] } = data
-  const [acc = {}] = accounts || []
+const Balance = () => {
+  const [balance = {}, loading] = useBalance()
+  const { available, pending } = balance
 
-  console.log(data)
+  return (
+    <HStack mt="1rem">
+      <Text>Avilable balance: </Text>
+      <Skeleton isLoaded={!loading} as={HStack}>
+        <Text fontWeight="bold">£{available?.[0].amount}</Text>
+        <Text> (pending £{pending?.[0].amount})</Text>
+      </Skeleton>
+    </HStack>
+  )
+}
+
+const PayoutsData = () => {
+  const [data = {}, loading] = usePayoutsData()
+  const { accounts = [] } = data
+  const [acc = {}] = accounts
 
   return (
     <VStack>

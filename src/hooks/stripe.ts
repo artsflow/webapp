@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { getStripeAccountStatus, getPayoutsData } from 'api'
+import { getStripeAccountStatus, getPayoutsData, getBalance } from 'api'
 
 export function useAccountStatus() {
   const [status, setStatus] = useState({ verified: true }) as any
@@ -24,8 +24,25 @@ export function usePayoutsData() {
   const [loading, setLoading] = useState(true)
 
   const getData = async () => {
-    const s = await getPayoutsData()
-    if (s) setData(s.data)
+    const res = await getPayoutsData()
+    if (res) setData(res.data)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  return [data, loading]
+}
+
+export function useBalance() {
+  const [data, setData] = useState({}) as any
+  const [loading, setLoading] = useState(true)
+
+  const getData = async () => {
+    const res = await getBalance()
+    if (res) setData(res.data)
     setLoading(false)
   }
 
