@@ -11,16 +11,22 @@ import {
   VStack,
   useToast,
   Skeleton,
+  Link,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
+import NextLink from 'next/link'
 
 import { useAccountStatus, usePayoutsData } from 'hooks'
 import { addStripeExternalAccount } from 'api'
 import { Meta } from 'components'
 
-export default function Payouts(): JSX.Element {
+export default function Payouts() {
   const [status, loading] = useAccountStatus()
+  console.log(status)
+  const isVerified = status?.verified === true
+  const hasPayoutsEnabled = status?.payouts_enabled === true
+
   return (
     <>
       <Meta title="Payouts" />
@@ -28,8 +34,21 @@ export default function Payouts(): JSX.Element {
         <Heading fontSize="lg" mb="1rem">
           Payouts
         </Heading>
-        {!loading && status.payouts_enabled && <PayoutsData />}
-        {!loading && !status.payouts_enabled && <AddBankAccount />}
+        {isVerified && hasPayoutsEnabled && <PayoutsData />}
+        {isVerified && !hasPayoutsEnabled && !loading && <AddBankAccount />}
+        {!isVerified && (
+          <Text as="span">
+            You need to {` `}
+            <NextLink href="/">
+              <Link>
+                <Text as="span" color="af.pink" fontWeight="bold">
+                  verify your account
+                </Text>
+              </Link>
+            </NextLink>
+            {` `}in order to access the payouts
+          </Text>
+        )}
       </Box>
     </>
   )
@@ -37,7 +56,7 @@ export default function Payouts(): JSX.Element {
 
 const PayoutsData = () => {
   const [data, loading] = usePayoutsData()
-  const { accounts } = data
+  const { accounts = [] } = data
   const [acc = {}] = accounts || []
 
   console.log(data)
@@ -58,6 +77,7 @@ const PayoutsData = () => {
 const AddBankAccount = () => {
   const { register, handleSubmit, errors } = useForm({})
   const [isLoading, setLoading] = useState(false)
+  const [hasBankAccount, setBankAccount] = useState(false)
   const toast = useToast()
 
   const onSubmit = async (data: any) => {
@@ -83,8 +103,11 @@ const AddBankAccount = () => {
         isClosable: true,
         position: 'top',
       })
+      setBankAccount(true)
     }
   }
+
+  if (hasBankAccount) return null
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
