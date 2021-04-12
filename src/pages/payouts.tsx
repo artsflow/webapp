@@ -128,6 +128,7 @@ const AddBankAccount = () => {
               ref={register({
                 required: true,
                 pattern: /(?!0{2}(-?0{2}){2})(\d{2}(-\d{2}){2})|(\d{6})/,
+                setValueAs: (value) => value.replaceAll('-', ''),
               })}
               name="sortcode"
             />
