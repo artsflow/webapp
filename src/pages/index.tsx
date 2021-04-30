@@ -1,15 +1,14 @@
-import { useContext } from 'react'
-import { Heading, Text, Box, Link, Skeleton, VStack } from '@chakra-ui/react'
+import { useContext, useState } from 'react'
+import { Heading, Text, Box, Link, VStack, Button } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 
-import { useAccountStatus } from 'hooks'
 import { UserContext } from 'lib/context'
 import { Meta } from 'components'
+import { createStripeAccountLinks } from 'api'
+import { useAccountStatus } from 'hooks'
 
 export default function Home(): JSX.Element {
   const { user } = useContext(UserContext)
-  const [status, loading] = useAccountStatus()
-
-  console.log(status)
 
   return (
     <>
@@ -18,18 +17,27 @@ export default function Home(): JSX.Element {
         <Heading fontSize="lg" mb="1rem">
           Welcome to Artsflow, {user.firstName}
         </Heading>
-        <Skeleton isLoaded={!loading}>
-          {!status?.verified && <OnboardingVerification status={status} />}
-        </Skeleton>
+        {!user.isVerified && <OnboardingVerification />}
       </Box>
     </>
   )
 }
 
-const OnboardingVerification = ({ status }: any) => {
-  const moreInfoNeeded =
-    status?.requirements?.pending_verification?.length > 0 ||
-    status?.requirements?.errors?.length > 0
+const OnboardingVerification = () => {
+  const [status] = useAccountStatus()
+  const [isLoading, setLoading] = useState(false)
+  const router = useRouter()
+
+  const { moreInfoNeeded } = status
+  console.log(status)
+
+  const handleVerification = async () => {
+    setLoading(true)
+    const links = await createStripeAccountLinks()
+    setLoading(false)
+    router.push(links?.data.url)
+  }
+
   return (
     <VStack alignItems="flex-start">
       <Text color="af.pink" fontWeight="bold">
@@ -52,17 +60,16 @@ const OnboardingVerification = ({ status }: any) => {
         checks.
       </Text>
       {moreInfoNeeded && <Text color="red">Additional information is needed!</Text>}
-      <Link
-        href={status?.onboardingUrl}
+      <Button
+        isLoading={isLoading}
         bg="af.teal"
         color="white"
-        padding="2"
-        px="4"
         rounded="8px"
         mt="1rem"
+        onClick={handleVerification}
       >
         Proceed with verification
-      </Link>
+      </Button>
     </VStack>
   )
 }

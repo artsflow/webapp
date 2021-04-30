@@ -30,7 +30,6 @@ import { useRouter } from 'next/router'
 import { UserContext } from 'lib/context'
 import { Notifications } from 'components'
 import { getImageKitUrl } from 'lib/utils'
-import { useAccountStatus } from 'hooks'
 
 import packageInfo from '../../package.json'
 
@@ -40,7 +39,8 @@ export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user, profile } = useContext(UserContext)
   const router = useRouter()
-  const [status, loading] = useAccountStatus()
+
+  console.log(user)
 
   const handleLogout = () => {
     auth.signOut()
@@ -70,13 +70,13 @@ export function Header() {
         </Text>
       </HStack>
       <HStack mt="10px" pl="1rem">
-        {!loading && !status?.verified && (
+        {!user.isVerified && (
           <NextLink href="/">
             <Link>
               <HStack>
                 <WarningTwoIcon color="af.pink" />
                 <Text fontSize="12px" color="af.pink" fontWeight="bold">
-                  Account not verified
+                  Account not verified - Click here to verfy!
                 </Text>
               </HStack>
             </Link>

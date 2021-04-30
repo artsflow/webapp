@@ -1,5 +1,6 @@
 import { firebaseCallable } from 'lib/firebase'
 
+export const createStripeAccountLinks = () => firebaseCallable('createStripeAccountLinks', {})
 export const getBalance = () => firebaseCallable('getBalance', {})
 export const getPayoutsData = () => firebaseCallable('getPayoutsData', {})
 export const getStripeAccountStatus = () => firebaseCallable('getStripeAccountStatus', {})

@@ -23,7 +23,7 @@ import { Meta } from 'components'
 
 export default function Payouts() {
   const [status, loading] = useAccountStatus()
-  // console.log(status)
+  console.log(status)
   const isVerified = status?.verified === true
   const hasPayoutsEnabled = status?.payouts_enabled === true
 
