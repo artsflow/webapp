@@ -8,7 +8,7 @@ export function useAccountStatus() {
 
   const getStatus = async () => {
     const s = await getStripeAccountStatus()
-    if (s) setStatus(s.data)
+    if (s) setStatus(s.data || {})
     setLoading(false)
   }
 
