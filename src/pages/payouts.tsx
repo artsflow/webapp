@@ -1,4 +1,4 @@
-import { Heading, Text, Box, Link } from '@chakra-ui/react'
+import { Heading, Text, Box, Link, VStack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 
 import { useAccountStatus } from 'hooks'
@@ -17,8 +17,11 @@ export default function Payouts() {
         <Heading fontSize="lg" mb="1rem">
           Payouts
         </Heading>
-        {isVerified && hasPayoutsEnabled && <PayoutsData />}
-        {isVerified && !hasPayoutsEnabled && !loading && <AddBankAccount />}
+        <VStack alignItems="flex-start">
+          {isVerified && hasPayoutsEnabled && <Balance />}
+          {isVerified && hasPayoutsEnabled && <PayoutsData />}
+          {isVerified && !hasPayoutsEnabled && !loading && <AddBankAccount />}
+        </VStack>
         {!isVerified && (
           <Text as="span">
             You need to {` `}
@@ -32,7 +35,6 @@ export default function Payouts() {
             {` `}in order to access the payouts
           </Text>
         )}
-        {isVerified && hasPayoutsEnabled && <Balance />}
       </Box>
     </>
   )
