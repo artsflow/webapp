@@ -12,8 +12,6 @@ export function useUserData() {
 
   const loading = authLoading || userLoading || profileLoading
 
-  console.log('useUserData', authLoading, userLoading, profileLoading)
-
   useEffect(() => {
     let unsubscribe
     setUserLoading(true)

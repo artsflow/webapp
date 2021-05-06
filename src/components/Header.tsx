@@ -40,8 +40,6 @@ export function Header() {
   const { user, profile } = useContext(UserContext)
   const router = useRouter()
 
-  console.log(user)
-
   const handleLogout = () => {
     auth.signOut()
     router.push('/')
