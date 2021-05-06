@@ -4,18 +4,18 @@ import { UserContext } from 'lib/context'
 
 import { firestore } from 'lib/firebase'
 
-export function useActivities() {
+export function useBookings() {
   const { user } = useContext(UserContext)
-  const [activities, loading, error] = useCollectionData(
+  const [bookings, loading, error] = useCollectionData(
     user.id &&
       firestore
-        .collection('activities')
-        .where('userId', '==', user.id)
+        .collection('bookings')
+        .where('creativeId', '==', user.id)
         .orderBy('createdAt', 'desc'),
     {
       idField: 'id',
     }
   ) as any
 
-  return [activities, loading, error]
+  return [bookings, loading, error]
 }

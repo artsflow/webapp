@@ -25,7 +25,7 @@ export const PayoutsData = () => {
 const PayoutsList = ({ data }: any) => {
   if (!data) return null
   return (
-    <Table bg="white" rounded="10px">
+    <Table bg="white" rounded="10px" boxShadow="0px 2px 6px rgba(0, 0, 0, 0.02)">
       <Thead>
         <Tr>
           <Th isNumeric>Amount</Th>
