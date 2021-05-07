@@ -42,7 +42,7 @@ export function useBalance() {
 
   const getData = async () => {
     const res = await getBalance()
-    if (res) setData(res.data)
+    if (res) setData(res.data || {})
     setLoading(false)
   }
 

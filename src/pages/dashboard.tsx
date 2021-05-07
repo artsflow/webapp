@@ -12,7 +12,7 @@ import { Card, BookingList } from 'components/Dashboard'
 import { useBalance, useBookings, useActivities } from 'hooks'
 
 export default function Dashboard(): JSX.Element {
-  const [balance = {}, loadingBalance] = useBalance()
+  const [balance, loadingBalance] = useBalance()
   const { pending } = balance
   const pendingBalance = `£${pending?.[0].amount / 100 || 0}`
   const [bookings = [], loadingBookings] = useBookings()
