@@ -6,7 +6,7 @@ import { useDocumentDataOnce } from 'react-firebase-hooks/firestore'
 import { useTimeoutWhen } from 'rooks'
 
 import { firestore } from 'lib/firebase'
-import { artsflowUrl } from 'lib/config'
+import { ARTSFLOW_URL } from 'lib/config'
 import { ActivityCard } from '../ActivityCard'
 
 const config = {
@@ -25,7 +25,7 @@ const config = {
 
 export function Published() {
   const [confettiActive, setConfettiActive] = useState(false)
-  const [url, setUrl] = useState(artsflowUrl)
+  const [url, setUrl] = useState(ARTSFLOW_URL) as any
   const { hasCopied, onCopy } = useClipboard(url)
   const router = useRouter()
   useTimeoutWhen(() => setConfettiActive(true), 1000)

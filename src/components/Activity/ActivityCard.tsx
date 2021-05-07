@@ -35,7 +35,7 @@ import { useRouter } from 'next/router'
 
 import { getImageKitUrl } from 'lib/utils'
 import { ruleText } from 'components/Activity/utils'
-import { artsflowUrl } from 'lib/config'
+import { ARTSFLOW_URL } from 'lib/config'
 import { setActivityStatus, deleteActivity } from 'api'
 import CalendarRepeatIcon from 'svg/icons/calendar-repeat.svg'
 
@@ -62,7 +62,7 @@ export const ActivityCard = (props: any) => {
   const freqLabel = freqList.join('\n')
   const isActive = status === 'active'
 
-  const activityLink = `${artsflowUrl}/a/${id}`
+  const activityLink = `${ARTSFLOW_URL}/a/${id}`
 
   return (
     <VStack

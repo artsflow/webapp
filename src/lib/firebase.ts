@@ -4,15 +4,24 @@ import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/functions'
 
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID,
+  FIREBASE_MEASUREMENT_ID,
+} from './config'
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyAqtqxeQK5-uLGC7iON1Ta-Q8QxXD0qIZ4',
-  authDomain: 'artsflow-com.firebaseapp.com',
-  projectId: 'artsflow-com',
-  storageBucket: 'artsflow-com.appspot.com',
-  messagingSenderId: '804828781243',
-  appId: '1:804828781243:web:1e37a98f1384cfd1afa79e',
-  measurementId: 'G-03GSHJRZVE',
-  // region: 'europe-west2',
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+  measurementId: FIREBASE_MEASUREMENT_ID,
 }
 
 if (!firebase.apps.length) {
