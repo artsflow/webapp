@@ -1,10 +1,12 @@
-import { Box, Heading, VStack, HStack } from '@chakra-ui/react'
+import { Box, Heading, VStack, HStack, Button } from '@chakra-ui/react'
 import { uniqBy } from 'lodash'
+import { DownloadIcon } from '@chakra-ui/icons'
 
 import BalanceSvg from 'svg/icons/balance.svg'
 import BookingsSvg from 'svg/icons/bookings.svg'
 import AudienceSvg from 'svg/icons/audience.svg'
 
+import { activityDownload } from 'lib/utils'
 import { Meta, Loading } from 'components'
 import { Card, BookingList } from 'components/Dashboard'
 import { useBalance, useBookings, useActivities } from 'hooks'
@@ -16,8 +18,6 @@ export default function Dashboard(): JSX.Element {
   const [bookings = [], loadingBookings] = useBookings()
   const audience = uniqBy(bookings, 'userId')
   const [activities = [], loadingActivities] = useActivities()
-
-  console.log(bookings, activities)
 
   return (
     <>
@@ -48,14 +48,29 @@ export default function Dashboard(): JSX.Element {
             />
           </HStack>
           {loadingActivities && <Loading />}
-          {activities.map(({ id, title }: any) => (
-            <>
-              <Heading size="sm" key={id}>
-                {title}
-              </Heading>
-              <BookingList list={bookings.filter(({ activityId }: any) => activityId === id)} />
-            </>
-          ))}
+          <VStack spacing="1rem">
+            {activities.map(({ id, title }: any) => {
+              const list = bookings.filter(({ activityId }: any) => activityId === id)
+              return (
+                <>
+                  <HStack key={id} justifyContent="space-between" w="full">
+                    <Heading size="sm">{title}</Heading>
+                    <Button
+                      disabled={!list.length}
+                      leftIcon={<DownloadIcon />}
+                      size="xs"
+                      bg="af.teal"
+                      color="white"
+                      onClick={() => activityDownload(list)}
+                    >
+                      Download data
+                    </Button>
+                  </HStack>
+                  <BookingList list={list} />
+                </>
+              )
+            })}
+          </VStack>
         </VStack>
       </Box>
     </>

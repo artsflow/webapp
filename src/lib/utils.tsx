@@ -1,5 +1,7 @@
 import { createStandaloneToast, forwardRef } from '@chakra-ui/react'
 import { motion, isValidMotionProp } from 'framer-motion'
+import Papa from 'papaparse'
+import { format, fromUnixTime } from 'date-fns'
 
 export const isProd = process.env.NODE_ENV === 'production'
 
@@ -41,4 +43,39 @@ export const getImageKitUrl = (url: string, options: any = {}) => {
     )
   }
   return url
+}
+
+export const activityDownload = (list: any) => {
+  const fields = [
+    'Activity id',
+    'Title',
+    'Amount',
+    'Activity date',
+    'Name',
+    'Email',
+    'Phone',
+    'Booking date',
+  ]
+  const data = list.map((a: any) => [
+    a.activityId,
+    a.title,
+    a.amount / 100,
+    format(fromUnixTime(a.timestamp), 'dd MMM, HH:mm'),
+    a.name,
+    a.email,
+    a.phone,
+    format(fromUnixTime(a.createdAt.seconds), 'dd MMM, HH:mm'),
+  ])
+  const csv = Papa.unparse({
+    data,
+    fields,
+  })
+  const blob = new Blob([csv])
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  const [{ activityId, title }] = list
+  a.download = `${activityId} ${title}`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
 }
