@@ -81,7 +81,14 @@ export function Header() {
           </NextLink>
         )}
       </HStack>
-      <HStack ml="auto" spacing="1rem" borderRight="1px solid #ECEDF1" mr="1.5rem" pr="1.5rem">
+      <HStack
+        display="none"
+        ml="auto"
+        spacing="1rem"
+        borderRight="1px solid #ECEDF1"
+        mr="1.5rem"
+        pr="1.5rem"
+      >
         <RoundButton icon={<Icon as={ChatIcon} />} onClick={() => router.push('/chat')} />
         <RoundButton icon={<Icon as={BellIcon} />} onClick={onOpen} />
       </HStack>

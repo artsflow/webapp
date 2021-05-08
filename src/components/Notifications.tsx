@@ -11,7 +11,7 @@ export const Notifications = ({ onClose, isOpen }: Props) => (
       <DrawerContent>
         <DrawerHeader borderBottomWidth="1px">Notifications</DrawerHeader>
         <DrawerBody>
-          <p>Notifications items here...</p>
+          <p>coming soon...</p>
         </DrawerBody>
       </DrawerContent>
     </DrawerOverlay>

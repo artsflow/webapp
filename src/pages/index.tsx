@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 import { UserContext } from 'lib/context'
 import { Meta } from 'components'
-import { createStripeAccountLinks } from 'api'
+import { createStripeAccountLinks, createStripeAccount } from 'api'
 import { useAccountStatus } from 'hooks'
 
 export default function Home(): JSX.Element {
@@ -17,25 +17,34 @@ export default function Home(): JSX.Element {
         <Heading fontSize="lg" mb="1rem">
           Welcome to Artsflow, {user.firstName}
         </Heading>
-        {!user.isVerified && <OnboardingVerification />}
+        {!user.isVerified && <OnboardingVerification user={user} />}
       </Box>
     </>
   )
 }
 
-const OnboardingVerification = () => {
+const OnboardingVerification = ({ user }: any) => {
   const [status] = useAccountStatus()
   const [isLoading, setLoading] = useState(false)
   const router = useRouter()
 
   const { moreInfoNeeded } = status
-  console.log(status)
 
   const handleVerification = async () => {
+    console.log('handleVerification')
+
     setLoading(true)
-    const links = await createStripeAccountLinks()
-    setLoading(false)
+    let { stripeAccountId } = user
+
+    if (!stripeAccountId) {
+      const { data } = await createStripeAccount()
+      stripeAccountId = data
+    }
+
+    const links = await createStripeAccountLinks({ stripeAccountId })
     router.push(links?.data.url)
+
+    setLoading(false)
   }
 
   return (
