@@ -9,7 +9,7 @@ const toast = createStandaloneToast()
 
 interface AlertProps {
   title: string
-  description: string
+  description?: string
   status?: 'error' | 'success' | 'warning' | 'info'
 }
 
@@ -18,7 +18,7 @@ export const showAlert = ({ title, description, status = 'error' }: AlertProps) 
     title,
     description,
     status,
-    duration: 5000,
+    duration: 3000,
     isClosable: true,
     position: 'top',
   })

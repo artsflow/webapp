@@ -3,6 +3,7 @@ import { Heading, Text, Box, Link, VStack, Button } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import { UserContext } from 'lib/context'
+import { showAlert } from 'lib/utils'
 import { Meta } from 'components'
 import { createStripeAccountLinks, createStripeAccount } from 'api'
 import { useAccountStatus } from 'hooks'
@@ -38,6 +39,9 @@ const OnboardingVerification = ({ user }: any) => {
 
     if (!stripeAccountId) {
       const { data } = await createStripeAccount()
+      if (!data) {
+        showAlert({ title: 'Errror! Please try again.' })
+      }
       stripeAccountId = data
     }
 
