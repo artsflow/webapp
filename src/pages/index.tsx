@@ -41,6 +41,8 @@ const OnboardingVerification = ({ user }: any) => {
       const { data } = await createStripeAccount()
       if (!data) {
         showAlert({ title: 'Errror! Please try again.' })
+        setLoading(false)
+        return
       }
       stripeAccountId = data
     }
