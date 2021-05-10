@@ -37,7 +37,7 @@ export function Layout({ children }: Props) {
   )
 }
 
-const NotAuthorizedLayout = () => {
+export const NotAuthorizedLayout = () => {
   const handleLogout = () => {
     auth.signOut()
   }
@@ -57,23 +57,17 @@ const NotAuthorizedLayout = () => {
   )
 }
 
-const AuthLayout = ({ children }: Props) => {
-  const { user } = useContext(UserContext)
-
-  if (user.provider && !user?.isBetaTester) return <NotAuthorizedLayout />
-
-  return (
-    <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
-      <Header />
-      <HStack as="main" bg="#F9F9F9" spacing="0">
-        <SidePanel />
-        <VStack h="100%" w="100%" alignItems="flex-start" spacing="0">
-          {children}
-        </VStack>
-      </HStack>
-    </Grid>
-  )
-}
+const AuthLayout = ({ children }: Props) => (
+  <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
+    <Header />
+    <HStack as="main" bg="#F9F9F9" spacing="0">
+      <SidePanel />
+      <VStack h="100%" w="100%" alignItems="flex-start" spacing="0">
+        {children}
+      </VStack>
+    </HStack>
+  </Grid>
+)
 
 const UnAuthLayout = ({ children }: Props) => {
   const { authState, loading } = useContext(UserContext)
