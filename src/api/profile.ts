@@ -3,7 +3,6 @@ import { firebaseCallable } from 'lib/firebase'
 interface ProfileData {
   firstName: string
   lastName: string
-  address: string
   bio: string
 }
 

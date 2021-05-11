@@ -8,6 +8,7 @@ import {
   IconButton,
   Avatar,
   Input,
+  Textarea,
   VStack,
   useToast,
   InputGroup,
@@ -29,7 +30,6 @@ import { Meta } from 'components'
 type Inputs = {
   firstName: string
   lastName: string
-  address: string
   bio: string
 }
 
@@ -208,25 +208,14 @@ export default function Profile(): JSX.Element {
               </VStack>
             </HStack>
             <HStack spacing="1.5rem" mt="1rem">
-              <VStack alignItems="flex-start" w="calc(33.33% - 1rem)">
-                <Text fontWeight="bold">Address</Text>
-                <InputGroup>
-                  <Input
-                    placeholder="Enter your address"
-                    defaultValue={user.address}
-                    name="address"
-                    ref={register({ maxLength: 120 })}
-                  />
-                  <InputRightElement children={<Icon as={BsLock} color="gray.300" />} />
-                </InputGroup>
-              </VStack>
               <VStack alignItems="flex-start" w="calc(66.66% - 1rem)">
                 <Text fontWeight="bold">Short description</Text>
                 <InputGroup>
-                  <Input
+                  <Textarea
                     placeholder="a little about you"
                     defaultValue={bio}
                     name="bio"
+                    rows={4}
                     ref={register({ maxLength: 420 })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
