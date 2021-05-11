@@ -17,6 +17,7 @@ export const initialStore = {
   whatToBring: '',
   location: {
     address: '',
+    town: '',
     details: '',
     geocode: {},
     geohash: '',

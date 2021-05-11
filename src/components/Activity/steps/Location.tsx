@@ -36,10 +36,10 @@ export function Location() {
         .then((results) => {
           const placeLat = results[0].geometry.location.lat()
           const placeLng = results[0].geometry.location.lng()
-
           actions.update({
             location: {
               address: place?.value.description,
+              town: place?.value?.structured_formatting?.secondary_text,
               placeId: place.value.place_id,
               geocode: {
                 lat: placeLat,
