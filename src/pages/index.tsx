@@ -40,7 +40,7 @@ const OnboardingVerification = ({ user }: any) => {
     if (!stripeAccountId) {
       const { data } = await createStripeAccount()
       if (!data) {
-        showAlert({ title: 'Errror! Please try again.' })
+        showAlert({ title: 'Error! Please try again.' })
         setLoading(false)
         return
       }

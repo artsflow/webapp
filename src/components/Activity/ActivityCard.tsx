@@ -40,7 +40,18 @@ import { setActivityStatus, deleteActivity } from 'api'
 import CalendarRepeatIcon from 'svg/icons/calendar-repeat.svg'
 
 export const ActivityCard = (props: any) => {
-  const { title, category, images, duration, frequency, type, price, id, loading, status } = props
+  const {
+    title,
+    category,
+    images,
+    duration,
+    frequency,
+    monetizationType,
+    price,
+    id,
+    loading,
+    status,
+  } = props
 
   if (loading) return <Skeleton rounded="12px" width="360px" height="200px" />
 
@@ -52,7 +63,7 @@ export const ActivityCard = (props: any) => {
   const from = format(nextSession, 'HH:mm')
   const to = format(addMinutes(nextSession, duration), 'HH:mm')
 
-  const isPaid = type === 'Paid'
+  const isPaid = monetizationType === 'Paid'
 
   const freqList = rrules.map((rule: string) => {
     const { freq, days, time } = ruleText(rule, duration)
@@ -113,7 +124,7 @@ export const ActivityCard = (props: any) => {
           </Text>
           <Separator />
           <Text fontSize="xs" color={isPaid ? '#616167' : 'af.pink'} pb="2px">
-            {isPaid ? `£${price}` : type}
+            {isPaid ? `£${price}` : monetizationType}
           </Text>
           <Separator />
           <Tooltip label={freqLabel} placement="top" closeOnClick hasArrow shouldWrapChildren>

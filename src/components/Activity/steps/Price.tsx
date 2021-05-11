@@ -22,13 +22,13 @@ const ACTIVITY_TYPE = ['Free', 'Paid']
 
 export function Price() {
   const { state, actions } = useStateMachine({ update }) as any
-  const { type } = state
+  const { monetizationType } = state
   const { register, formState, getValues, errors, trigger } = useForm({
     defaultValues: state,
     mode: 'onBlur',
   })
   const { isValid } = formState
-  const isPaid = type === 'Paid'
+  const isPaid = monetizationType === 'Paid'
 
   const handleChange = (field: string) => actions.update({ [field]: Number(getValues(field)) })
 
@@ -38,9 +38,9 @@ export function Price() {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'duration',
-    defaultValue: type,
+    defaultValue: monetizationType,
     onChange: (value) => {
-      actions.update({ type: value })
+      actions.update({ monetizationType: value })
     },
   })
 

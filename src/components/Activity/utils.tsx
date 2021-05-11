@@ -5,6 +5,11 @@ import { format, addMinutes } from 'date-fns'
 import { omit } from 'lodash'
 
 export const initialStore = {
+  activityType: '',
+  activityPresence: '',
+  presenceUrl: '',
+  audienceType: '',
+  audienceLevel: '',
   category: '',
   categoryType: '',
   title: '',
@@ -25,13 +30,14 @@ export const initialStore = {
   },
   capacity: 1,
   price: 5,
-  type: 'Paid',
+  monetizationType: 'Paid',
   meta: {
     actionType: 'add',
   },
 }
 
 export const steps = [
+  'options',
   'category',
   'details',
   'location',
@@ -77,6 +83,12 @@ export const ruleText = (r: string, duration: number) => {
   return { freq, days, time: `${from} - ${to}` }
 }
 
-export const isValidState = (state: any) =>
+export const isValidState = (state: any) => {
   // TODO: check against all state fields
-  !!state.category
+  const { activityType, activityPresence, presenceUrl, audienceType, audienceLevel } = state
+
+  const needsPresenceUrl = !(activityPresence === 'Online' && !presenceUrl)
+  const isValid = !!activityType && !!activityPresence && !!audienceType && !!audienceLevel
+
+  return isValid && needsPresenceUrl
+}

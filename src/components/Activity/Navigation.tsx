@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Flex, Button, HStack, Box, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useStateMachine } from 'little-state-machine'
 
 import { addActivity, editActivity } from 'api'
+import { showAlert } from 'lib/utils'
 import {
   steps,
   resetStore,
@@ -29,12 +30,20 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
 
   const navigate = (step: string, dir: string) => {
     if (onClick) onClick()
-    if (!isValid && dir === 'next') return
+    if (!isValid && dir === 'next') {
+      showAlert({ title: 'Error! You need to make a selection.' })
+      return
+    }
     const url = `/activities/add/${step}`
     router.push(url, url, { shallow: true })
   }
 
   const handleClick = async () => {
+    if (!isValidState(state)) {
+      showAlert({ title: 'Error! You need to make a selection.' })
+      return
+    }
+
     if (isLastStep(currentStep)) {
       setLoading(true)
       const result = await addActivity(cleanStore(state))
@@ -49,7 +58,10 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
 
   const handleSave = async () => {
     if (onClick) onClick()
-    if (!isValid) return
+    if (!isValid) {
+      showAlert({ title: 'Error! You need to make a selection.' })
+      return
+    }
 
     setLoading(true)
     const id = router.asPath.split('/')[3]
@@ -77,12 +89,6 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
     setLoading(false)
     router.back()
   }
-
-  useEffect(() => {
-    if (!isValidState(state)) {
-      router.push('/activities/add')
-    }
-  }, [currentStep])
 
   if (isEdit)
     return (

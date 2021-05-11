@@ -64,7 +64,7 @@ export function Header() {
       </Box>
       <HStack mt="10px" pl="1rem">
         <Text fontSize="10px" color="gray.500">
-          v{version} alpha
+          v{version}
         </Text>
       </HStack>
       <HStack mt="10px" pl="1rem">
