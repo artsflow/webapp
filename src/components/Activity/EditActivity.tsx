@@ -44,6 +44,7 @@ interface StepsMapButtons {
 }
 
 const stepsMapButtons: StepsMapButtons = {
+  options: 'Activity type',
   category: 'Category',
   details: 'Title & description',
   location: 'Location',
