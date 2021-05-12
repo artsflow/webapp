@@ -1,24 +1,15 @@
 import { useState } from 'react'
-import {
-  Text,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  Button,
-  HStack,
-  VStack,
-  useToast,
-} from '@chakra-ui/react'
+import { Text, Input, InputGroup, InputLeftAddon, Button, HStack, VStack } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 
 import { addStripeExternalAccount } from 'api'
+import { showAlert } from 'lib/utils'
 
 export const AddBankAccount = () => {
   const { register, handleSubmit, errors } = useForm({})
   const [isLoading, setLoading] = useState(false)
   const [hasBankAccount, setBankAccount] = useState(false)
-  const toast = useToast()
 
   const onSubmit = async (data: any) => {
     setLoading(true)
@@ -26,22 +17,15 @@ export const AddBankAccount = () => {
     setLoading(false)
 
     if (bankAccount?.data?.statusCode === 400) {
-      console.log('ERR', bankAccount.data.raw.message)
-      toast({
+      showAlert({
         title: 'Invalid banking details',
         description: bankAccount.data.raw.message,
         status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
       })
     } else {
-      toast({
+      showAlert({
         title: 'Bank details saved',
         status: 'success',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
       })
       setBankAccount(true)
     }

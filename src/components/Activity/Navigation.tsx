@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Flex, Button, HStack, Box, useToast } from '@chakra-ui/react'
+import { Flex, Button, HStack, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useStateMachine } from 'little-state-machine'
 
@@ -20,7 +20,6 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
   const { state, actions } = useStateMachine({ resetStore }) as any
   const [isLoading, setLoading] = useState(false)
   const router = useRouter()
-  const toast = useToast()
 
   const [currentStep] = useCurrentStep()
   const prevStep = getPrevStep(currentStep)
@@ -69,21 +68,9 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
     const result = await editActivity(data)
 
     if (result) {
-      toast({
-        title: 'Information updated',
-        status: 'success',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      })
+      showAlert({ title: 'Information updated.', status: 'success' })
     } else {
-      toast({
-        title: 'Information not updated',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      })
+      showAlert({ title: 'Information not updated.' })
     }
 
     setLoading(false)

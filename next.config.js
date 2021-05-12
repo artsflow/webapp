@@ -3,11 +3,7 @@ const withReactSvg = require('next-react-svg')
 const withPlugins = require('next-compose-plugins')
 const withTM = require('next-transpile-modules')(['little-state-machine-devtools'])
 
-const nextConfig = {
-  future: {
-    webpack5: true,
-  },
-}
+const nextConfig = {}
 
 module.exports = withPlugins([
   nextConfig,

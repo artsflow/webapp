@@ -25,6 +25,7 @@ export const initialStore = {
   },
   images: [],
   duration: 0,
+  dates: [],
   frequency: {
     rrules: [],
     exdate: [],
@@ -44,7 +45,7 @@ export const steps = [
   'location',
   'images',
   'duration',
-  'frequency',
+  'dates',
   'capacity',
   'price',
   'published',

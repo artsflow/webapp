@@ -10,7 +10,6 @@ import {
   Input,
   Textarea,
   VStack,
-  useToast,
   InputGroup,
   InputRightElement,
   CircularProgress,
@@ -21,7 +20,7 @@ import { BsEye, BsLock } from 'react-icons/bs'
 import { useDropzone } from 'react-dropzone'
 
 import { UserContext } from 'lib/context'
-import { getImageKitUrl } from 'lib/utils'
+import { getImageKitUrl, showAlert } from 'lib/utils'
 import { auth, storage, STATE_CHANGED } from 'lib/firebase'
 import { updateProfile, updateAvatarUrl } from 'api'
 import CameraSvg from 'svg/icons/camera.svg'
@@ -40,7 +39,6 @@ export default function Profile(): JSX.Element {
   const [progress, setProgress] = useState(0)
   const { user, profile } = useContext(UserContext)
   const { register, handleSubmit, formState, reset } = useForm<Inputs>()
-  const toast = useToast()
 
   const { firstName, lastName, displayName, bio, photoURL } = profile
   const { isDirty } = formState
@@ -98,21 +96,9 @@ export default function Profile(): JSX.Element {
     setLoading(false)
     reset()
     if (result) {
-      toast({
-        title: 'Information updated',
-        status: 'success',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      })
+      showAlert({ title: 'Information updated', status: 'success' })
     } else {
-      toast({
-        title: 'Information not updated',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      })
+      showAlert({ title: 'Information not updated', status: 'error' })
     }
   }
 
