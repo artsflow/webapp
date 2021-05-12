@@ -1,6 +1,5 @@
 import React from 'react'
 import { Text, Heading, Box } from '@chakra-ui/react'
-import { RRuleSet, rrulestr } from 'rrule'
 import { addMinutes } from 'date-fns'
 import { flatten } from 'lodash'
 
@@ -9,15 +8,14 @@ import { Calendar, Meta } from 'components'
 
 const makeEvents = (activities: any) =>
   flatten(
-    activities?.map(({ id, title, duration, frequency }: any) => {
-      const { rrules } = frequency
-      const rruleSet = new RRuleSet()
-      rrules.forEach((r: string) => rruleSet.rrule(rrulestr(r)))
-
-      return rruleSet
-        .all()
-        .map((d) => ({ id, title, start: new Date(d), end: addMinutes(d, duration) }))
-    })
+    activities?.map(({ id, title, duration, dates }: any) =>
+      dates.map((d: string) => ({
+        id,
+        title,
+        start: new Date(d),
+        end: addMinutes(new Date(d), duration),
+      }))
+    )
   )
 
 export default function CalendarPage(): JSX.Element {
