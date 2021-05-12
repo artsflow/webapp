@@ -1,7 +1,5 @@
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { rrulestr } from 'rrule'
-import { format, addMinutes } from 'date-fns'
 import { omit } from 'lodash'
 
 export const initialStore = {
@@ -26,10 +24,6 @@ export const initialStore = {
   images: [],
   duration: 0,
   dates: [],
-  frequency: {
-    rrules: [],
-    exdate: [],
-  },
   capacity: 1,
   price: 5,
   monetizationType: 'Paid',
@@ -75,14 +69,6 @@ export const useCurrentStep = () => {
   const [, , , step] = asPath.split('/')
   const currentStep = steps[steps.indexOf(step)] || steps[0]
   return [currentStep, step]
-}
-
-export const ruleText = (r: string, duration: number) => {
-  const rule = rrulestr(r)
-  const from = format(rule.options.dtstart, 'HH:mm')
-  const to = format(addMinutes(rule.options.dtstart, duration), 'HH:mm')
-  const [freq, days] = rule.toText().replace(' for 15 times', '').split(' on ')
-  return { freq, days, time: `${from} - ${to}` }
 }
 
 export const isValidState = (state: any) => {

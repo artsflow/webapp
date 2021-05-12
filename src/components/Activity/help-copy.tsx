@@ -50,12 +50,12 @@ export const help: HelpMap = {
     heading: 'Duration',
     info: 'The total time of the activity',
   },
-  frequency: {
-    heading: 'Frequency',
+  date: {
+    heading: 'Date and time',
     info: (
       <>
         <Text>Set the dates and times of your activity</Text>
-        <Text>You can add multiple frequency rules.</Text>
+        <Text>You can add many as you want.</Text>
       </>
     ),
   },
