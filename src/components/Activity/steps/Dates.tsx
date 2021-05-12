@@ -44,7 +44,7 @@ export function Dates() {
       <VStack justifyContent="space-between" alignItems="flex-start" p="40px" spacing="0">
         <Heading size="md">Select time and date</Heading>
         <Text pt="1rem" color="#616167">
-          Please choose the dates and times of your activity.
+          Please choose the date and time of your activity.
         </Text>
         <VStack pt="2rem" alignItems="flex-start" spacing="1rem">
           <HStack>

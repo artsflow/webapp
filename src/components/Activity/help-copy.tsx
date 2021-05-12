@@ -50,11 +50,11 @@ export const help: HelpMap = {
     heading: 'Duration',
     info: 'The total time of the activity',
   },
-  date: {
+  dates: {
     heading: 'Date and time',
     info: (
       <>
-        <Text>Set the dates and times of your activity</Text>
+        <Text>Set the date and time of your activity</Text>
         <Text>You can add many as you want.</Text>
       </>
     ),

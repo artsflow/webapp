@@ -50,7 +50,7 @@ const stepsMapButtons: StepsMapButtons = {
   location: 'Location',
   images: 'Images',
   duration: 'Duration',
-  dates: 'Dates and times',
+  dates: 'Date and time',
   capacity: 'Capacity',
   price: 'Price',
 }
