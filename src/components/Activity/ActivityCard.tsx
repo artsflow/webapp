@@ -27,14 +27,12 @@ import {
   AlertDialogFooter,
   useDisclosure,
 } from '@chakra-ui/react'
-import { RRuleSet, rrulestr } from 'rrule'
 import { format, addMinutes } from 'date-fns'
 import { BsLink, BsThreeDots } from 'react-icons/bs'
-import { capitalize } from 'lodash'
+import { capitalize, sortBy } from 'lodash'
 import { useRouter } from 'next/router'
 
 import { getImageKitUrl } from 'lib/utils'
-import { ruleText } from 'components/Activity/utils'
 import { ARTSFLOW_URL } from 'lib/config'
 import { setActivityStatus, deleteActivity } from 'api'
 import CalendarRepeatIcon from 'svg/icons/calendar-repeat.svg'
@@ -45,7 +43,7 @@ export const ActivityCard = (props: any) => {
     category,
     images,
     duration,
-    frequency,
+    dates,
     monetizationType,
     price,
     id,
@@ -55,22 +53,19 @@ export const ActivityCard = (props: any) => {
 
   if (loading) return <Skeleton rounded="12px" width="360px" height="200px" />
 
-  const { rrules } = frequency
-  const rruleSet = new RRuleSet()
-  rrules.forEach((r: string) => rruleSet.rrule(rrulestr(r)))
-  const [nextSession] = rruleSet.all()
+  const [nextSession] = sortBy(dates, [(d: string) => new Date(d)])
+    .map((d: string) => new Date(d))
+    .filter((d) => d > new Date())
 
   const from = format(nextSession, 'HH:mm')
   const to = format(addMinutes(nextSession, duration), 'HH:mm')
 
   const isPaid = monetizationType === 'Paid'
 
-  const freqList = rrules.map((rule: string) => {
-    const { freq, days, time } = ruleText(rule, duration)
-    return `${capitalize(freq)} / ${days} / ${time}`
-  })
+  const freqLabel = dates
+    .map((d: string) => format(new Date(d), 'dd MMM, yyy - HH:mm'))
+    .map((d: string) => <Text key={d}>{d}</Text>)
 
-  const freqLabel = freqList.join('\n')
   const isActive = status === 'active'
 
   const activityLink = `${ARTSFLOW_URL}/a/${id}`

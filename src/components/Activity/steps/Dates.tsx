@@ -36,7 +36,7 @@ export function Dates() {
   const dates = isValid ? state.dates : [new Date().toString()]
 
   useEffect(() => {
-    actions.update({ dates: sortBy(dates, [(d: Date) => new Date(d)]) })
+    actions.update({ dates: sortBy(dates, [(d: string) => new Date(d)]) })
   }, [])
 
   return (
