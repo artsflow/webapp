@@ -4,6 +4,7 @@ import { useStateMachine } from 'little-state-machine'
 import { setHours, setMinutes } from 'date-fns'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import gb from 'date-fns/locale/en-GB'
+import { sortBy } from 'lodash'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -35,7 +36,7 @@ export function Dates() {
   const dates = isValid ? state.dates : [new Date().toString()]
 
   useEffect(() => {
-    actions.update({ dates })
+    actions.update({ dates: sortBy(dates, [(d: Date) => new Date(d)]) })
   }, [])
 
   return (
@@ -71,10 +72,10 @@ export function Dates() {
                 showTimeSelectOnly
                 timeIntervals={15}
                 timeCaption="Time"
-                dateFormat="h:mm aa"
+                dateFormat="HH:mm"
                 minTime={setHours(setMinutes(new Date(), 0), 7)}
                 maxTime={setHours(setMinutes(new Date(), 30), 22)}
-                customInput={<CustomInput w="100px" />}
+                customInput={<CustomInput w="75px" />}
               />
               {index > 0 && (
                 <Button
@@ -89,7 +90,14 @@ export function Dates() {
               )}
             </HStack>
           ))}
-          <Button bg="#edf8fa" color="af.teal" onClick={handleAddMore}>
+          <Button
+            bg="#edf8fa"
+            color="af.teal"
+            shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
+            onClick={handleAddMore}
+            border="1px solid"
+            borderColor="af.teal"
+          >
             Add more
           </Button>
         </VStack>
