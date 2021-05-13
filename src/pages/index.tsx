@@ -1,15 +1,19 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { Heading, Text, Box, Link, VStack, Button } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import { UserContext } from 'lib/context'
 import { showAlert } from 'lib/utils'
 import { Meta } from 'components'
-import { createStripeAccountLinks, createStripeAccount } from 'api'
+import { createStripeAccountLinks, createStripeAccount, checkUserFirstTime } from 'api'
 import { useAccountStatus } from 'hooks'
 
 export default function Home(): JSX.Element {
   const { user } = useContext(UserContext)
+
+  useEffect(() => {
+    checkUserFirstTime()
+  }, [])
 
   return (
     <>
