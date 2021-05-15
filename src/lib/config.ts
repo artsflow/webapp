@@ -10,3 +10,4 @@ export const {
 } = process.env
 export const { NEXT_PUBLIC_FIREBASE_APP_ID: FIREBASE_APP_ID } = process.env
 export const { NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: FIREBASE_MEASUREMENT_ID } = process.env
+export const { NEXT_PUBLIC_SEGMENT_KEY: SEGMENT_KEY } = process.env

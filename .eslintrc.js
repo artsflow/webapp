@@ -83,6 +83,7 @@ module.exports = {
       'WithStatement',
       "BinaryExpression[operator='in']",
     ],
+    'class-methods-use-this': 0,
   },
   settings: {
     react: {

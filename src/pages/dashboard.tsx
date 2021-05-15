@@ -48,12 +48,12 @@ export default function Dashboard(): JSX.Element {
             />
           </HStack>
           {loadingActivities && <Loading />}
-          <VStack spacing="1rem">
+          <VStack spacing="2rem">
             {activities.map(({ id, title }: any) => {
               const list = bookings.filter(({ activityId }: any) => activityId === id)
               return (
-                <>
-                  <HStack key={id} justifyContent="space-between" w="full">
+                <VStack key={id}>
+                  <HStack justifyContent="space-between" w="full">
                     <Heading size="sm">{title}</Heading>
                     <Button
                       disabled={!list.length}
@@ -67,7 +67,7 @@ export default function Dashboard(): JSX.Element {
                     </Button>
                   </HStack>
                   <BookingList list={list} />
-                </>
+                </VStack>
               )
             })}
           </VStack>
