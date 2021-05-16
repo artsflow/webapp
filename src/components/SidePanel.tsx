@@ -25,6 +25,7 @@ import CardIcon from 'svg/icons/card.svg'
 import CardSelectedIcon from 'svg/icons/card-selected.svg'
 
 import { motionComponent } from 'lib/utils'
+import { trackSidepanelToggle } from 'analytics'
 
 const menu = [
   {
@@ -65,6 +66,7 @@ export const SidePanel = () => {
 
   const toggleCollapse = () => {
     setCollapsed(!isCollapsed)
+    trackSidepanelToggle(!isCollapsed)
   }
 
   useEffect(() => {

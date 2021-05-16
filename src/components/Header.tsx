@@ -30,6 +30,7 @@ import { useRouter } from 'next/router'
 import { UserContext } from 'lib/context'
 import { Notifications } from 'components'
 import { getImageKitUrl } from 'lib/utils'
+import { trackUserSignOut } from 'analytics'
 
 import packageInfo from '../../package.json'
 
@@ -42,6 +43,7 @@ export function Header() {
 
   const handleLogout = () => {
     auth.signOut()
+    trackUserSignOut()
     router.push('/')
   }
 
