@@ -52,7 +52,7 @@ const OnboardingVerification = ({ user }: any) => {
       stripeAccountId = data
     }
 
-    trackStartVerification(user.id)
+    trackStartVerification()
     const links = await createStripeAccountLinks({ stripeAccountId })
     router.push(links?.data.url)
 

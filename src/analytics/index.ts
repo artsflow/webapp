@@ -27,12 +27,10 @@ export const trackUpdateProfile = (userId: string, props: ProfileProps) => {
   window.analytics.identify(userId, props)
 }
 
-export const trackUpdateAvatar = (userId: string) => {
-  window.analytics.identify(userId)
+export const trackUpdateAvatar = () => {
   window.analytics.track('Avatar Updated')
 }
 
-export const trackStartVerification = (userId: string) => {
-  window.analytics.identify(userId)
+export const trackStartVerification = () => {
   window.analytics.track('Verification Started')
 }

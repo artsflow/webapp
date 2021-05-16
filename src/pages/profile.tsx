@@ -82,7 +82,7 @@ export default function Profile(): JSX.Element {
         console.log(url)
         setUploading(false)
         await updateAvatarUrl(url)
-        trackUpdateAvatar(user.id)
+        trackUpdateAvatar()
       })
   }, [])
 
