@@ -25,6 +25,7 @@ import { auth, storage, STATE_CHANGED } from 'lib/firebase'
 import { updateProfile, updateAvatarUrl } from 'api'
 import CameraSvg from 'svg/icons/camera.svg'
 import { Meta } from 'components'
+import { trackUpdateAvatar, trackUpdateProfile } from 'analytics'
 
 type Inputs = {
   firstName: string
@@ -81,6 +82,7 @@ export default function Profile(): JSX.Element {
         console.log(url)
         setUploading(false)
         await updateAvatarUrl(url)
+        trackUpdateAvatar(user.id)
       })
   }, [])
 
@@ -97,6 +99,7 @@ export default function Profile(): JSX.Element {
     reset()
     if (result) {
       showAlert({ title: 'Information updated', status: 'success' })
+      trackUpdateProfile(user.id, data)
     } else {
       showAlert({ title: 'Information not updated', status: 'error' })
     }

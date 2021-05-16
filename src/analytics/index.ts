@@ -1,4 +1,4 @@
-import { UserProps } from './types'
+import { UserProps, ProfileProps } from './types'
 
 export const trackSidepanelToggle = (isCollapsed: boolean) => {
   if (isCollapsed) {
@@ -20,4 +20,14 @@ export const trackUserSignIn = (props: UserProps) => {
   const { userId, provider } = props
   window.analytics.identify(userId, { ...props, isCreative: true })
   window.analytics.track('Creative Signed In', { provider })
+}
+
+export const trackUpdateProfile = (userId: string, props: ProfileProps) => {
+  window.analytics.track('Profile Updated')
+  window.analytics.identify(userId, props)
+}
+
+export const trackUpdateAvatar = (userId: string) => {
+  window.analytics.identify(userId)
+  window.analytics.track('Avatar Updated')
 }

@@ -6,3 +6,9 @@ export interface UserProps {
   displayName: string
   provider: string
 }
+
+export interface ProfileProps {
+  firstName: string
+  lastName: string
+  bio: string
+}
