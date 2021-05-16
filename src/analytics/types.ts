@@ -10,5 +10,6 @@ export interface UserProps {
 export interface ProfileProps {
   firstName: string
   lastName: string
+  displayName: string
   bio: string
 }

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { AppProps } from 'next/app'
 import NProgress from 'nprogress'
@@ -20,6 +21,10 @@ Router.events.on('routeChangeError', () => NProgress.done())
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const userData = useUserData()
+
+  useEffect(() => {
+    if (userData) window.analytics?.identify(userData.user.id)
+  }, [])
 
   return (
     <ChakraProvider resetCSS theme={theme}>

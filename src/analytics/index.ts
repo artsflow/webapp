@@ -31,3 +31,8 @@ export const trackUpdateAvatar = (userId: string) => {
   window.analytics.identify(userId)
   window.analytics.track('Avatar Updated')
 }
+
+export const trackStartVerification = (userId: string) => {
+  window.analytics.identify(userId)
+  window.analytics.track('Verification Started')
+}

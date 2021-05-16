@@ -7,6 +7,7 @@ import { showAlert } from 'lib/utils'
 import { Meta } from 'components'
 import { createStripeAccountLinks, createStripeAccount, checkUserFirstTime } from 'api'
 import { useAccountStatus } from 'hooks'
+import { trackStartVerification } from 'analytics'
 
 export default function Home(): JSX.Element {
   const { user } = useContext(UserContext)
@@ -51,6 +52,7 @@ const OnboardingVerification = ({ user }: any) => {
       stripeAccountId = data
     }
 
+    trackStartVerification(user.id)
     const links = await createStripeAccountLinks({ stripeAccountId })
     router.push(links?.data.url)
 

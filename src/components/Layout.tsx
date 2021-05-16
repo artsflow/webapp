@@ -20,6 +20,8 @@ export function Layout({ children }: Props) {
   const router = useRouter()
 
   useEffect(() => {
+    if (user) window.analytics?.identify(user.id)
+
     if (!authState && !loading) {
       router.push('/login')
     }
