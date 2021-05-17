@@ -5,6 +5,7 @@ import { ErrorMessage } from '@hookform/error-message'
 
 import { addStripeExternalAccount } from 'api'
 import { showAlert } from 'lib/utils'
+import { trackUpdateBankAccount } from 'analytics'
 
 export const AddBankAccount = () => {
   const { register, handleSubmit, errors } = useForm({})
@@ -28,6 +29,7 @@ export const AddBankAccount = () => {
         status: 'success',
       })
       setBankAccount(true)
+      trackUpdateBankAccount()
     }
   }
 

@@ -81,5 +81,9 @@ export const trackCalendarView = (view: string) => {
 }
 
 export const trackClickCalendarActivity = (activity: any) => {
-  window.analytics.track(`Calendar Activity Clicked`, { activity })
+  window.analytics.track('Calendar Activity Clicked', { activity })
+}
+
+export const trackUpdateBankAccount = () => {
+  window.analytics.track('Bank Account Updated')
 }
