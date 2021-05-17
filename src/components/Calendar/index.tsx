@@ -3,6 +3,7 @@ import { getDay, format, parse, startOfWeek, startOfToday, addHours } from 'date
 import * as ukLocale from 'date-fns/locale/uk/index.js'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
+import { trackClickCalendarActivity } from 'analytics'
 import { Toolbar } from './Toolbar'
 
 const locales = {
@@ -21,6 +22,7 @@ export function Calendar(props: any) {
   return (
     <BigCalendar
       localizer={localizer}
+      onSelectEvent={(activity) => trackClickCalendarActivity(activity)}
       defaultView="week"
       startAccessor="start"
       views={['month', 'week', 'day', 'agenda']}

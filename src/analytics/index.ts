@@ -1,3 +1,4 @@
+import { capitalize } from 'lodash'
 import { UserProps, ProfileProps } from './types'
 
 export const trackSidepanelToggle = (isCollapsed: boolean) => {
@@ -61,4 +62,24 @@ export const trackDeleteActivity = (id: string) => {
 
 export const trackDownloadActivityBooking = (id: string, title: string) => {
   window.analytics.track('Activity Booking Downloaded', { id, title })
+}
+
+export const trackCalendarToday = () => {
+  window.analytics.track('Calendar Today Clicked')
+}
+
+export const trackCalendarPrev = () => {
+  window.analytics.track('Calendar Prev Clicked')
+}
+
+export const trackCalendarNext = () => {
+  window.analytics.track('Calendar Next Clicked')
+}
+
+export const trackCalendarView = (view: string) => {
+  window.analytics.track(`Calendar ${capitalize(view)} Clicked`)
+}
+
+export const trackClickCalendarActivity = (activity: any) => {
+  window.analytics.track(`Calendar Activity Clicked`, { activity })
 }
