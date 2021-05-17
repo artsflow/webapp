@@ -10,6 +10,7 @@ import { activityDownload } from 'lib/utils'
 import { Meta, Loading } from 'components'
 import { Card, BookingList } from 'components/Dashboard'
 import { useBalance, useBookings, useActivities } from 'hooks'
+import { trackDownloadActivityBooking } from 'analytics'
 
 export default function Dashboard(): JSX.Element {
   const [balance, loadingBalance] = useBalance()
@@ -61,7 +62,10 @@ export default function Dashboard(): JSX.Element {
                       size="xs"
                       bg="af.teal"
                       color="white"
-                      onClick={() => activityDownload(list)}
+                      onClick={() => {
+                        activityDownload(list)
+                        trackDownloadActivityBooking(id, title)
+                      }}
                     >
                       Download data
                     </Button>

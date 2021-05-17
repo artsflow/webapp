@@ -58,3 +58,7 @@ export const trackActivateActivity = (id: string) => {
 export const trackDeleteActivity = (id: string) => {
   window.analytics.track('Activity Deleted', { id })
 }
+
+export const trackDownloadActivityBooking = (id: string, title: string) => {
+  window.analytics.track('Activity Booking Downloaded', { id, title })
+}
