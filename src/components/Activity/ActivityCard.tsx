@@ -36,6 +36,12 @@ import { getImageKitUrl } from 'lib/utils'
 import { ARTSFLOW_URL } from 'lib/config'
 import { setActivityStatus, deleteActivity } from 'api'
 import CalendarRepeatIcon from 'svg/icons/calendar-repeat.svg'
+import {
+  trackEditActivityButton,
+  trackPauseActivity,
+  trackActivateActivity,
+  trackDeleteActivity,
+} from 'analytics'
 
 export const ActivityCard = (props: any) => {
   const {
@@ -182,6 +188,11 @@ const OptionsMenu = (props: any) => {
 
   const menuItem = isActive ? 'Pause' : 'Set active'
 
+  const handleEditActivity = () => {
+    trackEditActivityButton(id, 'My Activities card')
+    router.push(`/activities/edit/${id}`)
+  }
+
   const toggleStateAlert = () => {
     setAction(isActive ? 'pause' : 'active')
     onOpen()
@@ -197,11 +208,17 @@ const OptionsMenu = (props: any) => {
       case 'delete':
         setLoading(true)
         await deleteActivity({ id })
+        trackDeleteActivity(id)
         break
 
       default:
         setLoading(true)
         await setActivityStatus({ status: isActive ? 'paused' : 'active', id })
+        if (isActive) {
+          trackPauseActivity(id)
+        } else {
+          trackActivateActivity(id)
+        }
         break
     }
     onClose()
@@ -224,7 +241,7 @@ const OptionsMenu = (props: any) => {
           color="#8e8e92"
         />
         <MenuList ml="-190px">
-          <MenuItem onClick={() => router.push(`/activities/edit/${id}`)}>Edit</MenuItem>
+          <MenuItem onClick={handleEditActivity}>Edit</MenuItem>
           <MenuItem onClick={toggleStateAlert}>{menuItem}</MenuItem>
           <MenuDivider />
           <MenuItem onClick={handleDeleteAlert} color="red.500">

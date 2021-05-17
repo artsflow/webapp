@@ -5,6 +5,7 @@ import { useStateMachine } from 'little-state-machine'
 
 import { addActivity, editActivity } from 'api'
 import { showAlert } from 'lib/utils'
+import { trackUpdateActivity } from 'analytics'
 import {
   steps,
   resetStore,
@@ -69,6 +70,7 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
 
     if (result) {
       showAlert({ title: 'Information updated.', status: 'success' })
+      trackUpdateActivity({ id, ...state })
     } else {
       showAlert({ title: 'Information not updated.' })
     }

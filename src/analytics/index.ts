@@ -34,3 +34,27 @@ export const trackUpdateAvatar = () => {
 export const trackStartVerification = () => {
   window.analytics.track('Verification Started')
 }
+
+export const trackAddActivityButton = (source: string) => {
+  window.analytics.track('Add Activity Clicked', { source })
+}
+
+export const trackEditActivityButton = (activityId: string, source: string) => {
+  window.analytics.track('Edit Activity Clicked', { activityId, source })
+}
+
+export const trackUpdateActivity = (activity: any) => {
+  window.analytics.track('Activity Updated', { activity })
+}
+
+export const trackPauseActivity = (id: string) => {
+  window.analytics.track('Activity Paused', { id })
+}
+
+export const trackActivateActivity = (id: string) => {
+  window.analytics.track('Activity Activated', { id })
+}
+
+export const trackDeleteActivity = (id: string) => {
+  window.analytics.track('Activity Deleted', { id })
+}

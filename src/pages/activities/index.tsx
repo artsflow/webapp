@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Meta } from 'components'
 import { useActivities } from 'hooks'
 import { ActivityCard } from 'components/Activity/ActivityCard'
+import { trackAddActivityButton } from 'analytics'
 
 export default function Activities(): JSX.Element {
   const [activities] = useActivities()
@@ -22,7 +23,13 @@ export default function Activities(): JSX.Element {
           </VStack>
           <VStack>
             <Link as="/activities/add" href="/activities/add">
-              <Button bg="af.teal" color="white" as="a" cursor="pointer">
+              <Button
+                bg="af.teal"
+                color="white"
+                as="a"
+                cursor="pointer"
+                onClick={() => trackAddActivityButton('My Activities')}
+              >
                 + Add activity
               </Button>
             </Link>
