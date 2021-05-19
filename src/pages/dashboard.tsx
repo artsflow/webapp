@@ -53,7 +53,7 @@ export default function Dashboard(): JSX.Element {
             {activities.map(({ id, title }: any) => {
               const list = bookings.filter(({ activityId }: any) => activityId === id)
               return (
-                <VStack key={id}>
+                <VStack key={id} w="full">
                   <HStack justifyContent="space-between" w="full">
                     <Heading size="sm">{title}</Heading>
                     <Button
