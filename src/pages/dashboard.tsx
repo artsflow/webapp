@@ -1,5 +1,5 @@
-import { Box, Heading, VStack, HStack, Button } from '@chakra-ui/react'
-import { uniqBy } from 'lodash'
+import { Box, Text, Heading, VStack, HStack, Button } from '@chakra-ui/react'
+import { uniqBy, sumBy } from 'lodash'
 import { DownloadIcon } from '@chakra-ui/icons'
 
 import BalanceSvg from 'svg/icons/balance.svg'
@@ -8,7 +8,7 @@ import AudienceSvg from 'svg/icons/audience.svg'
 
 import { activityDownload } from 'lib/utils'
 import { Meta, Loading } from 'components'
-import { Card, BookingList } from 'components/Dashboard'
+import { Card, BookingList, Chart, getIncomeLast7d } from 'components/Dashboard'
 import { useBalance, useBookings, useActivities } from 'hooks'
 import { trackDownloadActivityBooking } from 'analytics'
 
@@ -19,6 +19,8 @@ export default function Dashboard(): JSX.Element {
   const [bookings = [], loadingBookings] = useBookings()
   const audience = uniqBy(bookings, 'userId')
   const [activities = [], loadingActivities] = useActivities()
+
+  const chartData = getIncomeLast7d(bookings)
 
   return (
     <>
@@ -48,6 +50,11 @@ export default function Dashboard(): JSX.Element {
               subtext={audience.length}
             />
           </HStack>
+          <Chart data={chartData}>
+            <Text textAlign="center">
+              Gross income for the last 7 days: <b>£{sumBy(chartData, 'y')}</b>
+            </Text>
+          </Chart>
           {loadingActivities && <Loading />}
           <VStack spacing="2rem">
             {activities.map(({ id, title }: any) => {

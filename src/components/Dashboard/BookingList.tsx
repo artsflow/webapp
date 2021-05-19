@@ -4,10 +4,16 @@ import { format, fromUnixTime } from 'date-fns'
 export const BookingList = ({ list }: any) => {
   if (!list || list.length === 0)
     return (
-      <VStack bg="white" rounded="10px" boxShadow="0px 2px 6px rgba(0, 0, 0, 0.02)" w="full">
-        <Text fontSize="sm" py="0.5rem">
-          no bookings yet
-        </Text>
+      <VStack
+        bg="white"
+        rounded="10px"
+        boxShadow="0px 2px 6px rgba(0, 0, 0, 0.02)"
+        w="full"
+        spacing="0"
+        py="0.5rem"
+      >
+        <Text fontSize="sm">no bookings yet</Text>
+        <Text fontSize="xs">(copy asking user to share the activity link)</Text>
       </VStack>
     )
 
