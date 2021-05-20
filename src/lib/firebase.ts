@@ -78,18 +78,24 @@ export function postToJSON(doc: any) {
 
 export const firebaseCallable = async (func: string, params: any) => {
   console.info(`>>> callable: ${func}`, params)
+  const trace = perf.trace(`app:${func}`)
+  trace.start()
 
   try {
     const result = await functions.httpsCallable(func, { timeout: 5000 })(params)
+    trace.stop()
     return result
   } catch (e) {
     console.error(`firebaseCallable:error:${func}: ${JSON.stringify(e)}`)
+    trace.stop()
     return e
   }
 }
 
 export const uploadTask = async ({ path, blob, onProgres }: any) =>
   new Promise((resolve, reject) => {
+    const trace = perf.trace(`app:uploadTask`)
+    trace.start()
     const storageRef = storage.ref(path)
     const task = storageRef.put(blob)
 
@@ -105,6 +111,7 @@ export const uploadTask = async ({ path, blob, onProgres }: any) =>
       },
       () => {
         task.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          trace.stop()
           resolve(downloadURL)
         })
       }
