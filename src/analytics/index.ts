@@ -1,4 +1,5 @@
 import { capitalize } from 'lodash'
+import * as Sentry from '@sentry/nextjs'
 import { UserProps, ProfileProps } from './types'
 
 export const trackSidepanelToggle = (isCollapsed: boolean) => {
@@ -18,9 +19,10 @@ export const trackUserSignOut = () => {
 }
 
 export const trackUserSignIn = (props: UserProps) => {
-  const { userId, provider } = props
+  const { userId, provider, displayName, email } = props
   window.analytics.identify(userId, { ...props, isCreative: true })
   window.analytics.track('Creative Signed In', { provider })
+  Sentry.setUser({ email, displayName, userId })
 }
 
 export const trackUpdateProfile = (userId: string, props: ProfileProps) => {
