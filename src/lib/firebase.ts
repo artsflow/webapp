@@ -39,8 +39,6 @@ if (!firebase.apps.length) {
   }
 }
 
-export const perf = firebase.performance()
-
 // Auth exports
 export const auth = firebase.auth()
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
@@ -78,6 +76,7 @@ export function postToJSON(doc: any) {
 
 export const firebaseCallable = async (func: string, params: any) => {
   console.info(`>>> callable: ${func}`, params)
+  const perf = firebase.performance()
   const trace = perf.trace(`app:${func}`)
   trace.start()
 
@@ -94,6 +93,7 @@ export const firebaseCallable = async (func: string, params: any) => {
 
 export const uploadTask = async ({ path, blob, onProgres }: any) =>
   new Promise((resolve, reject) => {
+    const perf = firebase.performance()
     const trace = perf.trace(`app:uploadTask`)
     trace.start()
     const storageRef = storage.ref(path)
