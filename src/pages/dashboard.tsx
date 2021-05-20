@@ -52,7 +52,7 @@ export default function Dashboard(): JSX.Element {
           </HStack>
           <Chart data={chartData}>
             <Text textAlign="center">
-              Gross income for the last 7 days: <b>£{sumBy(chartData, 'y')}</b>
+              <b>£{sumBy(chartData, 'y')}</b> gross income over the last 7 days
             </Text>
           </Chart>
           {loadingActivities && <Loading />}

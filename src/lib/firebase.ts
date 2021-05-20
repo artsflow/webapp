@@ -3,6 +3,7 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/functions'
+import 'firebase/performance'
 
 import {
   FIREBASE_API_KEY,
@@ -37,6 +38,8 @@ if (!firebase.apps.length) {
     firebase.app().functions('europe-west2').useEmulator('localhost', 8042)
   }
 }
+
+export const perf = firebase.performance()
 
 // Auth exports
 export const auth = firebase.auth()
