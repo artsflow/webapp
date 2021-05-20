@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const userData = useUserData()
 
   useEffect(() => {
-    if (userData) window.analytics?.identify(userData.user.id)
+    // if (userData) window.analytics?.identify(userData.user.id)
   }, [])
 
   return (
