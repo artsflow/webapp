@@ -60,8 +60,8 @@ export const cleanStore = (state: any) => omit(state, ['meta', 'userId'])
 
 export const DevTool = dynamic(() => import('./DevTool'), { ssr: false })
 
-export const getPrevStep = (s: string) => steps[steps.indexOf(s) - 1]
-export const getNextStep = (s: string) => steps[steps.indexOf(s) + 1]
+export const getPrevStep = (s: string, skip: number) => steps[steps.indexOf(s) - 1 - skip]
+export const getNextStep = (s: string, skip: number) => steps[steps.indexOf(s) + 1 + skip]
 export const isLastStep = (s: string) => steps.indexOf(s) === steps.length - 2
 
 export const useCurrentStep = () => {

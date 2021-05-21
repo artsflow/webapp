@@ -23,8 +23,15 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
   const router = useRouter()
 
   const [currentStep] = useCurrentStep()
-  const prevStep = getPrevStep(currentStep)
-  const nextStep = getNextStep(currentStep)
+
+  let skipPrev = 0
+  let skipNext = 0
+
+  if (state.activityPresence === 'Online' && currentStep === 'details') skipNext = 1
+  if (state.activityPresence === 'Online' && currentStep === 'images') skipPrev = 1
+
+  const prevStep = getPrevStep(currentStep, skipPrev)
+  const nextStep = getNextStep(currentStep, skipNext)
 
   const isEdit = state.meta.actionType === 'edit'
 
