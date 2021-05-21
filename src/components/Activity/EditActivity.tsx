@@ -63,6 +63,7 @@ const EditButtons = () => {
   const [activity] = useDocumentData(firestore.doc(`/activities/${id}`))
   const [location] = useDocumentData(firestore.doc(`/locations/${id}`))
   console.log(id, activity, location)
+
   useEffect(() => {
     if (activity) {
       actions.update({
@@ -78,6 +79,8 @@ const EditButtons = () => {
     router.push(url, url, { shallow: true })
   }
 
+  // console.log(step)
+
   return (
     <Box p="40px">
       <Flex direction="column" alignItems="flex-start">
@@ -89,20 +92,27 @@ const EditButtons = () => {
         </Text>
       </Flex>
       <VStack w="320px" spacing="0.5rem">
-        {steps.slice(0, 8).map((s) => (
-          <StyledButton
-            key={s}
-            w="full"
-            justifyContent="flex-start"
-            p="1rem"
-            bg="white"
-            fontSize="xs"
-            pos="relative"
-            onClick={() => handleEdit(s)}
-          >
-            {stepsMapButtons[s]}
-          </StyledButton>
-        ))}
+        {steps.slice(0, steps.length - 1).map((s) => {
+          const isDisabled = activity?.activityPresence === 'Online' && s === 'location'
+          const whyDisabled = isDisabled ? 'Online activity does not have location' : ''
+
+          return (
+            <StyledButton
+              key={s}
+              w="full"
+              justifyContent="flex-start"
+              p="1rem"
+              bg="white"
+              fontSize="xs"
+              pos="relative"
+              disabled={isDisabled}
+              title={whyDisabled}
+              onClick={() => handleEdit(s)}
+            >
+              {stepsMapButtons[s]}
+            </StyledButton>
+          )
+        })}
       </VStack>
     </Box>
   )
