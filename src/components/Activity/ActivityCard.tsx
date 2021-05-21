@@ -63,8 +63,8 @@ export const ActivityCard = (props: any) => {
     .map((d: string) => new Date(d))
     .filter((d) => d > new Date())
 
-  const from = format(nextSession, 'HH:mm')
-  const to = format(addMinutes(nextSession, duration), 'HH:mm')
+  const from = nextSession ? format(nextSession, 'HH:mm') : ''
+  const to = nextSession ? format(addMinutes(nextSession, duration), 'HH:mm') : ''
 
   const isPaid = monetizationType === 'Paid'
 
@@ -104,8 +104,8 @@ export const ActivityCard = (props: any) => {
           <Text fontSize="xs" color="#616167">
             Next session
           </Text>
-          <Text fontSize="xs" fontWeight="bold">
-            {format(nextSession, 'MMM dd, yyyy')}
+          <Text fontSize="xs" fontWeight="bold" color={nextSession ? 'black' : 'af.pink'}>
+            {nextSession ? format(nextSession, 'MMM dd, yyyy') : 'Expired'}
           </Text>
         </VStack>
         <Flex w="1px" bg="#F3F3F3" h="70%" />
@@ -114,7 +114,7 @@ export const ActivityCard = (props: any) => {
             Time interval
           </Text>
           <Text fontSize="xs" fontWeight="bold">
-            {from} - {to}
+            {from && to ? `${from} - ${to}` : `... - ...`}
           </Text>
         </VStack>
       </HStack>
