@@ -18,6 +18,21 @@ const localizer = dateFnsLocalizer({
   locales,
 })
 
+const formats = {
+  dateFormat: 'dd',
+  dayFormat: (date: Date) => format(date, 'dd MMMM'),
+  dayRangeHeaderFormat: ({ start, end }: { start: Date; end: Date }) =>
+    `${format(start, 'dd')} - ${format(end, 'dd MMMM')}`,
+  agendaHeaderFormat: ({ start, end }: { start: Date; end: Date }) =>
+    `${format(start, 'dd')} - ${format(end, 'dd MMMM')}`,
+  agendaDateFormat: (date: Date) => format(date, 'EE, dd MMMM'),
+  agendaTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+    `${format(start, 'HH:mm')} - ${format(end, 'HH:mm')}`,
+  eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+    `${format(start, 'HH:mm')} - ${format(end, 'HH:mm')}`,
+  timeGutterFormat: (date: Date) => format(date, 'HH:mm'),
+}
+
 export function Calendar(props: any) {
   return (
     <BigCalendar
@@ -25,7 +40,8 @@ export function Calendar(props: any) {
       onSelectEvent={(activity) => trackClickCalendarActivity(activity)}
       defaultView="week"
       startAccessor="start"
-      views={['month', 'week', 'day', 'agenda']}
+      views={['week', 'month', 'agenda']}
+      formats={formats}
       endAccessor="end"
       style={{ height: '700px' }}
       eventPropGetter={eventPropGetter}

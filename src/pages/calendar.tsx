@@ -30,7 +30,8 @@ export default function CalendarPage(): JSX.Element {
           Calendar
         </Heading>
         <Text mb="2rem">
-          All of your activities are here on your calendar. Switch between Day, Week or Month view.
+          All of your activities are here on your calendar. Switch between Week, Month or Agenda
+          view.
         </Text>
         <Calendar events={events} />
       </Box>
