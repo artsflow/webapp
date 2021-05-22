@@ -9,7 +9,7 @@ import AudienceSvg from 'svg/icons/audience.svg'
 import { activityDownload } from 'lib/utils'
 import { Meta, Loading } from 'components'
 import { Card, BookingList, Chart, getIncomeLast7d } from 'components/Dashboard'
-import { useBalance, useBookings, useActivities } from 'hooks'
+import { useBalance, useBookings, useActivities, useActivityViews } from 'hooks'
 import { trackDownloadActivityBooking } from 'analytics'
 
 export default function Dashboard(): JSX.Element {
@@ -19,13 +19,14 @@ export default function Dashboard(): JSX.Element {
   const [bookings = [], loadingBookings] = useBookings()
   const audience = uniqBy(bookings, 'userId')
   const [activities = [], loadingActivities] = useActivities()
+  const [viewsData] = useActivityViews()
 
   const chartData = getIncomeLast7d(bookings)
 
   return (
     <>
       <Meta title="Dashboard" />
-      <Box p="40px">
+      <Box p="40px" w="full">
         <Heading fontSize="lg" mb="1rem">
           Dashboard
         </Heading>
@@ -50,13 +51,20 @@ export default function Dashboard(): JSX.Element {
               subtext={audience.length}
             />
           </HStack>
-          <Chart data={chartData}>
-            <Text textAlign="center">
-              <b>£{sumBy(chartData, 'y')}</b> gross income over the last 7 days
-            </Text>
-          </Chart>
+          <HStack spacing="1.5rem" w="full">
+            <Chart data={chartData}>
+              <Text textAlign="center">
+                <b>£{sumBy(chartData, 'y')}</b> gross income over the last 7 days
+              </Text>
+            </Chart>
+            <Chart data={viewsData} stroke="#E27CB0">
+              <Text textAlign="center">
+                <b>{sumBy(viewsData, 'y')}</b> activity pages views over the last 7 days
+              </Text>
+            </Chart>
+          </HStack>
           {loadingActivities && <Loading />}
-          <VStack spacing="2rem">
+          <VStack spacing="2rem" w="full" maxW="calc(840px + 1.5rem)">
             {activities.map(({ id, title }: any) => {
               const list = bookings.filter(({ activityId }: any) => activityId === id)
               return (

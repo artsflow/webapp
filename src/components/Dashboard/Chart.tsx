@@ -1,6 +1,5 @@
 import { Box, VStack, Text } from '@chakra-ui/react'
 import { AnimatedAxis, AnimatedGrid, AnimatedLineSeries, XYChart, Tooltip } from '@visx/xychart'
-import { LinearGradient } from '@visx/gradient'
 import { curveMonotoneX as curve } from '@visx/curve'
 
 const accessors = {
@@ -8,10 +7,10 @@ const accessors = {
   yAccessor: (d: any) => d.y,
 }
 
-export const Chart = ({ data, children }: any) => (
+export const Chart = ({ data, stroke = '#47BCC8', children }: any) => (
   <Box
     p="1rem"
-    maxW="500px"
+    maxW="420px"
     w="full"
     bg="white"
     rounded="10px"
@@ -19,8 +18,8 @@ export const Chart = ({ data, children }: any) => (
   >
     {children}
     <XYChart
-      margin={{ top: 20, right: 0, bottom: 20, left: 20 }}
-      height={260}
+      margin={{ top: 20, right: 0, bottom: 20, left: 25 }}
+      height={220}
       xScale={{ type: 'band' }}
       yScale={{ type: 'linear' }}
     >
@@ -33,9 +32,8 @@ export const Chart = ({ data, children }: any) => (
         strokeWidth="1"
         strokeDasharray="2"
       />
-      <LinearGradient id="line-gradient" from="#47BCC8" to="#fff" />
       <AnimatedLineSeries
-        stroke="#47BCC8"
+        stroke={stroke}
         strokeWidth="3"
         curve={curve}
         dataKey="icome"
