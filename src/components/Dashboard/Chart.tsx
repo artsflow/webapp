@@ -9,7 +9,7 @@ const accessors = {
   yAccessor: (d: any) => d.y,
 }
 
-export const Chart = ({ data, stroke = '#47BCC8', loading = false, children }: any) => (
+export const Chart = ({ data, stroke = '#47BCC8', sign = '', loading = false, children }: any) => (
   <Box
     p="1rem"
     maxW="420px"
@@ -59,7 +59,8 @@ export const Chart = ({ data, stroke = '#47BCC8', loading = false, children }: a
                 {tooltipData?.datumByKey.icome.datum.x}
               </Text>
               <Text fontSize="md" color="white" fontWeight="bold">
-                £{tooltipData?.datumByKey.icome.datum.y}
+                {sign}
+                {tooltipData?.datumByKey.icome.datum.y}
               </Text>
             </VStack>
           )}
