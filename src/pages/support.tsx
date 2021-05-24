@@ -6,7 +6,7 @@ import { Meta } from 'components'
 export default function Support(): JSX.Element {
   return (
     <>
-      <Meta title="Chat" />
+      <Meta title="Support" />
       <Box p="40px">
         <Text>Support coming soon...</Text>
       </Box>

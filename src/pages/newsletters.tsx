@@ -1,14 +1,17 @@
 import React from 'react'
-import { Text, Box } from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 
-import { Meta } from 'components'
+import { Meta, Newsletters } from 'components'
 
-export default function Newsletters(): JSX.Element {
+export default function NewslettersPage(): JSX.Element {
   return (
     <>
-      <Meta title="Chat" />
-      <Box p="40px">
-        <Text>Newsletters coming soon...</Text>
+      <Meta title="Newsletters" />
+      <Box p="40px" w="full">
+        <Heading fontSize="1.5rem" mb="1.5rem">
+          Newsletters
+        </Heading>
+        <Newsletters />
       </Box>
     </>
   )
