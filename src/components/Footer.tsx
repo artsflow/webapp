@@ -12,7 +12,7 @@ export const Footer = () => (
   >
     <Stack spacing={4} direction="row" align="center">
       <Box>
-        <Link as="/terms" href="/terms">
+        <Link as="/terms" href="/terms" passHref>
           <ChakraLink>Terms</ChakraLink>
         </Link>
       </Box>

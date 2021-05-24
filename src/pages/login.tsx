@@ -154,7 +154,7 @@ export default function Login(): JSX.Element {
     <>
       <Meta title="Login" />
       <Container h="100%" justifyContent="center">
-        <Link href="/">
+        <Link href="/" passHref>
           <a>
             <Logo width="242px" />
           </a>

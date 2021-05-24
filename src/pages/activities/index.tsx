@@ -22,7 +22,7 @@ export default function Activities(): JSX.Element {
             <Text color="#616167">View all of your ongoing activities here.</Text>
           </VStack>
           <VStack>
-            <Link as="/activities/add" href="/activities/add">
+            <Link as="/activities/add" href="/activities/add" passHref>
               <Button
                 bg="af.teal"
                 color="white"

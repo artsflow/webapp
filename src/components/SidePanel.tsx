@@ -7,6 +7,7 @@ import {
   ListIcon,
   Link as ChakraLink,
   IconButton,
+  Divider,
 } from '@chakra-ui/react'
 
 import { useRouter } from 'next/router'
@@ -14,6 +15,8 @@ import Link from 'next/link'
 import { useWindowSize } from 'rooks'
 
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons'
+import { BiMailSend } from 'react-icons/bi'
+import { IoChatbubbleEllipsesOutline } from 'react-icons/io5'
 
 import DashboardIcon from 'svg/icons/dashboard.svg'
 import DashboardSelectedIcon from 'svg/icons/dashboard-selected.svg'
@@ -41,16 +44,34 @@ const menu = [
     iconSelected: ActivitiesSelectedIcon,
   },
   {
+    id: 'newsletters',
+    text: 'Newsletters',
+    icon: BiMailSend,
+    iconSelected: BiMailSend,
+  },
+  {
     id: 'calendar',
     text: 'Calendar',
     icon: CalendarIcon,
     iconSelected: CalendarSelectedIcon,
   },
   {
+    id: 'divider',
+  },
+  {
     id: 'payouts',
     text: 'Payouts',
     icon: CardIcon,
     iconSelected: CardSelectedIcon,
+  },
+  {
+    id: 'divider',
+  },
+  {
+    id: 'support',
+    text: 'Support',
+    icon: IoChatbubbleEllipsesOutline,
+    iconSelected: IoChatbubbleEllipsesOutline,
   },
 ]
 
@@ -107,41 +128,51 @@ export const SidePanel = () => {
 
           return (
             <MotionListItem
-              key={item.id}
+              key={`${item.id}-${index + 1}`}
               flexDir="row"
               display="flex"
               alignItems="center"
               borderLeft={`3px solid ${isSelected ? '#47BCC8' : '#FFF'}`}
               animate={{ paddingLeft: isCollapsed ? '13px' : '29px' }}
             >
-              <Link as={`/${item.id}`} href={`/${item.id}`}>
-                <ChakraLink
-                  color={isSelected ? '#47BCC8' : 'black'}
-                  fontWeight={isSelected ? 'bold' : 'normal'}
-                  title={item.text}
-                  display="flex"
-                  alignItems="center"
-                  pos="relative"
-                >
-                  <ListIcon
-                    as={isSelected ? item.iconSelected : item.icon}
-                    w="20px"
-                    h="20px"
-                    color="#47BCC8"
-                  />
-                  <MotionText
-                    pos="absolute"
-                    left="30px"
-                    width="100px"
-                    animate={{
-                      opacity: isCollapsed ? '0' : '1',
-                      marginLeft: isCollapsed ? '-150px' : '0',
+              {item.id === 'divider' ? (
+                <Divider w={isCollapsed ? '20px' : '130px'} />
+              ) : (
+                <Link as={`/${item.id}`} href={`/${item.id}`} passHref>
+                  <ChakraLink
+                    color={isSelected ? '#47BCC8' : 'black'}
+                    fontWeight={isSelected ? 'bold' : 'normal'}
+                    title={item.text}
+                    display="flex"
+                    alignItems="center"
+                    pos="relative"
+                    _focus={{
+                      outline: 0,
+                    }}
+                    _hover={{
+                      color: '#47BCC8',
                     }}
                   >
-                    {item.text}
-                  </MotionText>
-                </ChakraLink>
-              </Link>
+                    <ListIcon
+                      color={isSelected ? '#47BCC8' : 'black'}
+                      as={isSelected ? item.iconSelected : item.icon}
+                      w="20px"
+                      h="20px"
+                    />
+                    <MotionText
+                      pos="absolute"
+                      left="30px"
+                      width="100px"
+                      animate={{
+                        opacity: isCollapsed ? '0' : '1',
+                        marginLeft: isCollapsed ? '-150px' : '0',
+                      }}
+                    >
+                      {item.text}
+                    </MotionText>
+                  </ChakraLink>
+                </Link>
+              )}
             </MotionListItem>
           )
         })}

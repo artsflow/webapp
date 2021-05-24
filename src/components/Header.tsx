@@ -58,7 +58,7 @@ export function Header() {
       zIndex="1"
     >
       <Box>
-        <NextLink href="/">
+        <NextLink href="/" passHref>
           <Link>
             <Logo width="107px" height="24px" />
           </Link>
@@ -71,7 +71,7 @@ export function Header() {
       </HStack>
       <HStack mt="10px" pl="1rem">
         {!user.isVerified && (
-          <NextLink href="/">
+          <NextLink href="/" passHref>
             <Link>
               <HStack>
                 <WarningTwoIcon color="af.pink" />
@@ -105,7 +105,7 @@ export function Header() {
             </Text>
           </>
         ) : (
-          <NextLink href="/profile">
+          <NextLink href="/profile" passHref>
             <Link>
               <Text fontSize="sm" fontWeight="bold" color="af.teal">
                 Complete your profile
