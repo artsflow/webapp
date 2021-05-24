@@ -8,7 +8,7 @@ export default function NewslettersPage(): JSX.Element {
     <>
       <Meta title="Newsletters" />
       <Box p="40px" w="full">
-        <Heading fontSize="1.5rem" mb="1.5rem">
+        <Heading fontSize="lg" mb="1.5rem">
           Newsletters
         </Heading>
         <Newsletters />

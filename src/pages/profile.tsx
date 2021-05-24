@@ -109,7 +109,7 @@ export default function Profile(): JSX.Element {
     <>
       <Meta title="My Profile" />
       <Box w="100%" p="40px">
-        <Heading size="md" mb="1rem">
+        <Heading fontSize="lg" mb="1rem">
           My profile
         </Heading>
         <Text color="#616167">Edit and add to your profile here.</Text>

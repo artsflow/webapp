@@ -26,7 +26,7 @@ export default function CalendarPage(): JSX.Element {
     <>
       <Meta title="Calendar" />
       <Box p="40px" w="full" h="auto">
-        <Heading fontSize="1.5rem" mb="1rem">
+        <Heading fontSize="lg" mb="1rem">
           Calendar
         </Heading>
         <Text mb="2rem">

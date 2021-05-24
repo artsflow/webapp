@@ -16,7 +16,7 @@ export default function Activities(): JSX.Element {
       <Box w="100%" p="40px">
         <HStack justifyContent="space-between" alignItems="flex-start">
           <VStack alignItems="flex-start">
-            <Heading size="md" mb="1rem">
+            <Heading fontSize="lg" mb="1rem">
               My activities
             </Heading>
             <Text color="#616167">View all of your ongoing activities here.</Text>
