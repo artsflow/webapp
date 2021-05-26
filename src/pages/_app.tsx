@@ -10,6 +10,7 @@ import { useUserData } from 'hooks'
 import theme from '../theme'
 
 import 'components/Calendar/styles.css'
+import 'components/Editor/styles.css'
 
 NProgress.configure({ showSpinner: false })
 Router.events.on('routeChangeStart', () => NProgress.start())
