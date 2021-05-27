@@ -27,7 +27,7 @@ import { getEditorConfig, emojiSuggestKey } from './utils'
 
 const CMenu = chakra(Menu)
 
-export function Editor({ onChange }: { onChange: (html: string) => void }) {
+export function Editor({ onChange }: any) {
   const [editor, setEditor] = useState()
   const editorState = useEditorState(getEditorConfig(onChange))
 
