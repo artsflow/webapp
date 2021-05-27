@@ -1,10 +1,13 @@
+import { useState, useEffect } from 'react'
 import { chakra, Text, VStack, Input, Button, HStack } from '@chakra-ui/react'
 import { useForm, Controller } from 'react-hook-form'
 import Select from 'react-select'
 import { useTimer } from 'react-timer-hook'
 import { addSeconds } from 'date-fns'
+import { uniqBy } from 'lodash'
 
 import { Editor } from 'components'
+import { useActivities, useBookings } from 'hooks'
 
 const options = [
   { value: 'myself', label: 'Myself (just testing)' },
@@ -13,10 +16,56 @@ const options = [
   { value: 'activities', label: 'All activities members' },
 ]
 
+const totalImported = 0
+
 const CSelect = chakra(Select)
 
 export const Compose = () => {
-  const { register, handleSubmit, control, getValues } = useForm({})
+  const [list, setList] = useState(options)
+  const [totalSelected, setTotalSelected] = useState(1)
+  const { register, handleSubmit, control, getValues, watch } = useForm({ mode: 'onBlur' })
+  const [activities] = useActivities()
+  const [bookings] = useBookings()
+
+  const watchTo = watch(['to'])
+
+  useEffect(() => {
+    switch (watchTo.to?.value) {
+      case 'myself':
+        setTotalSelected(1)
+        break
+      case 'everybody':
+        setTotalSelected(bookings.length + totalImported)
+        break
+      case 'imported':
+        setTotalSelected(totalImported)
+        break
+      case 'activities':
+        setTotalSelected(bookings.length)
+        break
+      default:
+        setTotalSelected(
+          bookings?.filter((b: any) => b.activityId === watchTo.to?.value).length || 0
+        )
+    }
+  }, [watchTo])
+
+  useEffect(() => {
+    if (activities) {
+      setList(
+        uniqBy(
+          [
+            ...list,
+            ...activities.map(({ id, title }: any) => ({
+              value: id,
+              label: `Members of "${title}"`,
+            })),
+          ],
+          'value'
+        )
+      )
+    }
+  }, [activities, bookings])
 
   const handleSendMessage = () => {
     console.info('call backend')
@@ -48,7 +97,7 @@ export const Compose = () => {
             isSearchable={false}
             w="360px"
             name="to"
-            options={options}
+            options={list}
             control={control}
             defaultValue={options[0]}
             ref={register({
@@ -85,10 +134,12 @@ export const Compose = () => {
             color="white"
             type="submit"
             _focus={{ outline: 'none' }}
+            disabled={!totalSelected}
           >
             {isRunning ? 'Cancel' : 'Send'}
           </Button>
           {isRunning && <Text>Sending in {seconds} seconds...</Text>}
+          {!isRunning && <Text>{totalSelected} selected</Text>}
         </HStack>
       </VStack>
     </form>
