@@ -81,7 +81,7 @@ module.exports = {
       'error',
       // 'FunctionExpression',
       'WithStatement',
-      "BinaryExpression[operator='in']",
+      // "BinaryExpression[operator='in']",
     ],
     'class-methods-use-this': 0,
   },

@@ -4,7 +4,7 @@ import {
   MdFormatBold,
   MdFormatItalic,
   MdFormatUnderlined,
-  // MdFormatListBulleted,
+  MdFormatListBulleted,
   // MdFormatListNumbered,
   // MdFormatQuote,
   // MdLooksOne,
@@ -12,12 +12,18 @@ import {
 } from 'react-icons/md'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { keymap } from 'prosemirror-keymap'
-import { baseKeymap, Command, toggleMark } from 'prosemirror-commands'
+import { baseKeymap, Command, toggleMark, chainCommands, exitCode } from 'prosemirror-commands'
 import { MarkType } from 'prosemirror-model'
 import { history, redo, undo } from 'prosemirror-history'
 import { useProseMirror } from 'use-prosemirror'
 
 import { schema } from './schema'
+import {
+  isBlockActive,
+  setListTypeBullet,
+  insertNodeLineBreak,
+  insertNodeHorizontalRule,
+} from './commands'
 
 const Button = (props: {
   icon: ReactElement
@@ -58,10 +64,13 @@ const isMarkActive = (state: EditorState, mark: MarkType): boolean => {
 const isBold = (state: EditorState): boolean => isMarkActive(state, schema.marks.strong)
 const isItalic = (state: EditorState): boolean => isMarkActive(state, schema.marks.em)
 const isUnderline = (state: EditorState): boolean => isMarkActive(state, schema.marks.underline)
+const isListBullet = (state: EditorState): boolean =>
+  isBlockActive(schema.nodes.list, { type: 'bullet' })(state)
 
 const toggleBold = toggleMarkCommand(schema.marks.strong)
 const toggleItalic = toggleMarkCommand(schema.marks.em)
 const toggleUnderline = toggleMarkCommand(schema.marks.underline)
+// const toggleList = setListTypeBullet(schema.marks.bullet)
 
 export const Toolbar = ({ state, onChange }: any) => (
   <HStack spacing="0.3rem" borderBottom="1px solid #D3D3D3" p="0.5rem" px="1rem">
@@ -83,6 +92,12 @@ export const Toolbar = ({ state, onChange }: any) => (
       icon={<MdFormatUnderlined />}
       ariaLabel="toggle-underline"
     />
+    <Button
+      isActive={isListBullet(state)}
+      onClick={() => setListTypeBullet(state, (tr) => onChange(state.apply(tr)))}
+      icon={<MdFormatListBulleted />}
+      ariaLabel="toggle-list-bullet"
+    />
   </HStack>
 )
 
@@ -98,6 +113,8 @@ export const opts: Parameters<typeof useProseMirror>[0] = {
       'Mod-b': toggleBold,
       'Mod-i': toggleItalic,
       'Mod-u': toggleUnderline,
+      'Mod-Enter': chainCommands(exitCode, insertNodeLineBreak),
+      'Mod-_': insertNodeHorizontalRule,
     }),
   ],
 }
