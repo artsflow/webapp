@@ -1142,6 +1142,18 @@
     prosemirror-utils "^0.9.6"
     prosemirror-view "^1.16.3"
 
+"@bangle.dev/emoji@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@bangle.dev/emoji/-/emoji-0.15.0.tgz#bbdb4c8457fc27dcd7bb9a349c54597448c49a5e"
+  integrity sha512-CNywcBOluBThSM8CKGCkaPw11dzTwrk5GLHiCZaZx07DkPqrPSTlAIewHRmIjZPrsLiOSdfHj2BrXEN/Q/U3SA==
+  dependencies:
+    markdown-it-emoji "^2.0.0"
+
+"@bangle.dev/react-emoji-suggest@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@bangle.dev/react-emoji-suggest/-/react-emoji-suggest-0.15.0.tgz#ad3f1df3c5bc7ccdf69ae02795c822186a543e37"
+  integrity sha512-QhePthmD9TvItOxrcu6pgWanaa534r3eOyrtVJqlBbEj4XQ63PGghyLfEudq5lj7tWUQAXA9fFMIvlvHWzIHlw==
+
 "@bangle.dev/react-menu@^0.15.0":
   version "0.15.0"
   resolved "https://registry.yarnpkg.com/@bangle.dev/react-menu/-/react-menu-0.15.0.tgz#9b51e15c8ee7a10db77ee2c6a6e13606cb19c283"
@@ -5716,6 +5728,11 @@ emittery@^0.7.1:
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.7.2.tgz#25595908e13af0f5674ab419396e2fb394cdfa82"
   integrity sha512-A8OG5SR/ij3SsJdWDJdkkSYUjQdCUx6APQXem0SaEePBSRg4eymGYwBkKo1Y6DU+af/Jn2dBQqDBvjnr9Vi8nQ==
 
+emoji-lookup-data@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/emoji-lookup-data/-/emoji-lookup-data-1.3.0.tgz#4b7c63fc82f1ae5f22dc3b3552179b61566a2ca0"
+  integrity sha512-VHulV35D4AbtampG/LR7CDR4wJo72df0TfDOmYczcYlZPk3nTi+3d+jwM9zfGu88cJsCvRAi6rTYNu8NhJMsNg==
+
 emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
@@ -8726,6 +8743,11 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
+
+markdown-it-emoji@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-it-emoji/-/markdown-it-emoji-2.0.0.tgz#3164ad4c009efd946e98274f7562ad611089a231"
+  integrity sha512-39j7/9vP/CPCKbEI44oV8yoPJTpvfeReTn/COgRhSpNrjWF3PfP/JUxxB0hxV6ynOY8KH8Y8aX9NMDdo6z+6YQ==
 
 math-expression-evaluator@^1.2.14:
   version "1.3.7"
