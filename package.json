@@ -1,6 +1,6 @@
 {
   "name": "artsflow-webapp",
-  "version": "0.1.138",
+  "version": "0.1.139",
   "private": true,
   "scripts": {
     "dev": "next dev --port=4042",
@@ -96,6 +96,7 @@
     "react-lorem-ipsum": "^1.4.9",
     "react-select": "^4.2.1",
     "react-spring": "^8.0.27",
+    "react-timer-hook": "^3.0.3",
     "rooks": "^5.0.2",
     "uuid": "^8.3.2",
     "xstate": "^4.16.2"

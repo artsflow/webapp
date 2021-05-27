@@ -1,6 +1,8 @@
-import { chakra, Text, VStack, Input, Button } from '@chakra-ui/react'
+import { chakra, Text, VStack, Input, Button, HStack } from '@chakra-ui/react'
 import { useForm, Controller } from 'react-hook-form'
 import Select from 'react-select'
+import { useTimer } from 'react-timer-hook'
+import { addSeconds } from 'date-fns'
 
 import { Editor } from 'components'
 
@@ -14,10 +16,24 @@ const options = [
 const CSelect = chakra(Select)
 
 export const Compose = () => {
-  const { register, handleSubmit, control } = useForm({})
+  const { register, handleSubmit, control, getValues } = useForm({})
 
-  const onSubmit = async (data: any) => {
-    console.log(data)
+  const handleSendMessage = () => {
+    console.info('call backend')
+    console.log(getValues())
+  }
+
+  const { seconds, isRunning, pause, restart } = useTimer({
+    expiryTimestamp: new Date(),
+    onExpire: handleSendMessage,
+  })
+
+  const onSubmit = async () => {
+    if (isRunning) {
+      pause()
+    } else {
+      restart(addSeconds(new Date(), 3))
+    }
   }
 
   return (
@@ -63,10 +79,17 @@ export const Compose = () => {
         </VStack>
 
         <Controller as={Editor} name="body" control={control} />
-
-        <Button bg="#47BCC8" color="white" type="submit">
-          Send
-        </Button>
+        <HStack>
+          <Button
+            bg={isRunning ? 'af.pink' : 'af.teal'}
+            color="white"
+            type="submit"
+            _focus={{ outline: 'none' }}
+          >
+            {isRunning ? 'Cancel' : 'Send'}
+          </Button>
+          {isRunning && <Text>Sending in {seconds} seconds...</Text>}
+        </HStack>
       </VStack>
     </form>
   )

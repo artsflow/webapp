@@ -10286,6 +10286,11 @@ react-textarea-autosize@^8.3.2:
     use-composed-ref "^1.0.0"
     use-latest "^1.0.0"
 
+react-timer-hook@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-timer-hook/-/react-timer-hook-3.0.3.tgz#b42bab3bf49322c378ad19587d14906f8af57ce8"
+  integrity sha512-2JdFvAKNi/7sW5NMrPPd06Yk4ky6W5OUmhsFInIKyqX7le3LdlN8aG2QTfX5nojkmcAXFmXhWI3EJSHQETg8qw==
+
 react-transition-group@^4.3.0:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.1.tgz#63868f9325a38ea5ee9535d828327f85773345c9"

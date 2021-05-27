@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { BangleEditor, useEditorState } from '@bangle.dev/react'
 import { EmojiSuggest } from '@bangle.dev/react-emoji-suggest'
+import { toHTMLString } from '@bangle.dev/core/utils/pm-utils'
 import {
   StaticMenu,
   Menu,
@@ -30,6 +31,11 @@ const CMenu = chakra(Menu)
 export function Editor({ onChange }: any) {
   const [editor, setEditor] = useState()
   const editorState = useEditorState(getEditorConfig(onChange))
+
+  const handleOnReady = (s: any) => {
+    setEditor(s)
+    onChange(toHTMLString(s.view.state))
+  }
 
   return (
     <Box
@@ -72,7 +78,7 @@ export function Editor({ onChange }: any) {
           </CMenu>
         )}
       />
-      <BangleEditor state={editorState} onReady={setEditor}>
+      <BangleEditor state={editorState} onReady={handleOnReady}>
         <EmojiSuggest emojiSuggestKey={emojiSuggestKey} />
       </BangleEditor>
     </Box>
