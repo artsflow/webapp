@@ -27,6 +27,7 @@ export const getEditorConfig = (onChange: any) => ({
         update: (view: any, prevState: any) => {
           if (!view.state.doc.eq(prevState.doc)) {
             onChange(toHTMLString(view.state))
+            localStorage.setItem('af-editor-value', JSON.stringify(view.state.doc.toJSON()))
           }
         },
       }),
@@ -51,7 +52,7 @@ export const getEditorConfig = (onChange: any) => ({
       },
     }),
   ],
-  initialValue: ``,
+  initialValue: getItemFromStorage() || '',
 })
 
 const emojiData = Object.values(
@@ -73,4 +74,12 @@ const getEmojiByAlias = (emojiAlias: any) => {
     }
   }
   return null
+}
+
+const getItemFromStorage = () => {
+  try {
+    return JSON.parse(localStorage.getItem('af-editor-value') as any)
+  } catch (err) {
+    return null
+  }
 }
