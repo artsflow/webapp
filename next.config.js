@@ -1,8 +1,15 @@
 const path = require('path')
 const withReactSvg = require('next-react-svg')
 const withPlugins = require('next-compose-plugins')
-const withTM = require('next-transpile-modules')(['little-state-machine-devtools'])
 const { withSentryConfig } = require('@sentry/nextjs')
+
+const withTM = require('next-transpile-modules')([
+  'little-state-machine-devtools',
+  '@bangle.dev/core',
+  '@bangle.dev/react',
+  '@bangle.dev/tooltip',
+  '@popperjs/core/lib/popper-lite',
+])
 
 const nextConfig = {}
 

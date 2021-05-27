@@ -1,0 +1,5 @@
+declare module '@bangle.dev/react-menu'
+declare module '@bangle.dev/react'
+declare module '@bangle.dev/core'
+declare module '@bangle.dev/core/utils/core-components'
+declare module '@bangle.dev/core/utils/pm-utils'

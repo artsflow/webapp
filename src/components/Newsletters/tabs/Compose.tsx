@@ -1,13 +1,15 @@
-import { Text, VStack, Input } from '@chakra-ui/react'
+import { useState } from 'react'
+import { Text, VStack, Input, Button } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 
 import { Editor } from 'components'
 
 export const Compose = () => {
+  const [editorState, setEditorState] = useState('')
   const { register, handleSubmit } = useForm({})
 
   const onSubmit = async (data: any) => {
-    console.log(data)
+    console.log(data, editorState)
   }
 
   return (
@@ -31,7 +33,8 @@ export const Compose = () => {
             name="subject"
           />
         </VStack>
-        <Editor />
+        <Editor onChange={setEditorState} />
+        <Button type="submit">Send</Button>
       </VStack>
     </form>
   )
