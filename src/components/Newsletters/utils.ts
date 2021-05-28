@@ -6,7 +6,7 @@ import { emojiSuggest } from '@bangle.dev/react-emoji-suggest'
 import { floatingMenu } from '@bangle.dev/react-menu'
 import gemojiData from 'emoji-lookup-data/data/gemoji.json'
 
-const menuKey = new PluginKey('menuKey')
+export const floatingMenuKey = new PluginKey('floatingMenuKey')
 export const emojiSuggestKey = new PluginKey('emojiSuggestKey')
 
 export const getEditorConfig = (onChange: any) => ({
@@ -20,7 +20,7 @@ export const getEditorConfig = (onChange: any) => ({
   plugins: () => [
     corePlugins(),
     floatingMenu.plugins({
-      key: menuKey,
+      key: floatingMenuKey,
     }),
     new Plugin({
       view: () => ({

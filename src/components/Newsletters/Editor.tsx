@@ -16,6 +16,7 @@ import {
   MenuGroup,
   UndoButton,
   RedoButton,
+  FloatingMenu,
 } from '@bangle.dev/react-menu'
 import { chakra, Box } from '@chakra-ui/react'
 import Select from 'react-select'
@@ -27,7 +28,7 @@ import '@bangle.dev/react-menu/style.css'
 import '@bangle.dev/react-emoji-suggest/style.css'
 
 import { ARTSFLOW_URL } from 'lib/config'
-import { getEditorConfig, emojiSuggestKey, selectStylesEditor } from './utils'
+import { getEditorConfig, emojiSuggestKey, floatingMenuKey, selectStylesEditor } from './utils'
 
 const CMenu = chakra(Menu)
 const CSelect = chakra(Select)
@@ -127,6 +128,7 @@ export function Editor({ onChange, activities }: any) {
       />
       <BangleEditor state={editorState} onReady={handleOnReady}>
         <EmojiSuggest emojiSuggestKey={emojiSuggestKey} />
+        <FloatingMenu menuKey={floatingMenuKey} />
       </BangleEditor>
     </Box>
   )
