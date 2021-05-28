@@ -6,8 +6,9 @@ import { useTimer } from 'react-timer-hook'
 import { addSeconds } from 'date-fns'
 import { uniqBy } from 'lodash'
 
-import { Editor } from 'components'
 import { useActivities, useBookings } from 'hooks'
+import { Editor } from '../Editor'
+import { selectStyles } from '../utils'
 
 const options = [
   { value: 'myself', label: 'Myself (just testing)' },
@@ -131,7 +132,7 @@ export const Compose = () => {
           />
         </VStack>
 
-        <Controller as={Editor} name="body" control={control} />
+        <Controller as={Editor} name="body" control={control} activities={activities} />
         <HStack>
           <Button
             bg={isRunning ? 'af.pink' : 'af.teal'}
@@ -149,23 +150,4 @@ export const Compose = () => {
       </VStack>
     </form>
   )
-}
-
-const selectStyles = {
-  control: (base: any, { isFocused }: any) => ({
-    ...base,
-    border: '0px',
-    padding: '2px',
-    paddingLeft: '8px',
-    boxShadow: isFocused ? '0px 0px 0px 1px #47BCC8' : '0px 3px 8px rgba(50, 50, 71, 0.05)',
-  }),
-  menu: (base: any) => ({
-    ...base,
-    boxShadow: '0px 3px 8px rgba(50, 50, 71, 0.05)',
-  }),
-  option: (styles: any, { isFocused }: any) => ({
-    ...styles,
-    backgroundColor: isFocused ? '#47BCC8' : null,
-    color: isFocused ? 'white' : 'black',
-  }),
 }

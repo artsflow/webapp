@@ -17,32 +17,59 @@ import {
   UndoButton,
   RedoButton,
 } from '@bangle.dev/react-menu'
-import { chakra, Box, Button } from '@chakra-ui/react'
+import { chakra, Box } from '@chakra-ui/react'
+import Select from 'react-select'
+import { uniqBy } from 'lodash'
 
 import '@bangle.dev/core/style.css'
 import '@bangle.dev/tooltip/style.css'
 import '@bangle.dev/react-menu/style.css'
 import '@bangle.dev/react-emoji-suggest/style.css'
 
-import { getEditorConfig, emojiSuggestKey } from './utils'
+import { ARTSFLOW_URL } from 'lib/config'
+import { getEditorConfig, emojiSuggestKey, selectStylesEditor } from './utils'
 
 const CMenu = chakra(Menu)
+const CSelect = chakra(Select)
+const CMenuGroup = chakra(MenuGroup, {
+  baseStyle: {
+    paddingX: '10px',
+    borderRightColor: 'gray.200',
+  },
+})
 
-export function Editor({ onChange }: any) {
+export function Editor({ onChange, activities }: any) {
   const [editor, setEditor] = useState()
+  const [selectValue, setSelectValue] = useState(null)
   const editorState = useEditorState(getEditorConfig(onChange))
+
+  const options = activities
+    ? uniqBy(
+        activities?.map(({ id, title }: any) => ({
+          value: id,
+          label: title,
+        })),
+        'value'
+      )
+    : []
 
   const handleOnReady = (s: any) => {
     setEditor(s)
     onChange(toHTMLString(s.view.state))
   }
 
-  const handleClick = () => {
+  const handleInsertLink = (props: any) => {
+    const { value, label } = props || {}
+    if (!value) return
+
+    const activityLink = `${ARTSFLOW_URL}/a/${value}`
     const { view } = editor as any
-    const attrs = { title: 'mylink', href: 'google.com' }
+    const attrs = { title: label, href: activityLink }
     const { schema } = view.state
     const node = schema.text(attrs.title, [schema.marks.link.create(attrs)])
     view.dispatch(view.state.tr.replaceSelectionWith(node, false))
+
+    setSelectValue(null)
   }
 
   return (
@@ -66,30 +93,35 @@ export function Editor({ onChange }: any) {
             rounded="0"
             p="0.5rem"
           >
-            <MenuGroup>
+            <CMenuGroup>
               <UndoButton />
               <RedoButton />
-            </MenuGroup>
-            <MenuGroup>
+            </CMenuGroup>
+            <CMenuGroup>
               <BoldButton />
               <ItalicButton />
-            </MenuGroup>
-            <MenuGroup>
+            </CMenuGroup>
+            <CMenuGroup>
               <ParagraphButton />
               <BlockquoteButton />
               <HeadingButton level={3} />
               <HeadingButton level={4} />
-            </MenuGroup>
-            <MenuGroup>
-              <BulletListButton />
-              <OrderedListButton />
-              <TodoListButton />
-            </MenuGroup>
-            <MenuGroup>
-              <Button size="xs" onClick={handleClick}>
-                x
-              </Button>
-            </MenuGroup>
+            </CMenuGroup>
+
+            <BulletListButton />
+            <OrderedListButton />
+            <TodoListButton />
+
+            <CSelect
+              isSearchable={false}
+              placeholder="Insert activity link"
+              ml="1rem"
+              w="240px"
+              onChange={handleInsertLink}
+              options={options}
+              value={selectValue}
+              styles={selectStylesEditor}
+            />
           </CMenu>
         )}
       />

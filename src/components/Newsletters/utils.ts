@@ -83,3 +83,31 @@ const getItemFromStorage = () => {
     return null
   }
 }
+
+export const selectStyles = {
+  control: (base: any, { isFocused }: any) => ({
+    ...base,
+    border: '0px',
+    padding: '2px',
+    paddingLeft: '8px',
+    boxShadow: isFocused ? '0px 0px 0px 1px #47BCC8' : '0px 3px 8px rgba(50, 50, 71, 0.05)',
+  }),
+  menu: (base: any) => ({
+    ...base,
+    boxShadow: '0px 3px 8px rgba(50, 50, 71, 0.05)',
+  }),
+  option: (styles: any, { isFocused }: any) => ({
+    ...styles,
+    backgroundColor: isFocused ? '#47BCC8' : null,
+    color: isFocused ? 'white' : 'black',
+  }),
+}
+
+export const selectStylesEditor = {
+  ...selectStyles,
+  control: (base: any, { isFocused }: any) => ({
+    ...base,
+    padding: '0px',
+    boxShadow: isFocused ? '0px 0px 0px 1px #47BCC8' : '1px 1px 1px rgba(50, 50, 71, 0.05)',
+  }),
+}
