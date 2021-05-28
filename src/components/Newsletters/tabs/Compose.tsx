@@ -16,8 +16,6 @@ const options = [
   { value: 'activities', label: 'All activities members' },
 ]
 
-const totalImported = 0
-
 const CSelect = chakra(Select)
 
 export const Compose = () => {
@@ -30,22 +28,28 @@ export const Compose = () => {
   const watchTo = watch(['to'])
 
   useEffect(() => {
+    const totalImported = 0
+    const totalBookings = uniqBy(bookings, 'userId')?.length || 0
+
     switch (watchTo.to?.value) {
       case 'myself':
         setTotalSelected(1)
         break
       case 'everybody':
-        setTotalSelected(bookings.length + totalImported)
+        setTotalSelected(totalBookings + totalImported)
         break
       case 'imported':
         setTotalSelected(totalImported)
         break
       case 'activities':
-        setTotalSelected(bookings.length)
+        setTotalSelected(totalBookings)
         break
       default:
         setTotalSelected(
-          bookings?.filter((b: any) => b.activityId === watchTo.to?.value).length || 0
+          uniqBy(
+            bookings?.filter((b: any) => b.activityId === watchTo.to?.value),
+            'userId'
+          )?.length || 0
         )
     }
   }, [watchTo])
@@ -135,6 +139,7 @@ export const Compose = () => {
             type="submit"
             _focus={{ outline: 'none' }}
             disabled={!totalSelected}
+            w="80px"
           >
             {isRunning ? 'Cancel' : 'Send'}
           </Button>

@@ -17,7 +17,7 @@ import {
   UndoButton,
   RedoButton,
 } from '@bangle.dev/react-menu'
-import { chakra, Box } from '@chakra-ui/react'
+import { chakra, Box, Button } from '@chakra-ui/react'
 
 import '@bangle.dev/core/style.css'
 import '@bangle.dev/tooltip/style.css'
@@ -35,6 +35,14 @@ export function Editor({ onChange }: any) {
   const handleOnReady = (s: any) => {
     setEditor(s)
     onChange(toHTMLString(s.view.state))
+  }
+
+  const handleClick = () => {
+    const { view } = editor as any
+    const attrs = { title: 'mylink', href: 'google.com' }
+    const { schema } = view.state
+    const node = schema.text(attrs.title, [schema.marks.link.create(attrs)])
+    view.dispatch(view.state.tr.replaceSelectionWith(node, false))
   }
 
   return (
@@ -72,9 +80,16 @@ export function Editor({ onChange }: any) {
               <HeadingButton level={3} />
               <HeadingButton level={4} />
             </MenuGroup>
-            <BulletListButton />
-            <OrderedListButton />
-            <TodoListButton />
+            <MenuGroup>
+              <BulletListButton />
+              <OrderedListButton />
+              <TodoListButton />
+            </MenuGroup>
+            <MenuGroup>
+              <Button size="xs" onClick={handleClick}>
+                x
+              </Button>
+            </MenuGroup>
           </CMenu>
         )}
       />
