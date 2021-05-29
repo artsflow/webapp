@@ -7,6 +7,7 @@ import { addSeconds } from 'date-fns'
 import { uniqBy } from 'lodash'
 
 import { useActivities, useBookings } from 'hooks'
+import { sendNewsletter } from 'api'
 import { Editor } from '../Editor'
 import { selectStyles } from '../utils'
 
@@ -72,9 +73,9 @@ export const Compose = () => {
     }
   }, [activities, bookings])
 
-  const handleSendMessage = () => {
-    console.info('call backend')
-    console.log(getValues())
+  const handleSendMessage = async () => {
+    const res = await sendNewsletter(getValues())
+    console.info('call backend', res)
   }
 
   const { seconds, isRunning, pause, restart } = useTimer({
@@ -86,7 +87,7 @@ export const Compose = () => {
     if (isRunning) {
       pause()
     } else {
-      restart(addSeconds(new Date(), 3))
+      restart(addSeconds(new Date(), 1))
     }
   }
 
