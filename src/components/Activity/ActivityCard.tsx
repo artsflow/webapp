@@ -69,8 +69,12 @@ export const ActivityCard = (props: any) => {
   const isPaid = monetizationType === 'Paid'
 
   const freqLabel = dates
-    .map((d: string) => format(new Date(d), 'dd MMM, yyy - HH:mm'))
-    .map((d: string) => <Text key={d}>{d}</Text>)
+    ? dates
+        .map((d: string) => format(new Date(d), 'dd MMM, yyy - HH:mm'))
+        .map((d: string) => <Text key={d}>{d}</Text>)
+    : 'not scheduled'
+
+  console.log(dates)
 
   const isActive = status === 'active'
 
@@ -105,7 +109,7 @@ export const ActivityCard = (props: any) => {
             Next session
           </Text>
           <Text fontSize="xs" fontWeight="bold" color={nextSession ? 'black' : 'af.pink'}>
-            {nextSession ? format(nextSession, 'MMM dd, yyyy') : 'Expired'}
+            {nextSession ? format(nextSession, 'MMM dd, yyyy') : 'Not scheduled'}
           </Text>
         </VStack>
         <Flex w="1px" bg="#F3F3F3" h="70%" />
