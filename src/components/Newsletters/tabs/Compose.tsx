@@ -6,7 +6,7 @@ import { useTimer } from 'react-timer-hook'
 import { addSeconds } from 'date-fns'
 import { uniqBy } from 'lodash'
 
-import { useActivities, useBookings } from 'hooks'
+import { useActivities, useBookings, useAudience } from 'hooks'
 import { sendNewsletter } from 'api'
 import { Editor } from '../Editor'
 import { selectStyles } from '../utils'
@@ -26,11 +26,12 @@ export const Compose = () => {
   const { register, handleSubmit, control, getValues, watch } = useForm({ mode: 'onBlur' })
   const [activities] = useActivities()
   const [bookings] = useBookings()
+  const [audience = []] = useAudience()
 
   const watchTo = watch(['to'])
 
   useEffect(() => {
-    const totalImported = 0
+    const totalImported = audience.length
     const totalBookings = uniqBy(bookings, 'userId')?.length || 0
 
     switch (watchTo.to?.value) {
@@ -118,10 +119,6 @@ export const Compose = () => {
             Subject
           </Text>
           <Input
-            bg="white"
-            border="1px solid white"
-            shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-            rounded="6px"
             w="640px"
             placeholder="Enter subject..."
             ref={register({

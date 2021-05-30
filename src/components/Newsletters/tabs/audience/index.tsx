@@ -1,18 +1,9 @@
-import { Box } from '@chakra-ui/react'
+import { Add } from './Add'
+import { List } from './List'
 
-import { Add } from './add'
-
-export const Audience = () => {
-  console.log('audience render')
-  return (
-    <>
-      <List />
-      <Add />
-    </>
-  )
-}
-
-const List = () => {
-  console.log('list')
-  return <Box mb="1rem">list here</Box>
-}
+export const Audience = () => (
+  <>
+    <List />
+    <Add />
+  </>
+)

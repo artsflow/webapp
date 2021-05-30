@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 
 import { firestore } from 'lib/firebase'
 import { Card } from 'components/UI'
-import { useUserData } from 'hooks'
+import { useUserData, useAudience } from 'hooks'
 import { giveConsent } from 'api'
 import { showAlert } from 'lib/utils'
 
@@ -13,6 +13,7 @@ export const Add = () => {
   const [loading, setLoading] = useState(false)
   const { user } = useUserData()
   const isDisabled = !user.hasConsent
+  const [audience = []] = useAudience()
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {},
@@ -20,6 +21,13 @@ export const Add = () => {
   })
 
   const handleAdd = async (data: any) => {
+    if (audience.find((a: any) => a.email === data.email)) {
+      showAlert({
+        title: 'Email address already on the list',
+        status: 'warning',
+      })
+      return
+    }
     setLoading(true)
     try {
       await firestore
@@ -41,7 +49,10 @@ export const Add = () => {
   }
 
   const handleCSVImport = async () => {
-    console.log('handleCSVImport')
+    showAlert({
+      title: 'CSV import not implemented',
+      status: 'warning',
+    })
   }
 
   return (
@@ -51,7 +62,6 @@ export const Add = () => {
         <HStack spacing="1rem" w="full">
           <Input
             w="full"
-            variant="af"
             placeholder="Enter name..."
             name="name"
             type="text"
@@ -61,7 +71,6 @@ export const Add = () => {
           />
           <Input
             w="full"
-            variant="af"
             placeholder="Enter email..."
             name="email"
             type="email"

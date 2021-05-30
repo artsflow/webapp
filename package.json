@@ -1,6 +1,6 @@
 {
   "name": "artsflow-webapp",
-  "version": "0.1.148",
+  "version": "0.1.149",
   "private": true,
   "scripts": {
     "dev": "next dev --port=4042",
@@ -50,6 +50,8 @@
     "@types/react-big-calendar": "^0.30.1",
     "@types/react-datepicker": "^3.1.8",
     "@types/react-select": "^4.0.13",
+    "@types/react-table": "^7.7.1",
+    "@types/react-window": "^1.8.3",
     "@visx/curve": "^1.7.0",
     "@visx/gradient": "^1.7.0",
     "@visx/scale": "^1.7.0",
@@ -98,6 +100,7 @@
     "react-spring": "^8.0.27",
     "react-table": "^7.7.0",
     "react-timer-hook": "^3.0.3",
+    "react-window": "^1.8.6",
     "rooks": "^5.0.2",
     "uuid": "^8.3.2",
     "xstate": "^4.16.2",

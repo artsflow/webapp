@@ -54,10 +54,20 @@ const theme = {
       },
     },
     Input: {
+      defaultProps: {
+        variant: 'af',
+      },
       variants: {
         af: {
-          bg: 'white',
-          boxShadow: '0px 3px 8px rgba(50, 50, 71, 0.05)',
+          field: {
+            bg: 'white',
+            boxShadow: '0px 3px 8px rgba(50, 50, 71, 0.05)',
+            rounded: '6px',
+            _focusWithin: {
+              boxShadow: '0 0 0 1px #45BCC8',
+              border: 'none',
+            },
+          },
         },
       },
     },
