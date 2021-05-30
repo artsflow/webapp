@@ -1,17 +1,43 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { VStack, Input, Text, HStack, Button, Link as ChakraLink } from '@chakra-ui/react'
+import { useForm } from 'react-hook-form'
 
+import { firestore } from 'lib/firebase'
 import { Card } from 'components/UI'
 import { useUserData } from 'hooks'
 import { giveConsent } from 'api'
+import { showAlert } from 'lib/utils'
 
 export const Add = () => {
+  const [loading, setLoading] = useState(false)
   const { user } = useUserData()
   const isDisabled = !user.hasConsent
 
-  const handleAdd = async () => {
-    console.log('handleAdd')
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {},
+    mode: 'onBlur',
+  })
+
+  const handleAdd = async (data: any) => {
+    setLoading(true)
+    try {
+      await firestore
+        .collection('audience')
+        .add({ ...data, userId: user.id, createdAt: new Date() })
+      reset()
+      showAlert({
+        title: 'Persson added to audience list',
+        status: 'success',
+      })
+    } catch (e) {
+      showAlert({
+        title: 'Error!',
+        description: e.message,
+        status: 'error',
+      })
+    }
+    setLoading(false)
   }
 
   const handleCSVImport = async () => {
@@ -21,22 +47,42 @@ export const Add = () => {
   return (
     <VStack maxW="800px" spacing="1rem" alignItems="flex-start">
       <ConsentBox />
-      <HStack spacing="1rem" w="full">
-        <Input w="full" variant="af" placeholder="Enter name..." />
-        <Input w="full" variant="af" placeholder="Enter email..." type="email" />
-        <Button variant="primary" disabled={isDisabled} onClick={handleAdd}>
-          Add
-        </Button>
-        <Button
-          variant="secondary"
-          w="full"
-          minW="220px"
-          disabled={isDisabled}
-          onClick={handleCSVImport}
-        >
-          Add multiple (CSV import)
-        </Button>
-      </HStack>
+      <form onSubmit={handleSubmit(handleAdd)}>
+        <HStack spacing="1rem" w="full">
+          <Input
+            w="full"
+            variant="af"
+            placeholder="Enter name..."
+            name="name"
+            type="text"
+            ref={register({
+              required: true,
+            })}
+          />
+          <Input
+            w="full"
+            variant="af"
+            placeholder="Enter email..."
+            name="email"
+            type="email"
+            ref={register({
+              required: true,
+            })}
+          />
+          <Button variant="primary" disabled={isDisabled} type="submit" isLoading={loading}>
+            Add
+          </Button>
+          <Button
+            variant="secondary"
+            w="full"
+            minW="220px"
+            disabled={isDisabled}
+            onClick={handleCSVImport}
+          >
+            Add multiple (CSV import)
+          </Button>
+        </HStack>
+      </form>
     </VStack>
   )
 }
@@ -47,8 +93,7 @@ const ConsentBox = () => {
 
   const handleConsent = async () => {
     setLoading(true)
-    const consent = await giveConsent()
-    console.log('consent', consent)
+    await giveConsent()
     setLoading(false)
   }
 
@@ -67,7 +112,7 @@ const ConsentBox = () => {
           </Link>
           {` `} for more information.
         </Text>
-        <Button disabled={loading} onClick={handleConsent} variant="important">
+        <Button isLoading={loading} onClick={handleConsent} variant="important">
           I consent
         </Button>
       </HStack>

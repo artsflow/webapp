@@ -4,6 +4,7 @@ import { RiMailSendFill, RiInboxArchiveFill } from 'react-icons/ri'
 import { IoIosPeople, IoIosStats } from 'react-icons/io'
 import { useRouter } from 'next/router'
 
+import { useAudience } from 'hooks'
 import { Compose, Audience, Sent, Stats } from './tabs'
 
 const TABS = ['compose', 'sent', 'audience', 'stats']
@@ -18,12 +19,15 @@ export const Newsletters = () => {
   const router = useRouter()
   const param = getParam(router.query.params as [])
   const [tabIndex, setTabIndex] = useState(param)
+  const [audience] = useAudience()
 
   const handleChange = (index: number) => {
     const url = `/newsletters/${TABS[index]}`
     router.push(url, url, { shallow: true })
     setTabIndex(index)
   }
+
+  const audienceLenth = Array.isArray(audience) ? audience.length : 0
 
   return (
     <Tabs colorScheme="unstyled" w="full" onChange={handleChange} index={tabIndex}>
@@ -38,7 +42,7 @@ export const Newsletters = () => {
         </TabStyled>
         <TabStyled>
           <Icon as={IoIosPeople} mr="0.5rem" />
-          Audience
+          Audience ({audienceLenth})
         </TabStyled>
         <TabStyled>
           <Icon as={IoIosStats} mr="0.5rem" />
