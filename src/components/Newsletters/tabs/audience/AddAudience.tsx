@@ -13,7 +13,7 @@ export const AddAudience = () => {
   const [loading, setLoading] = useState(false)
   const { user } = useUserData()
   const isDisabled = !user.hasConsent
-  const [audience = []] = useAudience()
+  const [audience] = useAudience()
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {},

@@ -12,7 +12,7 @@ import { firestore } from 'lib/firebase'
 import { showAlert } from 'lib/utils'
 
 export const ListAudience = () => {
-  const [audience = [], audienceLoading] = useAudience()
+  const [audience, audienceLoading] = useAudience()
 
   const columns = useMemo(
     () => [

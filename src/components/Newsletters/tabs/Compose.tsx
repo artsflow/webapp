@@ -26,7 +26,7 @@ export const Compose = () => {
   const { register, handleSubmit, control, getValues, watch } = useForm({ mode: 'onBlur' })
   const [activities] = useActivities()
   const [bookings] = useBookings()
-  const [audience = []] = useAudience()
+  const [audience] = useAudience()
 
   const watchTo = watch(['to'])
 
