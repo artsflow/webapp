@@ -11,7 +11,7 @@ import { Loading } from 'components'
 import { firestore } from 'lib/firebase'
 import { showAlert } from 'lib/utils'
 
-export const List = () => {
+export const ListAudience = () => {
   const [audience = [], audienceLoading] = useAudience()
 
   const columns = useMemo(

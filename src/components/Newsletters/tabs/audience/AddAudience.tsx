@@ -9,7 +9,7 @@ import { useUserData, useAudience } from 'hooks'
 import { giveConsent } from 'api'
 import { showAlert } from 'lib/utils'
 
-export const Add = () => {
+export const AddAudience = () => {
   const [loading, setLoading] = useState(false)
   const { user } = useUserData()
   const isDisabled = !user.hasConsent

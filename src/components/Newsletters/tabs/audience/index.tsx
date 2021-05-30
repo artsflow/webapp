@@ -1,9 +1,9 @@
-import { Add } from './Add'
-import { List } from './List'
+import { AddAudience } from './AddAudience'
+import { ListAudience } from './ListAudience'
 
 export const Audience = () => (
   <>
-    <List />
-    <Add />
+    <ListAudience />
+    <AddAudience />
   </>
 )
