@@ -162,6 +162,7 @@ export default function Profile(): JSX.Element {
                 <Text fontWeight="bold">First name</Text>
                 <InputGroup>
                   <Input
+                    variant="outline"
                     placeholder="First name"
                     defaultValue={firstName}
                     name="firstName"
@@ -174,6 +175,7 @@ export default function Profile(): JSX.Element {
                 <Text fontWeight="bold">Last name</Text>
                 <InputGroup>
                   <Input
+                    variant="outline"
                     placeholder="Last name"
                     defaultValue={lastName}
                     name="lastName"

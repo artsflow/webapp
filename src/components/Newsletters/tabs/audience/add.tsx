@@ -109,7 +109,7 @@ const ConsentBox = () => {
   if (user.hasConsent) return null
 
   return (
-    <Card variant="white">
+    <Card variant="white" maxW="770px">
       <HStack spacing="1rem">
         <Text>
           Before start importing my audience into Artsflow platform, I consnt I have perimission

@@ -58,15 +58,33 @@ const theme = {
         variant: 'af',
       },
       variants: {
+        outline: {
+          field: {
+            _focus: {
+              boxShadow: '0 0 0 1px #45BCC8',
+              borderColor: '#45BCC8',
+            },
+          },
+        },
         af: {
           field: {
             bg: 'white',
             boxShadow: '0px 3px 8px rgba(50, 50, 71, 0.05)',
             rounded: '6px',
-            _focusWithin: {
+            _focus: {
               boxShadow: '0 0 0 1px #45BCC8',
-              border: 'none',
+              borderColor: '#45BCC8',
             },
+          },
+        },
+      },
+    },
+    Textarea: {
+      variants: {
+        outline: {
+          _focus: {
+            boxShadow: '0 0 0 1px #45BCC8',
+            borderColor: '#45BCC8',
           },
         },
       },
