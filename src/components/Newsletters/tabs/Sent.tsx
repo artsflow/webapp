@@ -1,6 +1,6 @@
 import { Text } from '@chakra-ui/react'
 
 export const Sent = () => {
-  console.log('compose')
+  console.log('Sent render')
   return <Text>sent content</Text>
 }

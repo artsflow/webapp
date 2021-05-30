@@ -9,7 +9,7 @@ const withTM = require('next-transpile-modules')([
   '@bangle.dev/react',
   '@bangle.dev/tooltip',
   '@bangle.dev/emoji',
-  '@popperjs/core/lib/popper-lite',
+  '@popperjs/core',
 ])
 
 const nextConfig = {}
