@@ -1,6 +1,6 @@
 {
   "name": "artsflow-webapp",
-  "version": "0.1.146",
+  "version": "0.1.147",
   "private": true,
   "scripts": {
     "dev": "next dev --port=4042",
@@ -34,7 +34,7 @@
     "@bangle.dev/react-menu": "^0.15.0",
     "@bangle.dev/tooltip": "^0.15.0",
     "@chakra-ui/icons": "^1.0.13",
-    "@chakra-ui/react": "^1.6.1",
+    "@chakra-ui/react": "^1.6.3",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@hapi/iron": "^6.0.0",
@@ -96,10 +96,12 @@
     "react-lorem-ipsum": "^1.4.9",
     "react-select": "^4.2.1",
     "react-spring": "^8.0.27",
+    "react-table": "^7.7.0",
     "react-timer-hook": "^3.0.3",
     "rooks": "^5.0.2",
     "uuid": "^8.3.2",
-    "xstate": "^4.16.2"
+    "xstate": "^4.16.2",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "@babel/core": "^7.13.8",
