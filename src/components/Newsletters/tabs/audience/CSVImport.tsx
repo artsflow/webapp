@@ -21,6 +21,8 @@ import { showAlert, isEmailValid } from 'lib/utils'
 import { useAudience } from 'hooks'
 import CloudSvg from 'svg/icons/cloud.svg'
 
+export const AUDIENCE_LIMIT = 500
+
 export const CSVImport = ({ onClose, isOpen }: any) => {
   const [list, setList] = useState([] as unknown[])
   const [audience] = useAudience()
@@ -83,6 +85,8 @@ export const CSVImport = ({ onClose, isOpen }: any) => {
   }
 
   const { total } = cleanList(audience, list)
+  const contactsLeft = AUDIENCE_LIMIT - audience.length
+  const isOveLimit = total > contactsLeft
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} isCentered>
@@ -127,8 +131,13 @@ export const CSVImport = ({ onClose, isOpen }: any) => {
         </ModalBody>
         {list.length > 0 && (
           <ModalFooter>
-            <Button variant="primary" onClick={handleImport} disabled={!total} isLoading={loading}>
-              Import list ({total})
+            <Button
+              variant="primary"
+              onClick={handleImport}
+              disabled={!total || !contactsLeft}
+              isLoading={loading}
+            >
+              Import list ({isOveLimit ? contactsLeft : total})
             </Button>
           </ModalFooter>
         )}
@@ -139,6 +148,9 @@ export const CSVImport = ({ onClose, isOpen }: any) => {
 
 const Summary = ({ list, audience }: any) => {
   const { duplicate, invalid, total } = cleanList(audience, list)
+
+  const isOveLimit = total > AUDIENCE_LIMIT - audience.length
+  const contactsLeft = AUDIENCE_LIMIT - audience.length
 
   return (
     <>
@@ -158,6 +170,17 @@ const Summary = ({ list, audience }: any) => {
           Entries to be added after deduplication of existing audience: {total}
         </Text>
       </HStack>
+      {contactsLeft <= 0 && (
+        <Text color="af.pink" textAlign="center">
+          You reached the audience limit of {AUDIENCE_LIMIT} contacts.
+        </Text>
+      )}
+      {isOveLimit && contactsLeft > 0 && (
+        <Text color="af.pink" textAlign="center">
+          Your list will be larger than {AUDIENCE_LIMIT} which is the audience limit.
+          <br /> Only the first {contactsLeft} contacts will be imported
+        </Text>
+      )}
     </>
   )
 }

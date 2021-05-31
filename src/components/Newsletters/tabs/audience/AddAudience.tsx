@@ -6,7 +6,7 @@ import { firestore } from 'lib/firebase'
 import { useUserData, useAudience } from 'hooks'
 import { showAlert } from 'lib/utils'
 import { ConsentBox } from './ConsentBox'
-import { CSVImport } from './CSVImport'
+import { CSVImport, AUDIENCE_LIMIT } from './CSVImport'
 
 export const AddAudience = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -21,6 +21,17 @@ export const AddAudience = () => {
   })
 
   const handleAdd = async (data: any) => {
+    const contactsLeft = AUDIENCE_LIMIT - audience.length
+
+    if (contactsLeft <= 0) {
+      showAlert({
+        title: 'Error!',
+        description: `You reached the audience limit of ${AUDIENCE_LIMIT} contacts`,
+        status: 'error',
+      })
+      return
+    }
+
     if (audience.find((a: any) => a.email === data.email)) {
       showAlert({
         title: 'Email address already on the list',
