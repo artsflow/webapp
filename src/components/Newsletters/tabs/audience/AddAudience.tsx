@@ -1,13 +1,11 @@
 import { useState } from 'react'
-import Link from 'next/link'
-import { VStack, Input, Text, HStack, Button, Link as ChakraLink } from '@chakra-ui/react'
+import { VStack, Input, HStack, Button } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 
 import { firestore } from 'lib/firebase'
-import { Card } from 'components/UI'
 import { useUserData, useAudience } from 'hooks'
-import { giveConsent } from 'api'
 import { showAlert } from 'lib/utils'
+import { ConsentBox } from './ConsentBox'
 
 export const AddAudience = () => {
   const [loading, setLoading] = useState(false)
@@ -93,38 +91,5 @@ export const AddAudience = () => {
         </HStack>
       </form>
     </VStack>
-  )
-}
-
-const ConsentBox = () => {
-  const [loading, setLoading] = useState(false)
-  const { user } = useUserData()
-
-  const handleConsent = async () => {
-    setLoading(true)
-    await giveConsent()
-    setLoading(false)
-  }
-
-  if (user.hasConsent) return null
-
-  return (
-    <Card variant="white" maxW="770px">
-      <HStack spacing="1rem">
-        <Text>
-          Before start importing my audience into Artsflow platform, I consnt I have perimission
-          from the recipients to send them emails. See our{` `}
-          <Link as="/terms" href="/terms" passHref>
-            <ChakraLink isExternal textDecor="underline" color="af.pink">
-              Terms of Service
-            </ChakraLink>
-          </Link>
-          {` `} for more information.
-        </Text>
-        <Button isLoading={loading} onClick={handleConsent} variant="important">
-          I consent
-        </Button>
-      </HStack>
-    </Card>
   )
 }

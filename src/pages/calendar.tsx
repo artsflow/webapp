@@ -9,7 +9,7 @@ import { Calendar, Meta } from 'components'
 const makeEvents = (activities: any) =>
   flatten(
     activities?.map(({ id, title, duration, dates }: any) =>
-      dates.map((d: string) => ({
+      dates?.map((d: string) => ({
         id,
         title,
         start: new Date(d),
