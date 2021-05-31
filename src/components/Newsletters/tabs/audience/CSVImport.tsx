@@ -147,7 +147,7 @@ export const CSVImport = ({ onClose, isOpen }: any) => {
 }
 
 const Summary = ({ list, audience }: any) => {
-  const { duplicate, invalid, total } = cleanList(audience, list)
+  const { unique, invalid, total } = cleanList(audience, list)
 
   const isOveLimit = total > AUDIENCE_LIMIT - audience.length
   const contactsLeft = AUDIENCE_LIMIT - audience.length
@@ -162,7 +162,7 @@ const Summary = ({ list, audience }: any) => {
           invalid emails: <b>{invalid}</b>,
         </Text>
         <Text>
-          duplicate emails: <b>{duplicate}</b>
+          unique emails: <b>{unique}</b>
         </Text>
       </HStack>
       <HStack>
@@ -186,19 +186,18 @@ const Summary = ({ list, audience }: any) => {
 }
 
 const cleanList = (audience: any, list: any) => {
-  const valid = list.filter((item: string[]) => isEmailValid(item[1]))
-  const unique = uniqBy(valid, (item: string[]) => item[1])
-
-  const duplicate = list.length - unique.length
-  const invalid = list.length - valid.length
+  const validList = list.filter((item: string[]) => isEmailValid(item[1]))
+  const uniqueList = uniqBy(validList, (item: string[]) => item[1])
 
   const final = differenceBy(
-    unique.map((item) => ({ email: item[1] })),
+    uniqueList.map((item) => ({ email: item[1] })),
     audience,
     'email'
   )
 
+  const invalid = list.length - validList.length
   const total = final.length
+  const unique = uniqueList.length
 
-  return { duplicate, invalid, total }
+  return { unique, invalid, total }
 }
