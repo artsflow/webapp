@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { VStack, Input, HStack, Button } from '@chakra-ui/react'
+import { VStack, Input, HStack, Button, useDisclosure } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 
 import { firestore } from 'lib/firebase'
 import { useUserData, useAudience } from 'hooks'
 import { showAlert } from 'lib/utils'
 import { ConsentBox } from './ConsentBox'
+import { CSVImport } from './CSVImport'
 
 export const AddAudience = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [loading, setLoading] = useState(false)
   const { user } = useUserData()
   const isDisabled = !user.hasConsent
@@ -33,7 +35,7 @@ export const AddAudience = () => {
         .add({ ...data, userId: user.id, createdAt: new Date() })
       reset()
       showAlert({
-        title: 'Persson added to audience list',
+        title: `${data.email} added to audience list`,
         status: 'success',
       })
     } catch (e) {
@@ -44,13 +46,6 @@ export const AddAudience = () => {
       })
     }
     setLoading(false)
-  }
-
-  const handleCSVImport = async () => {
-    showAlert({
-      title: 'CSV import not implemented',
-      status: 'warning',
-    })
   }
 
   return (
@@ -79,17 +74,12 @@ export const AddAudience = () => {
           <Button variant="primary" disabled={isDisabled} type="submit" isLoading={loading}>
             Add
           </Button>
-          <Button
-            variant="secondary"
-            w="full"
-            minW="220px"
-            disabled={isDisabled}
-            onClick={handleCSVImport}
-          >
+          <Button variant="secondary" w="full" minW="220px" disabled={isDisabled} onClick={onOpen}>
             Add multiple (CSV import)
           </Button>
         </HStack>
       </form>
+      <CSVImport isOpen={isOpen} onClose={onClose} />
     </VStack>
   )
 }

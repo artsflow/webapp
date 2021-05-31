@@ -24,17 +24,17 @@ export const ListAudience = () => {
       {
         Header: 'Name',
         accessor: 'name',
-        width: 200,
+        width: 170,
       },
       {
         Header: 'Email',
         accessor: 'email',
-        width: 200,
+        width: 270,
       },
       {
         Header: 'Date added',
         accessor: 'createdAt.seconds',
-        width: 200,
+        width: 160,
       },
       {
         Header: 'Action',
@@ -66,12 +66,12 @@ export const ListAudience = () => {
     ({ index, style }) => {
       const [loading, setLoading] = useState(false)
 
-      const handleDelete = async (id: string) => {
+      const handleDelete = async (id: string, email: string) => {
         setLoading(true)
         try {
           await firestore.collection('audience').doc(id).delete()
           showAlert({
-            title: 'Persson removed from the audience list',
+            title: `${email} removed from the audience list`,
             status: 'success',
           })
         } catch (e) {
@@ -91,6 +91,7 @@ export const ListAudience = () => {
           {...row.getRowProps({
             style,
           })}
+          fontSize="sm"
         >
           {row.cells.map((cell, k) => {
             let component = null
@@ -101,7 +102,7 @@ export const ListAudience = () => {
                     <Button
                       leftIcon={<TrashcanIcon />}
                       size="xs"
-                      onClick={() => handleDelete(cell.value)}
+                      onClick={() => handleDelete(cell.value, cell.row.values.email)}
                       isLoading={loading}
                     >
                       Delete
@@ -151,7 +152,7 @@ export const ListAudience = () => {
             {audienceLoading ? (
               <Loading />
             ) : (
-              <Text>List is empty. Add or import your audience.</Text>
+              <Text color="#616167">List is empty. Add or import your audience.</Text>
             )}
           </VStack>
         ) : (

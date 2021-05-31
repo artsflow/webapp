@@ -79,3 +79,5 @@ export const activityDownload = (list: any) => {
   a.click()
   document.body.removeChild(a)
 }
+
+export const isEmailValid = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)

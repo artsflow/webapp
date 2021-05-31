@@ -5,6 +5,7 @@ import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/performance'
 
+import { showAlert } from 'lib/utils'
 import {
   FIREBASE_API_KEY,
   FIREBASE_AUTH_DOMAIN,
@@ -87,6 +88,11 @@ export const firebaseCallable = async (func: string, params: any) => {
   } catch (e) {
     console.error(`firebaseCallable:error:${func}: ${JSON.stringify(e)}`)
     trace.stop()
+    showAlert({
+      title: 'Error!',
+      description: e.message,
+      status: 'error',
+    })
     return e
   }
 }
