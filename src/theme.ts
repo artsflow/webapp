@@ -89,6 +89,34 @@ const theme = {
         },
       },
     },
+    Badge: {
+      baseStyle: {
+        fontSize: '10px',
+        textTransform: 'lowercase',
+      },
+      variants: {
+        delivered: {
+          color: 'gray.900',
+          bg: 'gray.100',
+        },
+        opened: {
+          color: 'green.900',
+          bg: 'green.100',
+        },
+        'link clicked': {
+          color: 'blue.900',
+          bg: 'blue.100',
+        },
+        unsubscribed: {
+          color: 'red.900',
+          bg: 'red.100',
+        },
+        subscribed: {
+          color: 'gray.900',
+          bg: 'gray.100',
+        },
+      },
+    },
   },
 }
 
