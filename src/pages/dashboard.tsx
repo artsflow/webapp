@@ -4,12 +4,13 @@ import { DownloadIcon } from '@chakra-ui/icons'
 
 import BalanceSvg from 'svg/icons/balance.svg'
 import BookingsSvg from 'svg/icons/bookings.svg'
+import AttendeesSvg from 'svg/icons/attendees.svg'
 import AudienceSvg from 'svg/icons/audience.svg'
 
 import { activityDownload } from 'lib/utils'
 import { Meta, Loading } from 'components'
 import { Card, BookingList, Chart, getIncomeLast7d } from 'components/Dashboard'
-import { useBalance, useBookings, useActivities, useActivityViews } from 'hooks'
+import { useBalance, useBookings, useActivities, useActivityViews, useAudience } from 'hooks'
 import { trackDownloadActivityBooking } from 'analytics'
 
 export default function Dashboard(): JSX.Element {
@@ -17,9 +18,10 @@ export default function Dashboard(): JSX.Element {
   const { pending } = balance
   const pendingBalance = `£${pending?.[0].amount / 100 || 0}`
   const [bookings = [], loadingBookings] = useBookings()
-  const audience = uniqBy(bookings, 'userId')
+  const attendees = uniqBy(bookings, 'userId')
   const [activities = [], loadingActivities] = useActivities()
   const [viewsData, loadingViews] = useActivityViews()
+  const [audience, loadingAudience] = useAudience()
 
   const chartData = getIncomeLast7d(bookings)
 
@@ -46,6 +48,12 @@ export default function Dashboard(): JSX.Element {
             />
             <Card
               loading={loadingBookings}
+              icon={AttendeesSvg}
+              text="Attendees"
+              subtext={attendees.length}
+            />
+            <Card
+              loading={loadingAudience}
               icon={AudienceSvg}
               text="Audience"
               subtext={audience.length}
@@ -64,7 +72,7 @@ export default function Dashboard(): JSX.Element {
             </Chart>
           </HStack>
           {loadingActivities && <Loading />}
-          <VStack spacing="2rem" w="full" maxW="calc(840px + 1.5rem)">
+          <VStack spacing="2rem" w="full" maxW="calc(860px + 1.5rem)">
             {activities.map(({ id, title }: any) => {
               const list = bookings.filter(({ activityId }: any) => activityId === id)
               return (

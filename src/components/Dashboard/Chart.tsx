@@ -12,7 +12,7 @@ const accessors = {
 export const Chart = ({ data, stroke = '#47BCC8', sign = '', loading = false, children }: any) => (
   <Box
     p="1rem"
-    maxW="420px"
+    maxW="430px"
     h="276px"
     w="full"
     bg="white"
