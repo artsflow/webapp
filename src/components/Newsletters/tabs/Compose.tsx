@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
-import { chakra, Text, VStack, Input, Button, HStack } from '@chakra-ui/react'
+import { chakra, Text, VStack, Input, Button, HStack, Link } from '@chakra-ui/react'
 import { useForm, Controller } from 'react-hook-form'
+import NextLink from 'next/link'
 import Select from 'react-select'
 import { useTimer } from 'react-timer-hook'
 import { addSeconds } from 'date-fns'
 import { uniqBy } from 'lodash'
+import { WarningTwoIcon } from '@chakra-ui/icons'
 
-import { useActivities, useBookings, useAudience } from 'hooks'
+import { useActivities, useBookings, useAudience, useUserData } from 'hooks'
 import { sendNewsletter } from 'api'
 import { Editor } from '../Editor'
 import { selectStyles } from '../utils'
@@ -27,6 +29,7 @@ export const Compose = () => {
   const [activities] = useActivities()
   const [bookings] = useBookings()
   const [audience] = useAudience()
+  const { user } = useUserData()
 
   const watchTo = watch(['to'])
 
@@ -131,13 +134,27 @@ export const Compose = () => {
         </VStack>
 
         <Controller as={Editor} name="body" control={control} activities={activities} />
+
+        {!user.isVerified && (
+          <NextLink href="/" passHref>
+            <Link>
+              <HStack>
+                <WarningTwoIcon color="af.pink" />
+                <Text fontSize="12px" color="af.pink" fontWeight="bold">
+                  Only verified accounts can send newsletters - Click here to verfy!
+                </Text>
+              </HStack>
+            </Link>
+          </NextLink>
+        )}
+
         <HStack>
           <Button
             bg={isRunning ? 'af.pink' : 'af.teal'}
             color="white"
             type="submit"
             _focus={{ outline: 'none' }}
-            disabled={!totalSelected}
+            disabled={!totalSelected || !user.isVerified}
             w="80px"
           >
             {isRunning ? 'Cancel' : 'Send'}
