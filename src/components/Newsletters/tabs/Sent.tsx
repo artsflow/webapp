@@ -12,6 +12,7 @@ import {
   Badge,
 } from '@chakra-ui/react'
 import { format } from 'date-fns'
+import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser'
 
 import { useSentMessages, useSentMessage } from 'hooks'
 import { Loading } from 'components'
@@ -73,7 +74,7 @@ const MessageDetail = ({ id }: { id: string }) => {
         px="2rem"
         py="1rem"
         overflow="scroll"
-        dangerouslySetInnerHTML={{ __html: HtmlBody }}
+        children={ReactHtmlParser(HtmlBody, { transform: removeLinks })}
       />
       <VStack overflow="scroll" alignItems="flex-start" w="full" h="full" maxW="260px">
         <Text fontWeight="semibold">Message events:</Text>
@@ -104,4 +105,12 @@ const EventStatus = ({ type, details }: any) => {
       {typeMap[type]}
     </Badge>
   )
+}
+
+const removeLinks = (node: any, index: number) => {
+  if (node.type === 'tag' && node.name === 'a') {
+    const newNode = { ...node, attribs: { ...node.attribs, href: '#' } }
+    return convertNodeToElement(newNode, index, removeLinks)
+  }
+  return convertNodeToElement(node, index, removeLinks)
 }
