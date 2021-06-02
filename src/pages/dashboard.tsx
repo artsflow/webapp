@@ -20,10 +20,11 @@ export default function Dashboard(): JSX.Element {
   const [bookings = [], loadingBookings] = useBookings()
   const attendees = uniqBy(bookings, 'userId')
   const [activities = [], loadingActivities] = useActivities()
-  const [viewsData, loadingViews] = useActivityViews()
+  const [views, loadingViews] = useActivityViews()
   const [audience, loadingAudience] = useAudience()
 
-  const chartData = getIncomeLast7d(bookings)
+  const chartData = [{ data: getIncomeLast7d(bookings), key: 'Income', stroke: '#45BCC8' }]
+  const viewsData = [{ data: views, key: 'Views', stroke: '#E27CB0' }]
 
   return (
     <>
@@ -62,12 +63,12 @@ export default function Dashboard(): JSX.Element {
           <HStack spacing="1.5rem" w="full">
             <Chart data={chartData} loading={loadingBookings} sign="£">
               <Text textAlign="center">
-                <b>£{sumBy(chartData, 'y')}</b> gross income over the last 7 days
+                <b>£{sumBy(chartData[0].data, 'y')}</b> gross income over the last 7 days
               </Text>
             </Chart>
-            <Chart data={viewsData} loading={loadingViews} stroke="#E27CB0">
+            <Chart data={viewsData} loading={loadingViews}>
               <Text textAlign="center">
-                <b>{sumBy(viewsData, 'y')}</b> activity pages views over the last 7 days
+                <b>{sumBy(viewsData[0].data, 'y')}</b> activity pages views over the last 7 days
               </Text>
             </Chart>
           </HStack>

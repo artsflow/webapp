@@ -9,7 +9,7 @@ const accessors = {
   yAccessor: (d: any) => d.y,
 }
 
-export const Chart = ({ data, stroke = '#47BCC8', sign = '', loading = false, children }: any) => (
+export const Chart = ({ data, sign = '', loading = false, children, ...props }: any) => (
   <Box
     p="1rem"
     maxW="430px"
@@ -18,6 +18,7 @@ export const Chart = ({ data, stroke = '#47BCC8', sign = '', loading = false, ch
     bg="white"
     rounded="10px"
     boxShadow="0px 2px 6px rgba(0, 0, 0, 0.02)"
+    {...props}
   >
     {children}
     {loading ? (
@@ -38,14 +39,17 @@ export const Chart = ({ data, stroke = '#47BCC8', sign = '', loading = false, ch
           strokeWidth="1"
           strokeDasharray="2"
         />
-        <AnimatedLineSeries
-          stroke={stroke}
-          strokeWidth="3"
-          curve={curve}
-          dataKey="icome"
-          data={data}
-          {...accessors}
-        />
+        {data.map((d: any) => (
+          <AnimatedLineSeries
+            key={d.key}
+            stroke={d.stroke}
+            strokeWidth="1.5"
+            curve={curve}
+            dataKey={d.key}
+            data={d.data}
+            {...accessors}
+          />
+        ))}
         <Tooltip
           snapTooltipToDatumX
           snapTooltipToDatumY
@@ -56,11 +60,11 @@ export const Chart = ({ data, stroke = '#47BCC8', sign = '', loading = false, ch
           renderTooltip={({ tooltipData }: any) => (
             <VStack bg="black" rounded="5px" px="2rem" py="0.5rem" spacing="0">
               <Text fontSize="xs" color="gray.300">
-                {tooltipData?.datumByKey.icome.datum.x}
+                {tooltipData?.nearestDatum.datum.x}
               </Text>
               <Text fontSize="md" color="white" fontWeight="bold">
-                {sign}
-                {tooltipData?.datumByKey.icome.datum.y}
+                {tooltipData?.nearestDatum.key}: {sign}
+                {tooltipData?.nearestDatum.datum.y}
               </Text>
             </VStack>
           )}
