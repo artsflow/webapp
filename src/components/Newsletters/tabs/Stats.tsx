@@ -11,17 +11,15 @@ export const Stats = () => {
 
   if (loading) return <Loading />
 
-  console.log(stats)
-
   const totalSent = stats?.sent?.Sent || 0
   const totalOpen = stats?.open?.Unique || 0
-  const openPercent = ((totalOpen / totalSent) * 100).toFixed(2)
+  const openPercent = totalSent ? ((totalOpen / totalSent) * 100).toFixed(2) : 0
   const totalUniqueClicks = stats?.clicks?.Unique || 0
   const totalClicks = stats?.clicks?.Clicks || 0
   const totalSpam = stats?.spam?.SpamComplaint || 0
   const totalUnsubscribed = stats?.suppressions?.Suppressions?.length || 0
   const totalBounced = stats?.bounced?.DnsError || 0
-  const bouncedPercent = ((totalBounced / totalSent) * 100).toFixed(2)
+  const bouncedPercent = totalSent ? ((totalBounced / totalSent) * 100).toFixed(2) : 0
 
   const sentData = stats?.sent?.Days?.map(({ Date: d, Sent }: any) => ({
     x: format(new Date(d), 'dd MMM'),
