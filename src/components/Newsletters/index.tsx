@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, Icon } from '@chakra-ui/react'
 import { RiMailSendFill, RiInboxArchiveFill } from 'react-icons/ri'
 import { IoIosPeople, IoIosStats } from 'react-icons/io'
@@ -27,10 +27,14 @@ export const Newsletters = () => {
     setTabIndex(index)
   }
 
+  useEffect(() => {
+    setTabIndex(param)
+  }, [param])
+
   const audienceLenth = Array.isArray(audience) ? audience.length : 0
 
   return (
-    <Tabs colorScheme="unstyled" w="full" onChange={handleChange} index={tabIndex}>
+    <Tabs colorScheme="unstyled" isLazy w="full" onChange={handleChange} index={tabIndex}>
       <TabList>
         <TabStyled pl="0">
           <Icon as={RiMailSendFill} mr="0.5rem" />

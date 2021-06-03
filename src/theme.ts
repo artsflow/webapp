@@ -99,7 +99,7 @@ const theme = {
           color: 'gray.900',
           bg: 'gray.100',
         },
-        opened: {
+        open: {
           color: 'green.900',
           bg: 'green.100',
         },
@@ -111,7 +111,11 @@ const theme = {
           color: 'red.900',
           bg: 'red.100',
         },
-        subscribed: {
+        bounced: {
+          color: 'red.900',
+          bg: 'red.100',
+        },
+        're-subscribed': {
           color: 'gray.900',
           bg: 'gray.100',
         },

@@ -11,35 +11,38 @@ import {
   HStack,
   Badge,
 } from '@chakra-ui/react'
-import { format } from 'date-fns'
+import { format, fromUnixTime } from 'date-fns'
 import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser'
 
-import { useSentMessages, useSentMessage } from 'hooks'
+import { useSentNewsletters, useNewsletterEvents } from 'hooks'
 import { Loading } from 'components'
 
 export const Sent = () => {
   const [selected, setSelected] = useState(-1)
-  const [list, loading] = useSentMessages()
+  const [list, loading] = useSentNewsletters()
 
   if (loading) return <Loading />
 
+  if (!list.length) return <Box>You haven't sent any newsletters yet</Box>
+
   return (
     <Accordion maxW="800px" onChange={(id: number) => setSelected(id)}>
-      {list?.Messages?.map(({ MessageID, Subject, ReceivedAt, To }: any, index: number) => (
+      {list?.map(({ id, subject, createdAt, recipients, body }: any, index: number) => (
         <MessageHeader
-          key={MessageID}
-          subject={Subject}
-          date={ReceivedAt}
-          recipients={To.length}
-          messageId={MessageID}
+          key={id}
+          subject={subject}
+          date={createdAt.seconds}
+          recipients={recipients}
+          messageId={id}
           isOpen={index === selected}
+          body={body}
         />
       ))}
     </Accordion>
   )
 }
 
-const MessageHeader = ({ subject, date, recipients, messageId, isOpen }: any) => (
+const MessageHeader = ({ subject, date, recipients, messageId, isOpen, body }: any) => (
   <AccordionItem bg="white" borderWidth={isOpen ? '2px' : 0} borderColor="af.teal">
     <AccordionButton _focus={{ outlineWidth: 0 }}>
       <Box flex="1" textAlign="left" fontWeight={isOpen ? 'bold' : 'normal'}>
@@ -50,54 +53,76 @@ const MessageHeader = ({ subject, date, recipients, messageId, isOpen }: any) =>
           {recipients} recipients
         </Text>
         <Text fontSize="xs" color="gray.800">
-          {format(new Date(date), 'dd MMM, yyy @ HH:mm')}
+          {format(fromUnixTime(date), 'dd MMM, yyy @ HH:mm')}
         </Text>
       </VStack>
       <AccordionIcon />
     </AccordionButton>
-    <AccordionPanel pb={4}>{isOpen && <MessageDetail id={messageId} />}</AccordionPanel>
+    <AccordionPanel pb={4}>
+      <MessageDetail id={messageId} body={body} isOpen={isOpen} />
+    </AccordionPanel>
   </AccordionItem>
 )
 
-const MessageDetail = ({ id }: { id: string }) => {
-  const [msg, loading] = useSentMessage(id)
+const MessageDetail = ({ id, body, isOpen }: any) => (
+  <HStack spacing="1rem" alignItems="flex-start" h="360px" w="full">
+    <Box
+      bg="#FAFAFA"
+      w="640px"
+      maxW="640px"
+      h="full"
+      px="2rem"
+      py="1rem"
+      overflow="scroll"
+      children={ReactHtmlParser(body, { transform: removeLinks })}
+    />
+    {isOpen && <MessageEvents id={id} />}
+  </HStack>
+)
 
-  if (loading) return <Loading />
-  const { HtmlBody, MessageEvents } = msg
+const MessageEvents = ({ id }: any) => {
+  const [events, loading] = useNewsletterEvents(id)
 
   return (
-    <HStack spacing="1rem" alignItems="flex-start" h="360px">
-      <Box
-        bg="#FAFAFA"
-        w="640px"
-        h="full"
-        px="2rem"
-        py="1rem"
-        overflow="scroll"
-        children={ReactHtmlParser(HtmlBody, { transform: removeLinks })}
-      />
-      <VStack overflow="scroll" alignItems="flex-start" w="full" h="full" maxW="260px">
-        <Text fontWeight="semibold">Message events:</Text>
-        {MessageEvents.map(({ Recipient, ReceivedAt, Type, Details }: any, key: number) => (
-          <HStack key={key} justifyContent="space-between" w="full">
-            <Box fontSize="xs">
-              <Text color="gray.500">{format(new Date(ReceivedAt), 'dd MMM, yyy @ HH:mm')}</Text>
-              <Text>{Recipient}</Text>
-            </Box>
-            <EventStatus type={Type} details={Details} />
-          </HStack>
-        ))}
-      </VStack>
-    </HStack>
+    <VStack overflow="scroll" alignItems="center" h="full" w="260px">
+      <Text fontWeight="semibold" w="full">
+        Message events:
+      </Text>
+      {loading && <Loading />}
+      {events
+        ?.flat()
+        .map(
+          (
+            {
+              recipient,
+              timestamp,
+              record_type: recordType,
+              suppress_sending: suppress,
+              suppression_reason: reason,
+            }: any,
+            key: number
+          ) => (
+            <HStack key={key} justifyContent="space-between" alignItems="flex-end" w="full">
+              <Box fontSize="xs">
+                <Text color="gray.500">
+                  {format(new Date(timestamp?.value), 'dd MMM, yyy @ HH:mm')}
+                </Text>
+                <Text>{recipient}</Text>
+              </Box>
+              <EventStatus type={recordType} suppress={suppress} reason={reason} />
+            </HStack>
+          )
+        )}
+    </VStack>
   )
 }
 
-const EventStatus = ({ type, details }: any) => {
+const EventStatus = ({ type, suppress, reason }: any) => {
   const typeMap = {
-    Delivered: 'delivered',
-    Opened: 'opened',
-    LinkClicked: 'link clicked',
-    SubscriptionChanged: details?.SuppressSending === 'True' ? 'unsubscribed' : 'subscribed',
+    Delivery: 'delivered',
+    Open: 'open',
+    Click: 'link clicked',
+    SubscriptionChange: getSubscriptionChange(suppress, reason),
   } as any
 
   return (
@@ -113,4 +138,11 @@ const removeLinks = (node: any, index: number) => {
     return convertNodeToElement(newNode, index, removeLinks)
   }
   return convertNodeToElement(node, index, removeLinks)
+}
+
+const getSubscriptionChange = (suppress: boolean, reason: string | null) => {
+  if (suppress && reason === 'ManualSuppression') return 'unsubscribed'
+  if (!suppress && !reason) return 're-subscribed'
+  if (suppress && reason === 'HardBounce') return 'bounced'
+  return null
 }

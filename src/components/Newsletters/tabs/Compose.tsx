@@ -1,40 +1,44 @@
 import { useState, useEffect } from 'react'
 import { chakra, Text, VStack, Input, Button, HStack, Link } from '@chakra-ui/react'
 import { useForm, Controller } from 'react-hook-form'
+import { WarningTwoIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
 import Select from 'react-select'
 import { useTimer } from 'react-timer-hook'
 import { addSeconds } from 'date-fns'
 import { uniqBy } from 'lodash'
-import { WarningTwoIcon } from '@chakra-ui/icons'
+import { useRouter } from 'next/router'
 
 import { useActivities, useBookings, useAudience, useUserData } from 'hooks'
 import { sendNewsletter } from 'api'
+import { showAlert } from 'lib/utils'
 import { Editor } from '../Editor'
 import { selectStyles } from '../utils'
 
 const options = [
   { value: 'myself', label: 'Myself (just testing)' },
   { value: 'everybody', label: 'Everybody' },
-  { value: 'imported', label: 'Imported audience' },
-  { value: 'activities', label: 'All activities members' },
+  { value: 'audience', label: 'Imported audience' },
+  { value: 'bookings', label: 'All activities bookings' },
 ]
 
 const CSelect = chakra(Select)
 
 export const Compose = () => {
   const [list, setList] = useState(options)
+  const [loading, setLoading] = useState(false)
   const [totalSelected, setTotalSelected] = useState(1)
   const { register, handleSubmit, control, getValues, watch } = useForm({ mode: 'onBlur' })
   const [activities] = useActivities()
   const [bookings] = useBookings()
   const [audience] = useAudience()
   const { user } = useUserData()
+  const router = useRouter()
 
   const watchTo = watch(['to'])
 
   useEffect(() => {
-    const totalImported = audience.length
+    const totalAudience = audience.length
     const totalBookings = uniqBy(bookings, 'userId')?.length || 0
 
     switch (watchTo.to?.value) {
@@ -42,12 +46,12 @@ export const Compose = () => {
         setTotalSelected(1)
         break
       case 'everybody':
-        setTotalSelected(totalBookings + totalImported)
+        setTotalSelected(uniqBy([...bookings, ...audience], 'email').length)
         break
-      case 'imported':
-        setTotalSelected(totalImported)
+      case 'audience':
+        setTotalSelected(totalAudience)
         break
-      case 'activities':
+      case 'bookings':
         setTotalSelected(totalBookings)
         break
       default:
@@ -78,8 +82,41 @@ export const Compose = () => {
   }, [activities, bookings])
 
   const handleSendMessage = async () => {
-    const res = await sendNewsletter(getValues())
+    const formData = getValues()
+    setLoading(true)
+    const res = await sendNewsletter(formData)
     console.info('call backend', res)
+
+    if (formData.to.value === 'myself') {
+      if (res?.data?.ok) {
+        showAlert({
+          title: `Test email sent to ${user.email}`,
+          status: 'success',
+        })
+      } else {
+        showAlert({
+          title: 'Error!',
+          description: res.data,
+          status: 'error',
+        })
+      }
+    } else if (res?.data?.ok) {
+      showAlert({
+        title: `Newsletter sent`,
+        status: 'success',
+      })
+
+      localStorage.removeItem('af-editor-value')
+      const url = `/newsletters/sent`
+      router.push(url)
+    } else {
+      showAlert({
+        title: 'Error! Please try again!',
+        description: res.data,
+        status: 'error',
+      })
+    }
+    setLoading(false)
   }
 
   const { seconds, isRunning, pause, restart } = useTimer({
@@ -88,10 +125,16 @@ export const Compose = () => {
   })
 
   const onSubmit = async () => {
-    if (isRunning) {
+    const formData = getValues()
+    if (formData.body === '<p></p>') {
+      showAlert({
+        title: "Body can't be empty!",
+        status: 'warning',
+      })
+    } else if (isRunning) {
       pause()
     } else {
-      restart(addSeconds(new Date(), 1))
+      restart(addSeconds(new Date(), 3))
     }
   }
 
@@ -155,6 +198,7 @@ export const Compose = () => {
             type="submit"
             _focus={{ outline: 'none' }}
             disabled={!totalSelected || !user.isVerified}
+            isLoading={loading}
             w="80px"
           >
             {isRunning ? 'Cancel' : 'Send'}
