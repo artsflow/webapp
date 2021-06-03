@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Text,
   Box,
@@ -15,6 +15,7 @@ import { format, fromUnixTime } from 'date-fns'
 import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser'
 
 import { useSentNewsletters, useNewsletterEvents } from 'hooks'
+import { trackNewsletterDetailsViewed } from 'analytics'
 import { Loading } from 'components'
 
 export const Sent = () => {
@@ -82,6 +83,10 @@ const MessageDetail = ({ id, body, isOpen }: any) => (
 
 const MessageEvents = ({ id }: any) => {
   const [events, loading] = useNewsletterEvents(id)
+
+  useEffect(() => {
+    trackNewsletterDetailsViewed()
+  }, [])
 
   return (
     <VStack overflow="scroll" alignItems="center" h="full" w="260px">

@@ -20,6 +20,7 @@ import { importCSV } from 'api'
 import { showAlert, isEmailValid } from 'lib/utils'
 import { useAudience } from 'hooks'
 import CloudSvg from 'svg/icons/cloud.svg'
+import { trackAudienceImported } from 'analytics'
 
 export const AUDIENCE_LIMIT = 500
 
@@ -75,6 +76,7 @@ export const CSVImport = ({ onClose, isOpen }: any) => {
         status: 'success',
       })
       handleClose()
+      trackAudienceImported({ recipients: total, isOveLimit, contactsLeft })
     } else {
       showAlert({
         title: 'Error! Please try again.',

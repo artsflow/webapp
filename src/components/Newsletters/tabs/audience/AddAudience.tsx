@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 
 import { firestore } from 'lib/firebase'
 import { useUserData, useAudience } from 'hooks'
+import { trackAudienceAdded } from 'analytics'
 import { showAlert } from 'lib/utils'
 import { ConsentBox } from './ConsentBox'
 import { CSVImport, AUDIENCE_LIMIT } from './CSVImport'
@@ -49,6 +50,7 @@ export const AddAudience = () => {
         title: `${data.email} added to audience list`,
         status: 'success',
       })
+      trackAudienceAdded()
     } catch (e) {
       showAlert({
         title: 'Error!',

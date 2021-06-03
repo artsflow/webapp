@@ -89,3 +89,19 @@ export const trackClickCalendarActivity = (activity: any) => {
 export const trackUpdateBankAccount = () => {
   window.analytics.track('Bank Account Updated')
 }
+
+export const trackNewsletterSent = (data: any) => {
+  window.analytics.track('Newsletter Sent', data)
+}
+
+export const trackNewsletterDetailsViewed = () => {
+  window.analytics.track('Newsletter Details Viewed')
+}
+
+export const trackAudienceAdded = () => {
+  window.analytics.track('Audience Added')
+}
+
+export const trackAudienceImported = (data: any) => {
+  window.analytics.track('Audience Imported', data)
+}

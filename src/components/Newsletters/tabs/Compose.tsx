@@ -10,6 +10,7 @@ import { uniqBy } from 'lodash'
 import { useRouter } from 'next/router'
 
 import { useActivities, useBookings, useAudience, useUserData } from 'hooks'
+import { trackNewsletterSent } from 'analytics'
 import { sendNewsletter } from 'api'
 import { showAlert } from 'lib/utils'
 import { Editor } from '../Editor'
@@ -85,13 +86,18 @@ export const Compose = () => {
     const formData = getValues()
     setLoading(true)
     const res = await sendNewsletter(formData)
-    console.info('call backend', res)
 
     if (formData.to.value === 'myself') {
       if (res?.data?.ok) {
         showAlert({
           title: `Test email sent to ${user.email}`,
           status: 'success',
+        })
+        trackNewsletterSent({
+          to: formData.to.value,
+          recipients: totalSelected,
+          subject: formData.subject,
+          newsletterId: res?.data?.newsletterId,
         })
       } else {
         showAlert({
@@ -106,6 +112,12 @@ export const Compose = () => {
         status: 'success',
       })
 
+      trackNewsletterSent({
+        to: formData.to.value,
+        recipients: totalSelected,
+        subject: formData.subject,
+        newsletterId: res?.data?.newsletterId,
+      })
       localStorage.removeItem('af-editor-value')
       const url = `/newsletters/sent`
       router.push(url)
