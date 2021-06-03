@@ -11,13 +11,17 @@ export const Stats = () => {
 
   if (loading) return <Loading />
 
-  const totalSent = stats?.sent?.Sent
-  const totalOpen = stats?.open?.Unique
+  console.log(stats)
+
+  const totalSent = stats?.sent?.Sent || 0
+  const totalOpen = stats?.open?.Unique || 0
   const openPercent = ((totalOpen / totalSent) * 100).toFixed(2)
-  const totalUniqueClicks = stats?.clicks?.Unique
-  const totalClicks = stats?.clicks?.Clicks
+  const totalUniqueClicks = stats?.clicks?.Unique || 0
+  const totalClicks = stats?.clicks?.Clicks || 0
   const totalSpam = stats?.spam?.SpamComplaint || 0
   const totalUnsubscribed = stats?.suppressions?.Suppressions?.length || 0
+  const totalBounced = stats?.bounced?.DnsError || 0
+  const bouncedPercent = ((totalBounced / totalSent) * 100).toFixed(2)
 
   const sentData = stats?.sent?.Days?.map(({ Date: d, Sent }: any) => ({
     x: format(new Date(d), 'dd MMM'),
@@ -49,7 +53,11 @@ export const Stats = () => {
           <Text as="span" color="af.violet" fontWeight="bold">
             {totalSent}
           </Text>{' '}
-          emails in the last 30 days.
+          emails in the last 30 days,{' '}
+          <Text as="span" color="af.pink" fontWeight="bold">
+            {bouncedPercent}%
+          </Text>{' '}
+          bounced.
         </Text>
         <Text>
           Out of {totalSent} emails with open tracking,{' '}
