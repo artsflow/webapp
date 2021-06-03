@@ -5,6 +5,7 @@ import { FixedSizeList } from 'react-window'
 import { format, fromUnixTime } from 'date-fns'
 
 import TrashcanIcon from 'svg/icons/trashcan.svg'
+import { trackAudienceRemoved } from 'analytics'
 import { useAudience } from 'hooks'
 import { Card } from 'components/UI'
 import { Loading } from 'components'
@@ -74,6 +75,7 @@ export const ListAudience = () => {
             title: `${email} removed from the audience list`,
             status: 'success',
           })
+          trackAudienceRemoved()
         } catch (e) {
           showAlert({
             title: 'Error!',

@@ -102,6 +102,10 @@ export const trackAudienceAdded = () => {
   window.analytics.track('Audience Added')
 }
 
+export const trackAudienceRemoved = () => {
+  window.analytics.track('Audience Removed')
+}
+
 export const trackAudienceImported = (data: any) => {
   window.analytics.track('Audience Imported', data)
 }
