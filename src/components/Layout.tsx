@@ -1,9 +1,11 @@
 import { useEffect, useContext } from 'react'
 import Head from 'next/head'
-import { Grid, Box, HStack, VStack, Text, Button, Center } from '@chakra-ui/react'
+import { Grid, Box, HStack, VStack, Text, Button, Center, useBreakpoint } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import { Footer, Header, SidePanel, Loading } from 'components'
+import { trackSmallScreenUsed } from 'analytics'
+import { Card } from 'components/UI'
 import { UserContext } from 'lib/context'
 import { auth } from 'lib/firebase'
 import Logo from 'svg/artsflow.svg'
@@ -59,17 +61,22 @@ export const NotAuthorizedLayout = () => {
   )
 }
 
-const AuthLayout = ({ children }: Props) => (
-  <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
-    <Header />
-    <HStack as="main" bg="#F9F9F9" spacing="0">
-      <SidePanel />
-      <VStack h="100%" w="full" alignItems="flex-start" spacing="0">
-        {children}
-      </VStack>
-    </HStack>
-  </Grid>
-)
+const AuthLayout = ({ children }: Props) => {
+  const screen = useBreakpoint('base') || ''
+  const isSmallScreen = ['base', 'sm'].includes(screen)
+
+  return (
+    <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
+      <Header />
+      <HStack as="main" bg="#F9F9F9" spacing="0">
+        <SidePanel />
+        <VStack h="100%" w="full" alignItems="flex-start" spacing="0">
+          {isSmallScreen ? <SmallScreenInfo /> : children}
+        </VStack>
+      </HStack>
+    </Grid>
+  )
+}
 
 const UnAuthLayout = ({ children }: Props) => {
   const { authState, loading } = useContext(UserContext)
@@ -92,5 +99,20 @@ const UnAuthLayout = ({ children }: Props) => {
       </Box>
       <Footer />
     </Grid>
+  )
+}
+
+const SmallScreenInfo = () => {
+  useEffect(() => {
+    trackSmallScreenUsed()
+  }, [])
+
+  return (
+    <Card m="1rem" w="200px">
+      <Text fontWeight="bold" mb="0.5rem" color="af.teal">
+        This app is optimized for large screens
+      </Text>
+      <Text>Please load it on a tablet or laptop</Text>
+    </Card>
   )
 }

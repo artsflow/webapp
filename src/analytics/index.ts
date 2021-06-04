@@ -109,3 +109,7 @@ export const trackAudienceRemoved = () => {
 export const trackAudienceImported = (data: any) => {
   window.analytics.track('Audience Imported', data)
 }
+
+export const trackSmallScreenUsed = () => {
+  window.analytics.track('Small Screen Used')
+}
