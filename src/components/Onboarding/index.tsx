@@ -4,22 +4,18 @@ import NextLink from 'next/link'
 
 import { Card } from 'components/UI'
 import { checkUserFirstTime } from 'api'
-import { useUserData, useActivities, useSentNewsletters, useAudience } from 'hooks'
+import { useUserData, useOnboarding } from 'hooks'
 import { trackAddActivityButton } from 'analytics'
 import { MdCheckCircle, MdRadioButtonUnchecked } from 'react-icons/md'
 import { AccountVerification } from './AccountVerification'
 
 export function Onboarding(): JSX.Element {
   const { user } = useUserData()
-  const [activities] = useActivities()
-  const [newsletters] = useSentNewsletters()
-  const [audience] = useAudience()
+  const [, , isStep2Completed, isStep3Completed, isStep4Completed] = useOnboarding()
 
   useEffect(() => {
     checkUserFirstTime()
   }, [])
-
-  const isStep4Completed = newsletters.length > 0 && audience.length > 0
 
   return (
     <>
@@ -30,12 +26,12 @@ export function Onboarding(): JSX.Element {
         <List spacing="1.5rem">
           <OnboardingStep isCompleted title="1. Successfully register to the platform" />
           <OnboardingStep
-            isCompleted={user.isVerified}
+            isCompleted={isStep2Completed}
             title="2. Verify your account"
             children={<AccountVerification />}
           />
           <OnboardingStep
-            isCompleted={activities?.length > 0}
+            isCompleted={isStep3Completed}
             title="3. Create your first activity (or event)"
             children={
               <NextLink as="/activities/add" href="/activities/add" passHref>
@@ -55,12 +51,7 @@ export function Onboarding(): JSX.Element {
             title="4. Import your audience and send your first newsletter to announce your activity!"
             children={
               <NextLink as="/newsletters" href="/newsletters" passHref>
-                <Button
-                  as="a"
-                  variant="primary"
-                  cursor="pointer"
-                  onClick={() => trackAddActivityButton('Onboarding')}
-                >
+                <Button as="a" variant="primary" cursor="pointer" isDisabled={!user.isVerified}>
                   Send newsletters
                 </Button>
               </NextLink>

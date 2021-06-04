@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Text, Link, VStack, Button } from '@chakra-ui/react'
+import { Text, Link, VStack, Button, HStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import { showAlert } from 'lib/utils'
@@ -57,14 +57,19 @@ export const AccountVerification = () => {
         checks.
       </Text>
       {moreInfoNeeded && <Text color="red">Additional information is needed!</Text>}
-      <Button
-        isLoading={isLoading}
-        isDisabled={user.isVerified}
-        variant="primary"
-        onClick={handleVerification}
-      >
-        Proceed with verification
-      </Button>
+      <HStack spacing="1rem">
+        <Button
+          isLoading={isLoading}
+          isDisabled={user.isVerified}
+          variant="primary"
+          onClick={handleVerification}
+        >
+          Proceed with verification
+        </Button>
+        <Text color="gray.500" fontSize="sm">
+          5 minutes to complete
+        </Text>
+      </HStack>
     </VStack>
   )
 }
