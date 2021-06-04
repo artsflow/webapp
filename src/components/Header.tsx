@@ -76,7 +76,7 @@ export function Header() {
               <HStack>
                 <WarningTwoIcon color="af.pink" />
                 <Text fontSize="12px" color="af.pink" fontWeight="bold">
-                  Account not verified - Click here to verfy!
+                  Your account is not verified - Click here to verfy and finish onboarding!
                 </Text>
               </HStack>
             </Link>
