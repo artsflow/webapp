@@ -31,6 +31,7 @@ import { UserContext } from 'lib/context'
 import { Notifications } from 'components'
 import { getImageKitUrl } from 'lib/utils'
 import { trackUserSignOut } from 'analytics'
+import { useOnboarding } from 'hooks'
 
 import packageInfo from '../../package.json'
 
@@ -40,6 +41,7 @@ export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user, profile } = useContext(UserContext)
   const router = useRouter()
+  const [onboardingCompleted] = useOnboarding()
 
   const handleLogout = () => {
     auth.signOut()
@@ -77,6 +79,18 @@ export function Header() {
                 <WarningTwoIcon color="af.pink" />
                 <Text fontSize="12px" color="af.pink" fontWeight="bold">
                   Your account is not verified - Click here to verfy and finish onboarding!
+                </Text>
+              </HStack>
+            </Link>
+          </NextLink>
+        )}
+        {user.isVerified && !onboardingCompleted && (
+          <NextLink href="/" passHref>
+            <Link>
+              <HStack>
+                <WarningTwoIcon color="af.teal" />
+                <Text fontSize="12px" color="af.teal" fontWeight="bold">
+                  Onboarding not completed. Click here to complete.
                 </Text>
               </HStack>
             </Link>
