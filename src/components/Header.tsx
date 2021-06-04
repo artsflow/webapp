@@ -61,9 +61,9 @@ export function Header() {
     >
       <Box>
         <NextLink href="/" passHref>
-          <Link>
+          <a>
             <Logo width="107px" height="24px" />
-          </Link>
+          </a>
         </NextLink>
       </Box>
       <HStack mt="10px" pl="1rem">
