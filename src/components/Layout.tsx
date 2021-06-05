@@ -8,6 +8,7 @@ import { trackSmallScreenUsed } from 'analytics'
 import { Card } from 'components/UI'
 import { UserContext } from 'lib/context'
 import { auth } from 'lib/firebase'
+import { useUserData } from 'hooks'
 import Logo from 'svg/artsflow.svg'
 
 const UNAUTH_ROUTES = ['/login', '/terms']
@@ -62,8 +63,11 @@ export const NotAuthorizedLayout = () => {
 }
 
 const AuthLayout = ({ children }: Props) => {
+  const { user } = useUserData()
   const screen = useBreakpoint('base') || ''
   const isSmallScreen = ['base', 'sm'].includes(screen)
+
+  if (user.provider && !user?.isBetaTester) return <NotAuthorizedLayout />
 
   return (
     <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
