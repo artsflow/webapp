@@ -6,6 +6,7 @@ import { GCP_MAPS_KEY, SEGMENT_KEY } from 'lib/config'
 export default class MyDocument extends Document {
   renderSnippet() {
     const opts = {
+      host: 'cdn.artsflow.link',
       apiKey: SEGMENT_KEY,
       page: true,
     }
