@@ -62,7 +62,6 @@ const EditButtons = () => {
 
   const [activity] = useDocumentData(firestore.doc(`/activities/${id}`))
   const [location] = useDocumentData(firestore.doc(`/locations/${id}`))
-  console.log(id, activity, location)
 
   useEffect(() => {
     if (activity) {
@@ -78,8 +77,6 @@ const EditButtons = () => {
     const url = `/activities/edit/${id}/${step}`
     router.push(url, url, { shallow: true })
   }
-
-  // console.log(step)
 
   return (
     <Box p="40px">

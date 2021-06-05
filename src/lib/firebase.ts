@@ -32,7 +32,6 @@ if (!firebase.apps.length) {
   // emulators
   if (process.env.NEXT_PUBLIC_EMULATOR) {
     console.info('___using__emulators___')
-
     firebase.auth().useEmulator('http://localhost:7042')
     firebase.firestore().useEmulator('localhost', 9042)
     firebase.firestore().settings({ host: 'localhost:9042', ssl: false, cacheSizeBytes: 2048576 })
@@ -76,7 +75,7 @@ export function postToJSON(doc: any) {
 }
 
 export const firebaseCallable = async (func: string, params: any) => {
-  console.info(`>>> callable: ${func}`, params)
+  // console.info(`>>> callable: ${func}`, params)
   const perf = firebase.performance()
   const trace = perf.trace(`app:${func}`)
   trace.start()

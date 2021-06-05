@@ -74,8 +74,6 @@ export const ActivityCard = (props: any) => {
         .map((d: string) => <Text key={d}>{d}</Text>)
     : 'not scheduled'
 
-  console.log(dates)
-
   const isActive = status === 'active'
 
   const activityLink = `${ARTSFLOW_URL}/a/${id}`

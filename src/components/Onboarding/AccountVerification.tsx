@@ -16,8 +16,6 @@ export const AccountVerification = () => {
   const { moreInfoNeeded } = status
 
   const handleVerification = async () => {
-    console.log('handleVerification')
-
     setLoading(true)
     let { stripeAccountId } = user
 

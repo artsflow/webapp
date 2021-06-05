@@ -45,7 +45,6 @@ export default function Profile(): JSX.Element {
   const { isDirty } = formState
 
   const onDrop = useCallback(async ([file]) => {
-    console.log('onDrop')
     setCompressing(true)
 
     const heic2any = (await import('heic2any')).default
@@ -64,7 +63,6 @@ export default function Profile(): JSX.Element {
     )
 
     setCompressing(false)
-    // console.log(resizedImage, file) // check heic vs webp
     const extension = resizedImage.type.replace('image/', '')
 
     const ref = storage.ref(`uploads/${auth.currentUser?.uid}/${Date.now()}.${extension}`)
@@ -79,7 +77,6 @@ export default function Profile(): JSX.Element {
     task
       .then(() => ref.getDownloadURL())
       .then(async (url) => {
-        console.log(url)
         setUploading(false)
         await updateAvatarUrl(url)
         trackUpdateAvatar()
@@ -94,7 +91,7 @@ export default function Profile(): JSX.Element {
   const onSubmit = async (data: Inputs) => {
     setLoading(true)
     const result = await updateProfile(data)
-    console.log(result)
+
     setLoading(false)
     reset()
     if (result) {

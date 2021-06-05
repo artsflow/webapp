@@ -58,7 +58,6 @@ export default function Login(): JSX.Element {
         auth
           .signInWithEmailLink(emailForSignIn, window.location.href)
           .then((data) => {
-            console.log('signInWithEmailLink', data)
             const { isNewUser } = data.additionalUserInfo as any
             const { uid: userId, displayName, email } = data.user as any
 
@@ -82,7 +81,6 @@ export default function Login(): JSX.Element {
     auth
       .signInWithEmailLink(confirmEmailValue, window.location.href)
       .then((data) => {
-        console.log('handleConfirmEmail', data)
         const { isNewUser } = data.additionalUserInfo as any
         const { uid: userId, displayName, email } = data.user as any
 
@@ -115,11 +113,9 @@ export default function Login(): JSX.Element {
 
   const onLogin = useCallback(
     (e) => {
-      console.log('sendSignInLinkToEmail')
       e.preventDefault()
       auth
         .sendSignInLinkToEmail(emailValue, { url: window.location.href, handleCodeInApp: true })
-        .then((r) => console.info('sendSignInLinkToEmail:', r))
         .catch((err) => console.error('sendSignInLinkToEmail', err))
 
       window.localStorage.setItem('emailForSignIn', emailValue)
@@ -138,7 +134,6 @@ export default function Login(): JSX.Element {
 
   const onGoogleLogin = async () => {
     auth.signInWithPopup(googleAuthProvider).then((data) => {
-      console.log('signInWithPopup', data)
       const { isNewUser } = data.additionalUserInfo as any
       const { uid: userId, displayName, email } = data.user as any
 
