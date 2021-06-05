@@ -44,13 +44,7 @@ export const AddBankAccount = () => {
       <VStack alignItems="flex-start" pos="relative" spacing="1rem">
         <Text fontSize="sm">Please add the bank account:</Text>
         <HStack>
-          <InputGroup
-            bg="white"
-            border="1px solid white"
-            shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-            rounded="6px"
-            w="220px"
-          >
+          <InputGroup bg="white" rounded="6px" w="220px">
             <InputLeftAddon w="100px" bg="white" children="Sort code" />
             <Input
               autoFocus
@@ -65,13 +59,7 @@ export const AddBankAccount = () => {
           <Error errors={errors} name="sortcode" message="Invalid sort code" />
         </HStack>
         <HStack>
-          <InputGroup
-            bg="white"
-            border="1px solid white"
-            shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-            rounded="6px"
-            w="220px"
-          >
+          <InputGroup bg="white" rounded="6px" w="220px">
             <InputLeftAddon w="100px" bg="white" children="Account" />
             <Input
               placeholder="123456789"

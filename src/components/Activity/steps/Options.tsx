@@ -1,6 +1,6 @@
 import { Box, Flex, HStack, VStack, Heading, useRadioGroup, Text, Input } from '@chakra-ui/react'
 import { useStateMachine } from 'little-state-machine'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 
 import { RadioCard } from 'components'
 import { Navigation } from '../Navigation'
@@ -67,7 +67,7 @@ export function Options() {
 
 const ActivityPresence = () => {
   const { state, actions } = useStateMachine({ update }) as any
-  const { register, getValues } = useForm({
+  const { getValues, control } = useForm({
     defaultValues: state,
     mode: 'onBlur',
   })
@@ -98,17 +98,23 @@ const ActivityPresence = () => {
             )
           })}
         </Flex>
-        <Input
-          display={isOnline ? 'block' : 'none'}
-          my="4"
-          pr="60px"
-          placeholder="https://"
-          bg="white"
-          border="none"
-          shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-          autoFocus
-          {...register('presenceUrl', { required: false })}
-          onChange={() => actions.update({ presenceUrl: getValues('presenceUrl') })}
+        <Controller
+          name="presenceUrl"
+          control={control}
+          render={({ field }) => (
+            <Input
+              display={isOnline ? 'block' : 'none'}
+              my="4"
+              pr="60px"
+              placeholder="https://"
+              autoFocus
+              {...field}
+              onChange={(e) => {
+                field.onChange(e)
+                actions.update({ presenceUrl: getValues('presenceUrl') })
+              }}
+            />
+          )}
         />
       </HStack>
     </Box>

@@ -8,7 +8,7 @@ import {
   useRadioGroup,
 } from '@chakra-ui/react'
 import { useStateMachine } from 'little-state-machine'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 
 import { RadioCard } from 'components'
@@ -24,11 +24,11 @@ export function Price() {
   const { state, actions } = useStateMachine({ update }) as any
   const { monetizationType } = state
   const {
-    register,
     formState,
     getValues,
     formState: { errors },
     trigger,
+    control,
   } = useForm({
     defaultValues: state,
     mode: 'onBlur',
@@ -90,17 +90,22 @@ export function Price() {
                 rounded="6px"
               >
                 <InputLeftAddon bg="white" pr="4px" children="£" />
-                <Input
-                  pl="4px"
-                  autoFocus
-                  type="number"
-                  {...register('price', {
-                    required: isPaid,
-                    min: MIN_PRICE,
-                    max: MAX_PRICE,
-                    valueAsNumber: true,
-                  })}
-                  onChange={() => handleChange('price')}
+                <Controller
+                  name="price"
+                  control={control}
+                  rules={{ required: isPaid, min: MIN_PRICE, max: MAX_PRICE }}
+                  render={({ field }) => (
+                    <Input
+                      pl="4px"
+                      autoFocus
+                      type="number"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        handleChange('price')
+                      }}
+                    />
+                  )}
                 />
               </InputGroup>
               <Error
