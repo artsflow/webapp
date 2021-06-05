@@ -165,8 +165,11 @@ export default function Profile(): JSX.Element {
                     variant="outline"
                     placeholder="First name"
                     defaultValue={firstName}
-                    name="firstName"
-                    ref={register({ required: true, maxLength: 20, pattern: /^[A-Za-z]+$/i })}
+                    {...register('firstName', {
+                      required: true,
+                      maxLength: 20,
+                      pattern: /^[A-Za-z]+$/i,
+                    })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
                 </InputGroup>
@@ -178,8 +181,11 @@ export default function Profile(): JSX.Element {
                     variant="outline"
                     placeholder="Last name"
                     defaultValue={lastName}
-                    name="lastName"
-                    ref={register({ required: true, maxLength: 40, pattern: /^[A-Za-z]+$/i })}
+                    {...register('lastName', {
+                      required: true,
+                      maxLength: 40,
+                      pattern: /^[A-Za-z]+$/i,
+                    })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
                 </InputGroup>
@@ -205,9 +211,8 @@ export default function Profile(): JSX.Element {
                   <Textarea
                     placeholder="a little about you"
                     defaultValue={bio}
-                    name="bio"
                     rows={4}
-                    ref={register({ maxLength: 420 })}
+                    {...register('bio', { maxLength: 420 })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
                 </InputGroup>

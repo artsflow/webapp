@@ -107,10 +107,7 @@ const ActivityPresence = () => {
           border="none"
           shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
           autoFocus
-          name="presenceUrl"
-          ref={register({
-            required: false,
-          })}
+          {...register('presenceUrl', { required: false })}
           onChange={() => actions.update({ presenceUrl: getValues('presenceUrl') })}
         />
       </HStack>

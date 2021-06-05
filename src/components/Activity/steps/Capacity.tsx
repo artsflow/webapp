@@ -11,7 +11,13 @@ const MAX_CAPACITY = 100
 
 export function Capacity() {
   const { state, actions } = useStateMachine({ update }) as any
-  const { register, formState, getValues, errors, trigger } = useForm({
+  const {
+    register,
+    formState,
+    getValues,
+    formState: { errors },
+    trigger,
+  } = useForm({
     defaultValues: state,
     mode: 'onBlur',
   })
@@ -49,13 +55,12 @@ export function Capacity() {
             <Input
               autoFocus
               type="number"
-              ref={register({
+              {...register('capacity', {
                 required: true,
                 min: MIN_CAPACITY,
                 max: MAX_CAPACITY,
               })}
               onChange={() => handleChange('capacity')}
-              name="capacity"
             />
             <InputRightAddon bg="white" children="members" />
           </InputGroup>

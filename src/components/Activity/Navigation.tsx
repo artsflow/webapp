@@ -66,7 +66,7 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
   const handleSave = async () => {
     if (onClick) onClick()
     if (!isValid) {
-      showAlert({ title: 'Error! You need to make a selection.' })
+      showAlert({ title: 'Error! Invalid input.' })
       return
     }
 

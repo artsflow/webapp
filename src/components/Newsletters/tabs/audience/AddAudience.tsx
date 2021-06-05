@@ -16,10 +16,7 @@ export const AddAudience = () => {
   const isDisabled = !user.hasConsent
   const [audience] = useAudience()
 
-  const { register, handleSubmit, reset } = useForm({
-    defaultValues: {},
-    mode: 'onBlur',
-  })
+  const { register, handleSubmit, reset } = useForm({ mode: 'onBlur' })
 
   const handleAdd = async (data: any) => {
     const contactsLeft = AUDIENCE_LIMIT - audience.length
@@ -69,20 +66,14 @@ export const AddAudience = () => {
           <Input
             w="full"
             placeholder="Enter name..."
-            name="name"
             type="text"
-            ref={register({
-              required: true,
-            })}
+            {...register('name', { required: true })}
           />
           <Input
             w="full"
             placeholder="Enter email..."
-            name="email"
             type="email"
-            ref={register({
-              required: true,
-            })}
+            {...register('email', { required: true })}
           />
           <Button variant="primary" disabled={isDisabled} type="submit" isLoading={loading}>
             Add

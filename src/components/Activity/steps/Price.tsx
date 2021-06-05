@@ -23,7 +23,13 @@ const ACTIVITY_TYPE = ['Free', 'Paid']
 export function Price() {
   const { state, actions } = useStateMachine({ update }) as any
   const { monetizationType } = state
-  const { register, formState, getValues, errors, trigger } = useForm({
+  const {
+    register,
+    formState,
+    getValues,
+    formState: { errors },
+    trigger,
+  } = useForm({
     defaultValues: state,
     mode: 'onBlur',
   })
@@ -88,14 +94,13 @@ export function Price() {
                   pl="4px"
                   autoFocus
                   type="number"
-                  ref={register({
+                  {...register('price', {
                     required: isPaid,
                     min: MIN_PRICE,
                     max: MAX_PRICE,
                     valueAsNumber: true,
                   })}
                   onChange={() => handleChange('price')}
-                  name="price"
                 />
               </InputGroup>
               <Error

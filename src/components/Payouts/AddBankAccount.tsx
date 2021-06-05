@@ -8,7 +8,11 @@ import { showAlert } from 'lib/utils'
 import { trackUpdateBankAccount } from 'analytics'
 
 export const AddBankAccount = () => {
-  const { register, handleSubmit, errors } = useForm({})
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({})
   const [isLoading, setLoading] = useState(false)
   const [hasBankAccount, setBankAccount] = useState(false)
 
@@ -51,12 +55,11 @@ export const AddBankAccount = () => {
             <Input
               autoFocus
               placeholder="12-34-56"
-              ref={register({
+              {...register('sortcode', {
                 required: true,
                 pattern: /(?!0{2}(-?0{2}){2})(\d{2}(-\d{2}){2})|(\d{6})/,
                 setValueAs: (value) => value.replaceAll('-', ''),
               })}
-              name="sortcode"
             />
           </InputGroup>
           <Error errors={errors} name="sortcode" message="Invalid sort code" />
@@ -72,13 +75,12 @@ export const AddBankAccount = () => {
             <InputLeftAddon w="100px" bg="white" children="Account" />
             <Input
               placeholder="123456789"
-              ref={register({
+              {...register('account', {
                 required: true,
                 minLength: 6,
                 maxLength: 9,
                 pattern: /^[0-9]*$/,
               })}
-              name="account"
             />
           </InputGroup>
           <Error errors={errors} name="account" message="Invalid account number" />

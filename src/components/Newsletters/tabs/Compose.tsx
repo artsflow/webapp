@@ -29,7 +29,7 @@ export const Compose = () => {
   const [list, setList] = useState(options)
   const [loading, setLoading] = useState(false)
   const [totalSelected, setTotalSelected] = useState(1)
-  const { register, handleSubmit, control, getValues, watch } = useForm({ mode: 'onBlur' })
+  const { handleSubmit, register, control, getValues, watch } = useForm({ mode: 'onBlur' })
   const [activities] = useActivities()
   const [bookings] = useBookings()
   const [audience] = useAudience()
@@ -42,7 +42,9 @@ export const Compose = () => {
     const totalAudience = audience.length
     const totalBookings = uniqBy(bookings, 'userId')?.length || 0
 
-    switch (watchTo.to?.value) {
+    const toValue = watchTo?.[0]?.value
+
+    switch (toValue) {
       case 'myself':
         setTotalSelected(1)
         break
@@ -58,7 +60,7 @@ export const Compose = () => {
       default:
         setTotalSelected(
           uniqBy(
-            bookings?.filter((b: any) => b.activityId === watchTo.to?.value),
+            bookings?.filter((b: any) => b.activityId === toValue),
             'userId'
           )?.length || 0
         )
@@ -158,17 +160,21 @@ export const Compose = () => {
             To
           </Text>
           <Controller
-            as={CSelect}
-            isSearchable={false}
-            w="360px"
             name="to"
-            options={list}
             control={control}
             defaultValue={options[0]}
-            ref={register({
+            rules={{
               required: true,
-            })}
-            styles={selectStyles}
+            }}
+            render={({ field }) => (
+              <CSelect
+                w="360px"
+                {...field}
+                options={list}
+                isSearchable={false}
+                styles={selectStyles}
+              />
+            )}
           />
         </VStack>
 
@@ -179,16 +185,18 @@ export const Compose = () => {
           <Input
             w="640px"
             placeholder="Enter subject..."
-            ref={register({
+            {...register('subject', {
               required: true,
               maxLength: 100,
             })}
-            name="subject"
-            _focusWithin={{ boxShadow: '0 0 0 1px #45BCC8', border: 'none' }}
           />
         </VStack>
 
-        <Controller as={Editor} name="body" control={control} activities={activities} />
+        <Controller
+          name="body"
+          control={control}
+          render={({ field }) => <Editor {...field} activities={activities} />}
+        />
 
         {!user.isVerified && (
           <NextLink href="/" passHref>
