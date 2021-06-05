@@ -5,12 +5,13 @@ import { StateMachineProvider, createStore, useStateMachine } from 'little-state
 
 import { Preview } from './Preview'
 import {
+  Options,
   Category,
   Details,
   Location,
   Images,
   Duration,
-  Frequency,
+  Dates,
   Capacity,
   Price,
   Published,
@@ -19,19 +20,24 @@ import {
 import { initialStore, resetStore, steps, useCurrentStep, DevTool } from './utils'
 import { InfoBulb } from './InfoBulb'
 
-createStore(initialStore)
+createStore(initialStore, {
+  storageType: process.browser ? window.localStorage : ({} as Storage),
+  name: '__AF__',
+  middleWares: [],
+})
 
 interface StepsMap {
   [key: string]: React.FC
 }
 
 export const stepsMap: StepsMap = {
+  options: Options,
   category: Category,
   details: Details,
   location: Location,
   images: Images,
   duration: Duration,
-  frequency: Frequency,
+  dates: Dates,
   capacity: Capacity,
   price: Price,
   published: Published,
@@ -44,7 +50,7 @@ export function Activity(): JSX.Element {
 
   useEffect(() => {
     if (!steps.includes(stepFromUrl)) {
-      const url = `/activities/add/category`
+      const url = `/activities/add/options`
       push(url, url, { shallow: true })
     }
   }, [currentStep])

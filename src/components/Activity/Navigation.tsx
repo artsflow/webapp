@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
-import { Flex, Button, HStack, Box, useToast } from '@chakra-ui/react'
+import { useState } from 'react'
+import { Flex, Button, HStack, Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useStateMachine } from 'little-state-machine'
 
 import { addActivity, editActivity } from 'api'
+import { showAlert } from 'lib/utils'
+import { trackUpdateActivity } from 'analytics'
 import {
   steps,
   resetStore,
@@ -19,22 +21,36 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
   const { state, actions } = useStateMachine({ resetStore }) as any
   const [isLoading, setLoading] = useState(false)
   const router = useRouter()
-  const toast = useToast()
 
   const [currentStep] = useCurrentStep()
-  const prevStep = getPrevStep(currentStep)
-  const nextStep = getNextStep(currentStep)
+
+  let skipPrev = 0
+  let skipNext = 0
+
+  if (state.activityPresence === 'Online' && currentStep === 'details') skipNext = 1
+  if (state.activityPresence === 'Online' && currentStep === 'images') skipPrev = 1
+
+  const prevStep = getPrevStep(currentStep, skipPrev)
+  const nextStep = getNextStep(currentStep, skipNext)
 
   const isEdit = state.meta.actionType === 'edit'
 
   const navigate = (step: string, dir: string) => {
     if (onClick) onClick()
-    if (!isValid && dir === 'next') return
+    if (!isValid && dir === 'next') {
+      showAlert({ title: 'Error! You need to make a selection.' })
+      return
+    }
     const url = `/activities/add/${step}`
     router.push(url, url, { shallow: true })
   }
 
   const handleClick = async () => {
+    if (!isValidState(state)) {
+      showAlert({ title: 'Error! You need to make a selection.' })
+      return
+    }
+
     if (isLastStep(currentStep)) {
       setLoading(true)
       const result = await addActivity(cleanStore(state))
@@ -49,7 +65,10 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
 
   const handleSave = async () => {
     if (onClick) onClick()
-    if (!isValid) return
+    if (!isValid) {
+      showAlert({ title: 'Error! Invalid input.' })
+      return
+    }
 
     setLoading(true)
     const id = router.asPath.split('/')[3]
@@ -57,32 +76,15 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
     const result = await editActivity(data)
 
     if (result) {
-      toast({
-        title: 'Information updated',
-        status: 'success',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      })
+      showAlert({ title: 'Information updated.', status: 'success' })
+      trackUpdateActivity({ id, ...state })
     } else {
-      toast({
-        title: 'Information not updated',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      })
+      showAlert({ title: 'Information not updated.' })
     }
 
     setLoading(false)
     router.back()
   }
-
-  useEffect(() => {
-    if (!isValidState(state)) {
-      router.push('/activities/add')
-    }
-  }, [currentStep])
 
   if (isEdit)
     return (

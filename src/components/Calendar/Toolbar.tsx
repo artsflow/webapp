@@ -1,6 +1,13 @@
 import { Text, HStack, ButtonGroup, Button, IconButton } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
+import {
+  trackCalendarToday,
+  trackCalendarPrev,
+  trackCalendarNext,
+  trackCalendarView,
+} from 'analytics'
+
 export const Toolbar = (props: any) => {
   const {
     localizer: { messages },
@@ -22,7 +29,10 @@ export const Toolbar = (props: any) => {
           rounded="12px"
           aria-label="Today"
           fontSize="xs"
-          onClick={() => onNavigate('TODAY')}
+          onClick={() => {
+            onNavigate('TODAY')
+            trackCalendarToday()
+          }}
         >
           Today
         </Button>
@@ -34,7 +44,10 @@ export const Toolbar = (props: any) => {
           rounded="12px"
           aria-label="Prev"
           icon={<ChevronLeftIcon />}
-          onClick={() => onNavigate('PREV')}
+          onClick={() => {
+            onNavigate('PREV')
+            trackCalendarPrev()
+          }}
         />
         <IconButton
           variant="ghost"
@@ -44,7 +57,10 @@ export const Toolbar = (props: any) => {
           rounded="12px"
           aria-label="Next"
           icon={<ChevronRightIcon />}
-          onClick={() => onNavigate('NEXT')}
+          onClick={() => {
+            onNavigate('NEXT')
+            trackCalendarNext()
+          }}
         />
       </ButtonGroup>
       <Text fontWeight="bold" fontSize="1rem" mr="auto">
@@ -64,7 +80,10 @@ export const Toolbar = (props: any) => {
               rounded="12px"
               aria-label="Today"
               fontSize="xs"
-              onClick={() => onView(v)}
+              onClick={() => {
+                onView(v)
+                trackCalendarView(v)
+              }}
             >
               {messages[v]}
             </Button>

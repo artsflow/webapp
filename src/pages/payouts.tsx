@@ -25,7 +25,7 @@ export default function Payouts() {
         {!isVerified && (
           <Text as="span">
             You need to {` `}
-            <NextLink href="/">
+            <NextLink href="/" passHref>
               <Link>
                 <Text as="span" color="af.pink" fontWeight="bold">
                   verify your account

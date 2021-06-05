@@ -20,7 +20,7 @@ export const showAlert = ({ title, description, status = 'error' }: AlertProps) 
     status,
     duration: 3000,
     isClosable: true,
-    position: 'top',
+    position: 'bottom',
   })
 
 export const motionComponent = (Component: any) =>
@@ -79,3 +79,5 @@ export const activityDownload = (list: any) => {
   a.click()
   document.body.removeChild(a)
 }
+
+export const isEmailValid = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)

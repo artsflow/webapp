@@ -1,0 +1,17 @@
+.ProseMirror {
+  min-height: 360px;
+  outline: none;
+  padding: 1rem;
+}
+
+:root {
+  --bangle-floating-menu-bg-color: #333;
+  --bangle-floating-menu-text-color: #fff;
+  --bangle-menu-button-hover-color: grey;
+  --bangle-menu-button-disabled-color: grey;
+  --bangle-floating-menu-separator-color: grey;
+  --bangle-menu-button-active-color: #45BCC8;
+  --bangle-balloon-border-radius: 4px;
+  --bangle-balloon-font-size: 12px;
+  --bangle-balloon-move: 4px;
+}

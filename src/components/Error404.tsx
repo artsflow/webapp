@@ -6,7 +6,7 @@ export function Error404() {
   return (
     <>
       <Meta title="Error 404" description="Page not found" />
-      <Heading fontSize="md" align="center" mt="8">
+      <Heading fontSize="lg" align="center" mt="8">
         Error 404 - Page not found
       </Heading>
     </>

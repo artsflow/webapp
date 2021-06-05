@@ -24,6 +24,104 @@ const theme = {
       yellow: '#FCCE36',
     },
   },
+  components: {
+    Card: {
+      baseStyle: {
+        boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.02)',
+        background: 'white',
+        rounded: '0.75rem',
+        p: '1rem',
+      },
+      variants: {},
+    },
+    Button: {
+      variants: {
+        important: {
+          color: 'white',
+          bg: 'af.pink',
+          px: '2rem',
+        },
+        primary: {
+          color: 'white',
+          bg: 'af.teal',
+          px: '2rem',
+        },
+        secondary: {
+          color: 'af.teal',
+          bg: 'rgba(71, 188, 200, 0.1);',
+          px: '2rem',
+        },
+      },
+    },
+    Input: {
+      defaultProps: {
+        variant: 'af',
+      },
+      variants: {
+        outline: {
+          field: {
+            _focus: {
+              boxShadow: '0 0 0 1px #45BCC8',
+              borderColor: '#45BCC8',
+            },
+          },
+        },
+        af: {
+          field: {
+            bg: 'white',
+            boxShadow: '0px 3px 8px rgba(50, 50, 71, 0.05)',
+            rounded: '6px',
+            _focus: {
+              boxShadow: '0 0 0 1px #45BCC8',
+              borderColor: '#45BCC8',
+            },
+          },
+        },
+      },
+    },
+    Textarea: {
+      variants: {
+        outline: {
+          _focus: {
+            boxShadow: '0 0 0 1px #45BCC8',
+            borderColor: '#45BCC8',
+          },
+        },
+      },
+    },
+    Badge: {
+      baseStyle: {
+        fontSize: '10px',
+        textTransform: 'lowercase',
+      },
+      variants: {
+        delivered: {
+          color: 'gray.900',
+          bg: 'gray.100',
+        },
+        open: {
+          color: 'green.900',
+          bg: 'green.100',
+        },
+        'link clicked': {
+          color: 'blue.900',
+          bg: 'blue.100',
+        },
+        unsubscribed: {
+          color: 'red.900',
+          bg: 'red.100',
+        },
+        bounced: {
+          color: 'red.900',
+          bg: 'red.100',
+        },
+        're-subscribed': {
+          color: 'gray.900',
+          bg: 'gray.100',
+        },
+      },
+    },
+  },
 }
 
 const appTheme = extendTheme(theme)

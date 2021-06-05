@@ -15,6 +15,10 @@ export const help: HelpMap = {
     info:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
   },
+  options: {
+    heading: 'Select acticity options',
+    info: '',
+  },
   category: {
     heading: 'Category',
     info: 'Select the category that describes better your activity',
@@ -50,12 +54,12 @@ export const help: HelpMap = {
     heading: 'Duration',
     info: 'The total time of the activity',
   },
-  frequency: {
-    heading: 'Frequency',
+  dates: {
+    heading: 'Date and time',
     info: (
       <>
-        <Text>Set the dates and times of your activity</Text>
-        <Text>You can add multiple frequency rules.</Text>
+        <Text>Set the date and time of your activity</Text>
+        <Text>You can add many as you want.</Text>
       </>
     ),
   },

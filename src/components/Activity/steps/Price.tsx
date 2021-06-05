@@ -8,7 +8,7 @@ import {
   useRadioGroup,
 } from '@chakra-ui/react'
 import { useStateMachine } from 'little-state-machine'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 
 import { RadioCard } from 'components'
@@ -22,13 +22,19 @@ const ACTIVITY_TYPE = ['Free', 'Paid']
 
 export function Price() {
   const { state, actions } = useStateMachine({ update }) as any
-  const { type } = state
-  const { register, formState, getValues, errors, trigger } = useForm({
+  const { monetizationType } = state
+  const {
+    formState,
+    getValues,
+    formState: { errors },
+    trigger,
+    control,
+  } = useForm({
     defaultValues: state,
     mode: 'onBlur',
   })
   const { isValid } = formState
-  const isPaid = type === 'Paid'
+  const isPaid = monetizationType === 'Paid'
 
   const handleChange = (field: string) => actions.update({ [field]: Number(getValues(field)) })
 
@@ -38,9 +44,9 @@ export function Price() {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'duration',
-    defaultValue: type,
+    defaultValue: monetizationType,
     onChange: (value) => {
-      actions.update({ type: value })
+      actions.update({ monetizationType: value })
     },
   })
 
@@ -84,18 +90,22 @@ export function Price() {
                 rounded="6px"
               >
                 <InputLeftAddon bg="white" pr="4px" children="£" />
-                <Input
-                  pl="4px"
-                  autoFocus
-                  type="number"
-                  ref={register({
-                    required: isPaid,
-                    min: MIN_PRICE,
-                    max: MAX_PRICE,
-                    valueAsNumber: true,
-                  })}
-                  onChange={() => handleChange('price')}
+                <Controller
                   name="price"
+                  control={control}
+                  rules={{ required: isPaid, min: MIN_PRICE, max: MAX_PRICE }}
+                  render={({ field }) => (
+                    <Input
+                      pl="4px"
+                      autoFocus
+                      type="number"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e)
+                        handleChange('price')
+                      }}
+                    />
+                  )}
                 />
               </InputGroup>
               <Error

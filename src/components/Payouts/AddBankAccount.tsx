@@ -1,24 +1,20 @@
 import { useState } from 'react'
-import {
-  Text,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  Button,
-  HStack,
-  VStack,
-  useToast,
-} from '@chakra-ui/react'
+import { Text, Input, InputGroup, InputLeftAddon, Button, HStack, VStack } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 
 import { addStripeExternalAccount } from 'api'
+import { showAlert } from 'lib/utils'
+import { trackUpdateBankAccount } from 'analytics'
 
 export const AddBankAccount = () => {
-  const { register, handleSubmit, errors } = useForm({})
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({})
   const [isLoading, setLoading] = useState(false)
   const [hasBankAccount, setBankAccount] = useState(false)
-  const toast = useToast()
 
   const onSubmit = async (data: any) => {
     setLoading(true)
@@ -26,24 +22,18 @@ export const AddBankAccount = () => {
     setLoading(false)
 
     if (bankAccount?.data?.statusCode === 400) {
-      console.log('ERR', bankAccount.data.raw.message)
-      toast({
+      showAlert({
         title: 'Invalid banking details',
         description: bankAccount.data.raw.message,
         status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
       })
     } else {
-      toast({
+      showAlert({
         title: 'Bank details saved',
         status: 'success',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
       })
       setBankAccount(true)
+      trackUpdateBankAccount()
     }
   }
 
@@ -54,45 +44,31 @@ export const AddBankAccount = () => {
       <VStack alignItems="flex-start" pos="relative" spacing="1rem">
         <Text fontSize="sm">Please add the bank account:</Text>
         <HStack>
-          <InputGroup
-            bg="white"
-            border="1px solid white"
-            shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-            rounded="6px"
-            w="220px"
-          >
+          <InputGroup bg="white" rounded="6px" w="220px">
             <InputLeftAddon w="100px" bg="white" children="Sort code" />
             <Input
               autoFocus
               placeholder="12-34-56"
-              ref={register({
+              {...register('sortcode', {
                 required: true,
                 pattern: /(?!0{2}(-?0{2}){2})(\d{2}(-\d{2}){2})|(\d{6})/,
                 setValueAs: (value) => value.replaceAll('-', ''),
               })}
-              name="sortcode"
             />
           </InputGroup>
           <Error errors={errors} name="sortcode" message="Invalid sort code" />
         </HStack>
         <HStack>
-          <InputGroup
-            bg="white"
-            border="1px solid white"
-            shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-            rounded="6px"
-            w="220px"
-          >
+          <InputGroup bg="white" rounded="6px" w="220px">
             <InputLeftAddon w="100px" bg="white" children="Account" />
             <Input
               placeholder="123456789"
-              ref={register({
+              {...register('account', {
                 required: true,
                 minLength: 6,
                 maxLength: 9,
                 pattern: /^[0-9]*$/,
               })}
-              name="account"
             />
           </InputGroup>
           <Error errors={errors} name="account" message="Invalid account number" />

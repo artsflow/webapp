@@ -1,6 +1,6 @@
 import { Flex, Text, Input, InputGroup, InputRightAddon, Heading } from '@chakra-ui/react'
 import { useStateMachine } from 'little-state-machine'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 
 import { update } from '../utils'
@@ -11,7 +11,13 @@ const MAX_CAPACITY = 100
 
 export function Capacity() {
   const { state, actions } = useStateMachine({ update }) as any
-  const { register, formState, getValues, errors, trigger } = useForm({
+  const {
+    formState,
+    getValues,
+    formState: { errors },
+    trigger,
+    control,
+  } = useForm({
     defaultValues: state,
     mode: 'onBlur',
   })
@@ -38,26 +44,24 @@ export function Capacity() {
             Select capacity
           </Text>
 
-          <InputGroup
-            my="4"
-            bg="white"
-            border="1px solid white"
-            shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-            w="160px"
-            rounded="6px"
-          >
-            <Input
-              autoFocus
-              type="number"
-              ref={register({
-                required: true,
-                min: MIN_CAPACITY,
-                max: MAX_CAPACITY,
-              })}
-              onChange={() => handleChange('capacity')}
+          <InputGroup my="4" w="160px">
+            <Controller
               name="capacity"
+              control={control}
+              rules={{ required: true, min: MIN_CAPACITY, max: MAX_CAPACITY }}
+              render={({ field }) => (
+                <Input
+                  autoFocus
+                  type="number"
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e)
+                    handleChange('capacity')
+                  }}
+                />
+              )}
             />
-            <InputRightAddon bg="white" children="members" />
+            <InputRightAddon children="members" />
           </InputGroup>
           <Error
             errors={errors}

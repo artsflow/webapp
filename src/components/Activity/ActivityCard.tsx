@@ -27,39 +27,53 @@ import {
   AlertDialogFooter,
   useDisclosure,
 } from '@chakra-ui/react'
-import { RRuleSet, rrulestr } from 'rrule'
 import { format, addMinutes } from 'date-fns'
 import { BsLink, BsThreeDots } from 'react-icons/bs'
-import { capitalize } from 'lodash'
+import { capitalize, sortBy } from 'lodash'
 import { useRouter } from 'next/router'
 
 import { getImageKitUrl } from 'lib/utils'
-import { ruleText } from 'components/Activity/utils'
 import { ARTSFLOW_URL } from 'lib/config'
 import { setActivityStatus, deleteActivity } from 'api'
 import CalendarRepeatIcon from 'svg/icons/calendar-repeat.svg'
+import {
+  trackEditActivityButton,
+  trackPauseActivity,
+  trackActivateActivity,
+  trackDeleteActivity,
+} from 'analytics'
 
 export const ActivityCard = (props: any) => {
-  const { title, category, images, duration, frequency, type, price, id, loading, status } = props
+  const {
+    title,
+    category,
+    images,
+    duration,
+    dates,
+    monetizationType,
+    price,
+    id,
+    loading,
+    status,
+  } = props
 
   if (loading) return <Skeleton rounded="12px" width="360px" height="200px" />
 
-  const { rrules } = frequency
-  const rruleSet = new RRuleSet()
-  rrules.forEach((r: string) => rruleSet.rrule(rrulestr(r)))
-  const [nextSession] = rruleSet.all()
+  const [nextSession] = sortBy(dates, [(d: string) => new Date(d)])
+    .map((d: string) => new Date(d))
+    .filter((d) => d > new Date())
 
-  const from = format(nextSession, 'HH:mm')
-  const to = format(addMinutes(nextSession, duration), 'HH:mm')
+  const from = nextSession ? format(nextSession, 'HH:mm') : ''
+  const to = nextSession ? format(addMinutes(nextSession, duration), 'HH:mm') : ''
 
-  const isPaid = type === 'Paid'
+  const isPaid = monetizationType === 'Paid'
 
-  const freqList = rrules.map((rule: string) => {
-    const { freq, days, time } = ruleText(rule, duration)
-    return `${capitalize(freq)} / ${days} / ${time}`
-  })
+  const freqLabel = dates
+    ? dates
+        .map((d: string) => format(new Date(d), 'dd MMM, yyy - HH:mm'))
+        .map((d: string) => <Text key={d}>{d}</Text>)
+    : 'not scheduled'
 
-  const freqLabel = freqList.join('\n')
   const isActive = status === 'active'
 
   const activityLink = `${ARTSFLOW_URL}/a/${id}`
@@ -92,8 +106,8 @@ export const ActivityCard = (props: any) => {
           <Text fontSize="xs" color="#616167">
             Next session
           </Text>
-          <Text fontSize="xs" fontWeight="bold">
-            {format(nextSession, 'MMM dd, yyyy')}
+          <Text fontSize="xs" fontWeight="bold" color={nextSession ? 'black' : 'af.pink'}>
+            {nextSession ? format(nextSession, 'MMM dd, yyyy') : 'Not scheduled'}
           </Text>
         </VStack>
         <Flex w="1px" bg="#F3F3F3" h="70%" />
@@ -102,7 +116,7 @@ export const ActivityCard = (props: any) => {
             Time interval
           </Text>
           <Text fontSize="xs" fontWeight="bold">
-            {from} - {to}
+            {from && to ? `${from} - ${to}` : `... - ...`}
           </Text>
         </VStack>
       </HStack>
@@ -113,7 +127,7 @@ export const ActivityCard = (props: any) => {
           </Text>
           <Separator />
           <Text fontSize="xs" color={isPaid ? '#616167' : 'af.pink'} pb="2px">
-            {isPaid ? `£${price}` : type}
+            {isPaid ? `£${price}` : monetizationType}
           </Text>
           <Separator />
           <Tooltip label={freqLabel} placement="top" closeOnClick hasArrow shouldWrapChildren>
@@ -176,6 +190,11 @@ const OptionsMenu = (props: any) => {
 
   const menuItem = isActive ? 'Pause' : 'Set active'
 
+  const handleEditActivity = () => {
+    trackEditActivityButton(id, 'My Activities card')
+    router.push(`/activities/edit/${id}`)
+  }
+
   const toggleStateAlert = () => {
     setAction(isActive ? 'pause' : 'active')
     onOpen()
@@ -191,11 +210,17 @@ const OptionsMenu = (props: any) => {
       case 'delete':
         setLoading(true)
         await deleteActivity({ id })
+        trackDeleteActivity(id)
         break
 
       default:
         setLoading(true)
         await setActivityStatus({ status: isActive ? 'paused' : 'active', id })
+        if (isActive) {
+          trackPauseActivity(id)
+        } else {
+          trackActivateActivity(id)
+        }
         break
     }
     onClose()
@@ -218,7 +243,7 @@ const OptionsMenu = (props: any) => {
           color="#8e8e92"
         />
         <MenuList ml="-190px">
-          <MenuItem onClick={() => router.push(`/activities/edit/${id}`)}>Edit</MenuItem>
+          <MenuItem onClick={handleEditActivity}>Edit</MenuItem>
           <MenuItem onClick={toggleStateAlert}>{menuItem}</MenuItem>
           <MenuDivider />
           <MenuItem onClick={handleDeleteAlert} color="red.500">

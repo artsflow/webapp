@@ -3,7 +3,9 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/functions'
+import 'firebase/performance'
 
+import { showAlert } from 'lib/utils'
 import {
   FIREBASE_API_KEY,
   FIREBASE_AUTH_DOMAIN,
@@ -30,7 +32,6 @@ if (!firebase.apps.length) {
   // emulators
   if (process.env.NEXT_PUBLIC_EMULATOR) {
     console.info('___using__emulators___')
-
     firebase.auth().useEmulator('http://localhost:7042')
     firebase.firestore().useEmulator('localhost', 9042)
     firebase.firestore().settings({ host: 'localhost:9042', ssl: false, cacheSizeBytes: 2048576 })
@@ -74,19 +75,32 @@ export function postToJSON(doc: any) {
 }
 
 export const firebaseCallable = async (func: string, params: any) => {
-  console.info(`>>> callable: ${func}`, params)
+  // console.info(`>>> callable: ${func}`, params)
+  const perf = firebase.performance()
+  const trace = perf.trace(`app:${func}`)
+  trace.start()
 
   try {
     const result = await functions.httpsCallable(func, { timeout: 5000 })(params)
+    trace.stop()
     return result
   } catch (e) {
     console.error(`firebaseCallable:error:${func}: ${JSON.stringify(e)}`)
+    trace.stop()
+    showAlert({
+      title: 'Error!',
+      description: e.message,
+      status: 'error',
+    })
     return e
   }
 }
 
 export const uploadTask = async ({ path, blob, onProgres }: any) =>
   new Promise((resolve, reject) => {
+    const perf = firebase.performance()
+    const trace = perf.trace(`app:uploadTask`)
+    trace.start()
     const storageRef = storage.ref(path)
     const task = storageRef.put(blob)
 
@@ -102,6 +116,7 @@ export const uploadTask = async ({ path, blob, onProgres }: any) =>
       },
       () => {
         task.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          trace.stop()
           resolve(downloadURL)
         })
       }

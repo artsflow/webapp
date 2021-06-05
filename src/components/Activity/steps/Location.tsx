@@ -15,7 +15,13 @@ import { Navigation } from '../Navigation'
 
 export function Location() {
   const { state, actions } = useStateMachine({ update }) as any
-  const { register, formState, getValues, errors, trigger } = useForm({
+  const {
+    register,
+    formState,
+    getValues,
+    formState: { errors },
+    trigger,
+  } = useForm({
     defaultValues: state,
     mode: 'onBlur',
   })
@@ -36,10 +42,10 @@ export function Location() {
         .then((results) => {
           const placeLat = results[0].geometry.location.lat()
           const placeLng = results[0].geometry.location.lng()
-
           actions.update({
             location: {
               address: place?.value.description,
+              town: place?.value?.structured_formatting?.secondary_text,
               placeId: place.value.place_id,
               geocode: {
                 lat: placeLat,
@@ -143,9 +149,8 @@ export function Location() {
                 bg="white"
                 border="none"
                 shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-                name="address"
                 value={address}
-                ref={register({
+                {...register('address', {
                   required: true,
                   minLength: 10,
                   maxLength: 200,
@@ -173,8 +178,7 @@ export function Location() {
                 border="none"
                 shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
                 value={details}
-                name="details"
-                ref={register({
+                {...register('details', {
                   required: false,
                   maxLength: 200,
                 })}

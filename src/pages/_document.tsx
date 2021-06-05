@@ -1,9 +1,23 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
-import React from 'react'
+import * as snippet from '@segment/snippet'
 
-import { GCP_MAPS_KEY } from 'lib/config'
+import { GCP_MAPS_KEY, SEGMENT_KEY } from 'lib/config'
 
 export default class MyDocument extends Document {
+  renderSnippet() {
+    const opts = {
+      host: 'cdn.artsflow.link',
+      apiKey: SEGMENT_KEY,
+      page: true,
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      return snippet.max(opts)
+    }
+
+    return snippet.min(opts)
+  }
+
   render(): JSX.Element {
     return (
       <Html lang="en">
@@ -27,6 +41,7 @@ export default class MyDocument extends Document {
           <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
           <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
           <link rel="manifest" href="/site.webmanifest" />
+          <script dangerouslySetInnerHTML={{ __html: this.renderSnippet() }} />
         </Head>
         <style>
           {`

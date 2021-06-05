@@ -30,6 +30,8 @@ import { useRouter } from 'next/router'
 import { UserContext } from 'lib/context'
 import { Notifications } from 'components'
 import { getImageKitUrl } from 'lib/utils'
+import { trackUserSignOut } from 'analytics'
+import { useOnboarding } from 'hooks'
 
 import packageInfo from '../../package.json'
 
@@ -39,9 +41,11 @@ export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user, profile } = useContext(UserContext)
   const router = useRouter()
+  const [onboardingCompleted] = useOnboarding()
 
   const handleLogout = () => {
     auth.signOut()
+    trackUserSignOut()
     router.push('/')
   }
 
@@ -56,25 +60,37 @@ export function Header() {
       zIndex="1"
     >
       <Box>
-        <NextLink href="/">
-          <Link>
+        <NextLink href="/" passHref>
+          <a>
             <Logo width="107px" height="24px" />
-          </Link>
+          </a>
         </NextLink>
       </Box>
       <HStack mt="10px" pl="1rem">
         <Text fontSize="10px" color="gray.500">
-          v{version} alpha
+          v{version}
         </Text>
       </HStack>
       <HStack mt="10px" pl="1rem">
         {!user.isVerified && (
-          <NextLink href="/">
+          <NextLink href="/" passHref>
             <Link>
               <HStack>
                 <WarningTwoIcon color="af.pink" />
                 <Text fontSize="12px" color="af.pink" fontWeight="bold">
-                  Account not verified - Click here to verfy!
+                  Your account is not verified - Click here to verfy and finish onboarding!
+                </Text>
+              </HStack>
+            </Link>
+          </NextLink>
+        )}
+        {user.isVerified && !onboardingCompleted && (
+          <NextLink href="/" passHref>
+            <Link>
+              <HStack>
+                <WarningTwoIcon color="af.teal" />
+                <Text fontSize="12px" color="af.teal" fontWeight="bold">
+                  Onboarding not completed. Click here to complete.
                 </Text>
               </HStack>
             </Link>
@@ -103,7 +119,7 @@ export function Header() {
             </Text>
           </>
         ) : (
-          <NextLink href="/profile">
+          <NextLink href="/profile" passHref>
             <Link>
               <Text fontSize="sm" fontWeight="bold" color="af.teal">
                 Complete your profile

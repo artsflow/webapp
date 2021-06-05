@@ -3,6 +3,7 @@ import { Box, VStack, Icon, IconButton, Heading } from '@chakra-ui/react'
 import { useOutsideClick } from 'rooks'
 
 import BulbIcon from 'svg/icons/bulb.svg'
+import { trackHelpBulb } from 'analytics'
 import { help } from './help-copy'
 
 export const InfoBulb = ({ step }: any) => {
@@ -12,6 +13,9 @@ export const InfoBulb = ({ step }: any) => {
   useOutsideClick(pRef, () => setOpen(false))
 
   const handleToggle = () => {
+    if (!isOpen) {
+      trackHelpBulb(step)
+    }
     setOpen(!isOpen)
   }
 

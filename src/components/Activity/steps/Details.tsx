@@ -5,31 +5,38 @@ import {
   InputGroup,
   InputRightElement,
   Heading,
-  Textarea,
   HStack,
+  Spacer,
 } from '@chakra-ui/react'
 import { useStateMachine } from 'little-state-machine'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 
 import { update } from '../utils'
 import { Navigation } from '../Navigation'
+import { Editor } from '../Editor'
 
 const TITLE_MIN_LENGTH = 20
 const TITLE_MAX_LENGTH = 80
-const DESCRIPTION_MIN_LENGTH = 200
+const DESCRIPTION_MIN_LENGTH = 500
 const DESCRIPTION_MAX_LENGTH = 5000
-const WHATTOBRING_MAX_LENGTH = 1000
 
 export function Details() {
   const { state, actions } = useStateMachine({ update }) as any
-  const { register, formState, getValues, errors, trigger } = useForm({
+
+  const {
+    getValues,
+    formState: { errors, isValid },
+    trigger,
+    control,
+  } = useForm({
     defaultValues: state,
     mode: 'onBlur',
   })
-  const { isValid } = formState
 
-  const handleChange = (field: string) => actions.update({ [field]: getValues(field) })
+  const handleChange = (field: string) => {
+    actions.update({ [field]: getValues(field) })
+  }
 
   const handleTrigger = async () => {
     await trigger()
@@ -38,7 +45,7 @@ export function Details() {
   return (
     <>
       <Flex justifyContent="space-between" alignItems="flex-start" p="40px">
-        <Flex direction="column" alignItems="flex-start" w="460px">
+        <Flex direction="column" alignItems="flex-start" w="640px">
           <Heading size="md" mb="1rem">
             Add Details
           </Heading>
@@ -47,29 +54,36 @@ export function Details() {
           </Text>
 
           <Container>
-            <Text fontWeight="bold" alignItems="center">
+            <Text fontWeight="bold" alignItems="center" mb="0.5rem">
               Activity Title
             </Text>
             <InputGroup>
-              <Input
-                my="4"
-                pr="60px"
-                placeholder="Add activity title..."
-                bg="white"
-                border="none"
-                shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-                autoFocus
+              <Controller
                 name="title"
-                ref={register({
+                control={control}
+                rules={{
                   required: true,
                   minLength: TITLE_MIN_LENGTH,
                   maxLength: TITLE_MAX_LENGTH,
-                })}
-                onChange={() => handleChange('title')}
+                }}
+                defaultValue={state.title}
+                render={({ field }) => (
+                  <Input
+                    mb="4"
+                    pr="65px"
+                    {...field}
+                    placeholder="Add activity title..."
+                    autoFocus
+                    onChange={(e) => {
+                      field.onChange(e)
+                      handleChange('title')
+                    }}
+                  />
+                )}
               />
               <InputRightElement
-                my="4"
                 mr="2"
+                w="50px"
                 fontSize="xs"
                 children={`${state.title?.length} / ${TITLE_MAX_LENGTH}`}
                 color="gray.400"
@@ -83,73 +97,37 @@ export function Details() {
           </Container>
 
           <Container>
-            <Text fontWeight="bold" alignItems="center">
-              Description
-            </Text>
-            <InputGroup>
-              <Textarea
-                my="4"
-                placeholder="Enter description..."
-                rows={7}
-                bg="white"
-                border="none"
-                shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-                name="description"
-                ref={register({
-                  required: true,
-                  minLength: DESCRIPTION_MIN_LENGTH,
-                  maxLength: DESCRIPTION_MAX_LENGTH,
-                })}
-                onChange={() => handleChange('description')}
-              />
-              <InputRightElement
-                mt="-2rem"
-                w="80px"
-                color="gray.400"
-                fontSize="xs"
-                children={`${state.description?.length} / ${DESCRIPTION_MAX_LENGTH}`}
-              />
-            </InputGroup>
+            <HStack mb="0.5rem" alignItems="center" justifyContent="space-between" w="full">
+              <Text fontWeight="bold">Description</Text>
+              <Text fontSize="xs" color="gray.400">
+                {state.description?.replace(/<[^>]+>/g, '')?.length} / {DESCRIPTION_MAX_LENGTH}
+              </Text>
+            </HStack>
+            <Controller
+              control={control}
+              name="description"
+              rules={{
+                required: true,
+                minLength: DESCRIPTION_MIN_LENGTH,
+                maxLength: DESCRIPTION_MAX_LENGTH,
+              }}
+              defaultValue={state.description}
+              render={({ field }) => (
+                <Editor
+                  {...field}
+                  onChange={(e: any) => {
+                    field.onChange(e)
+                    handleChange('description')
+                    field.onBlur()
+                  }}
+                />
+              )}
+            />
+            <Spacer mb="1rem" />
             <Error
               errors={errors}
               name="description"
-              message={`Description hast have between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters`}
-            />
-          </Container>
-
-          <Container>
-            <HStack>
-              <Text fontWeight="bold" alignItems="center">
-                What to bring (optional)
-              </Text>
-            </HStack>
-            <InputGroup>
-              <Textarea
-                my="4"
-                placeholder="List what to bring..."
-                rows={7}
-                bg="white"
-                border="none"
-                shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-                name="whatToBring"
-                ref={register({
-                  required: false,
-                  maxLength: DESCRIPTION_MAX_LENGTH,
-                })}
-                onChange={() => handleChange('whatToBring')}
-              />
-              <InputRightElement
-                mt="-2rem"
-                w="80px"
-                color="gray.400"
-                fontSize="xs"
-                children={`${state.whatToBring?.length} / ${WHATTOBRING_MAX_LENGTH}`}
-              />
-            </InputGroup>
-            <Error
-              errors={errors}
-              name="whatToBring"
-              message={`What to bring no more than ${WHATTOBRING_MAX_LENGTH} characters`}
+              message={`Description between ${DESCRIPTION_MIN_LENGTH} and ${DESCRIPTION_MAX_LENGTH} characters`}
             />
           </Container>
         </Flex>

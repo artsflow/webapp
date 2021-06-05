@@ -1,11 +1,14 @@
 import { useEffect, useContext } from 'react'
 import Head from 'next/head'
-import { Grid, Box, HStack, VStack, Text, Button, Center } from '@chakra-ui/react'
+import { Grid, Box, HStack, VStack, Text, Button, Center, useBreakpoint } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 import { Footer, Header, SidePanel, Loading } from 'components'
+import { trackSmallScreenUsed } from 'analytics'
+import { Card } from 'components/UI'
 import { UserContext } from 'lib/context'
 import { auth } from 'lib/firebase'
+import { useUserData } from 'hooks'
 import Logo from 'svg/artsflow.svg'
 
 const UNAUTH_ROUTES = ['/login', '/terms']
@@ -20,6 +23,8 @@ export function Layout({ children }: Props) {
   const router = useRouter()
 
   useEffect(() => {
+    if (user) window.analytics?.identify(user.id)
+
     if (!authState && !loading) {
       router.push('/login')
     }
@@ -37,7 +42,7 @@ export function Layout({ children }: Props) {
   )
 }
 
-const NotAuthorizedLayout = () => {
+export const NotAuthorizedLayout = () => {
   const handleLogout = () => {
     auth.signOut()
   }
@@ -58,7 +63,9 @@ const NotAuthorizedLayout = () => {
 }
 
 const AuthLayout = ({ children }: Props) => {
-  const { user } = useContext(UserContext)
+  const { user } = useUserData()
+  const screen = useBreakpoint('base') || ''
+  const isSmallScreen = ['base', 'sm'].includes(screen)
 
   if (user.provider && !user?.isBetaTester) return <NotAuthorizedLayout />
 
@@ -67,8 +74,8 @@ const AuthLayout = ({ children }: Props) => {
       <Header />
       <HStack as="main" bg="#F9F9F9" spacing="0">
         <SidePanel />
-        <VStack h="100%" w="100%" alignItems="flex-start" spacing="0">
-          {children}
+        <VStack h="100%" w="full" alignItems="flex-start" spacing="0">
+          {isSmallScreen ? <SmallScreenInfo /> : children}
         </VStack>
       </HStack>
     </Grid>
@@ -96,5 +103,20 @@ const UnAuthLayout = ({ children }: Props) => {
       </Box>
       <Footer />
     </Grid>
+  )
+}
+
+const SmallScreenInfo = () => {
+  useEffect(() => {
+    trackSmallScreenUsed()
+  }, [])
+
+  return (
+    <Card m="1rem" w="200px">
+      <Text fontWeight="bold" mb="0.5rem" color="af.teal">
+        This app is optimized for large screens
+      </Text>
+      <Text>Please load it on a tablet or laptop</Text>
+    </Card>
   )
 }

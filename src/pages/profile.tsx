@@ -8,8 +8,8 @@ import {
   IconButton,
   Avatar,
   Input,
+  Textarea,
   VStack,
-  useToast,
   InputGroup,
   InputRightElement,
   CircularProgress,
@@ -20,16 +20,16 @@ import { BsEye, BsLock } from 'react-icons/bs'
 import { useDropzone } from 'react-dropzone'
 
 import { UserContext } from 'lib/context'
-import { getImageKitUrl } from 'lib/utils'
+import { getImageKitUrl, showAlert } from 'lib/utils'
 import { auth, storage, STATE_CHANGED } from 'lib/firebase'
 import { updateProfile, updateAvatarUrl } from 'api'
 import CameraSvg from 'svg/icons/camera.svg'
 import { Meta } from 'components'
+import { trackUpdateAvatar, trackUpdateProfile } from 'analytics'
 
 type Inputs = {
   firstName: string
   lastName: string
-  address: string
   bio: string
 }
 
@@ -40,13 +40,11 @@ export default function Profile(): JSX.Element {
   const [progress, setProgress] = useState(0)
   const { user, profile } = useContext(UserContext)
   const { register, handleSubmit, formState, reset } = useForm<Inputs>()
-  const toast = useToast()
 
   const { firstName, lastName, displayName, bio, photoURL } = profile
   const { isDirty } = formState
 
   const onDrop = useCallback(async ([file]) => {
-    console.log('onDrop')
     setCompressing(true)
 
     const heic2any = (await import('heic2any')).default
@@ -65,7 +63,6 @@ export default function Profile(): JSX.Element {
     )
 
     setCompressing(false)
-    // console.log(resizedImage, file) // check heic vs webp
     const extension = resizedImage.type.replace('image/', '')
 
     const ref = storage.ref(`uploads/${auth.currentUser?.uid}/${Date.now()}.${extension}`)
@@ -80,9 +77,9 @@ export default function Profile(): JSX.Element {
     task
       .then(() => ref.getDownloadURL())
       .then(async (url) => {
-        console.log(url)
         setUploading(false)
         await updateAvatarUrl(url)
+        trackUpdateAvatar()
       })
   }, [])
 
@@ -94,25 +91,14 @@ export default function Profile(): JSX.Element {
   const onSubmit = async (data: Inputs) => {
     setLoading(true)
     const result = await updateProfile(data)
-    console.log(result)
+
     setLoading(false)
     reset()
     if (result) {
-      toast({
-        title: 'Information updated',
-        status: 'success',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      })
+      showAlert({ title: 'Information updated', status: 'success' })
+      trackUpdateProfile(user.id, { ...data, displayName: `${data.firstName} ${data.lastName}` })
     } else {
-      toast({
-        title: 'Information not updated',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      })
+      showAlert({ title: 'Information not updated', status: 'error' })
     }
   }
 
@@ -120,7 +106,7 @@ export default function Profile(): JSX.Element {
     <>
       <Meta title="My Profile" />
       <Box w="100%" p="40px">
-        <Heading size="md" mb="1rem">
+        <Heading fontSize="lg" mb="1rem">
           My profile
         </Heading>
         <Text color="#616167">Edit and add to your profile here.</Text>
@@ -173,10 +159,14 @@ export default function Profile(): JSX.Element {
                 <Text fontWeight="bold">First name</Text>
                 <InputGroup>
                   <Input
+                    variant="outline"
                     placeholder="First name"
                     defaultValue={firstName}
-                    name="firstName"
-                    ref={register({ required: true, maxLength: 20, pattern: /^[A-Za-z]+$/i })}
+                    {...register('firstName', {
+                      required: true,
+                      maxLength: 20,
+                      pattern: /^[A-Za-z]+$/i,
+                    })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
                 </InputGroup>
@@ -185,10 +175,14 @@ export default function Profile(): JSX.Element {
                 <Text fontWeight="bold">Last name</Text>
                 <InputGroup>
                   <Input
+                    variant="outline"
                     placeholder="Last name"
                     defaultValue={lastName}
-                    name="lastName"
-                    ref={register({ required: true, maxLength: 40, pattern: /^[A-Za-z]+$/i })}
+                    {...register('lastName', {
+                      required: true,
+                      maxLength: 40,
+                      pattern: /^[A-Za-z]+$/i,
+                    })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
                 </InputGroup>
@@ -208,26 +202,14 @@ export default function Profile(): JSX.Element {
               </VStack>
             </HStack>
             <HStack spacing="1.5rem" mt="1rem">
-              <VStack alignItems="flex-start" w="calc(33.33% - 1rem)">
-                <Text fontWeight="bold">Address</Text>
-                <InputGroup>
-                  <Input
-                    placeholder="Enter your address"
-                    defaultValue={user.address}
-                    name="address"
-                    ref={register({ maxLength: 120 })}
-                  />
-                  <InputRightElement children={<Icon as={BsLock} color="gray.300" />} />
-                </InputGroup>
-              </VStack>
               <VStack alignItems="flex-start" w="calc(66.66% - 1rem)">
                 <Text fontWeight="bold">Short description</Text>
                 <InputGroup>
-                  <Input
+                  <Textarea
                     placeholder="a little about you"
                     defaultValue={bio}
-                    name="bio"
-                    ref={register({ maxLength: 420 })}
+                    rows={4}
+                    {...register('bio', { maxLength: 420 })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
                 </InputGroup>

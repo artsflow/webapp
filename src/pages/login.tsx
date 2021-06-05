@@ -29,6 +29,7 @@ import GoogleButton from 'svg/google-signin.svg'
 import { Container, Meta } from 'components'
 import { auth, googleAuthProvider } from 'lib/firebase'
 import { UserContext } from 'lib/context'
+import { trackUserSignIn, trackUserSignUp } from 'analytics'
 
 const validateEmail = (str: string): boolean => !!str.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g)
 
@@ -51,13 +52,21 @@ export default function Login(): JSX.Element {
 
   useEffect(() => {
     if (oobCode && auth.isSignInWithEmailLink(window.location.href)) {
-      const email = window.localStorage.getItem('emailForSignIn')
+      const emailForSignIn = window.localStorage.getItem('emailForSignIn')
 
-      if (email) {
+      if (emailForSignIn) {
         auth
-          .signInWithEmailLink(email, window.location.href)
-          .then(() => {
+          .signInWithEmailLink(emailForSignIn, window.location.href)
+          .then((data) => {
+            const { isNewUser } = data.additionalUserInfo as any
+            const { uid: userId, displayName, email } = data.user as any
+
             window.localStorage.removeItem('emailForSignIn')
+            trackUserSignIn({ userId, displayName, email, provider: 'email' })
+
+            if (isNewUser) {
+              trackUserSignUp({ provider: 'email' })
+            }
           })
           .catch((error) => {
             console.error('email_auth_error1:', error)
@@ -68,11 +77,19 @@ export default function Login(): JSX.Element {
     }
   }, [oobCode])
 
-  const handleConfirnmEmail = () => {
+  const handleConfirmEmail = () => {
     auth
       .signInWithEmailLink(confirmEmailValue, window.location.href)
-      .then(() => {
+      .then((data) => {
+        const { isNewUser } = data.additionalUserInfo as any
+        const { uid: userId, displayName, email } = data.user as any
+
         window.localStorage.removeItem('emailForSignIn')
+        trackUserSignIn({ userId, displayName, email, provider: 'email' })
+
+        if (isNewUser) {
+          trackUserSignUp({ provider: 'email' })
+        }
       })
       .catch((error) => {
         console.error('email_auth_error2:', error)
@@ -96,11 +113,9 @@ export default function Login(): JSX.Element {
 
   const onLogin = useCallback(
     (e) => {
-      console.log('sendSignInLinkToEmail')
       e.preventDefault()
       auth
         .sendSignInLinkToEmail(emailValue, { url: window.location.href, handleCodeInApp: true })
-        .then((r) => console.info('sendSignInLinkToEmail:', r))
         .catch((err) => console.error('sendSignInLinkToEmail', err))
 
       window.localStorage.setItem('emailForSignIn', emailValue)
@@ -118,14 +133,23 @@ export default function Login(): JSX.Element {
   )
 
   const onGoogleLogin = async () => {
-    await auth.signInWithPopup(googleAuthProvider)
+    auth.signInWithPopup(googleAuthProvider).then((data) => {
+      const { isNewUser } = data.additionalUserInfo as any
+      const { uid: userId, displayName, email } = data.user as any
+
+      trackUserSignIn({ userId, displayName, email, provider: 'google' })
+
+      if (isNewUser) {
+        trackUserSignUp({ provider: 'google' })
+      }
+    })
   }
 
   return (
     <>
       <Meta title="Login" />
       <Container h="100%" justifyContent="center">
-        <Link href="/">
+        <Link href="/" passHref>
           <a>
             <Logo width="242px" />
           </a>
@@ -203,7 +227,7 @@ export default function Login(): JSX.Element {
               <Button onClick={onClose} mr="1rem">
                 Cancel
               </Button>
-              <Button onClick={handleConfirnmEmail} bg="af.pink" color="white">
+              <Button onClick={handleConfirmEmail} bg="af.pink" color="white">
                 Confirm
               </Button>
             </ModalFooter>

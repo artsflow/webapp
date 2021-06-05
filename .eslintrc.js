@@ -81,8 +81,10 @@ module.exports = {
       'error',
       // 'FunctionExpression',
       'WithStatement',
-      "BinaryExpression[operator='in']",
+      // "BinaryExpression[operator='in']",
     ],
+    'class-methods-use-this': 0,
+    'react/no-array-index-key': 0,
   },
   settings: {
     react: {
