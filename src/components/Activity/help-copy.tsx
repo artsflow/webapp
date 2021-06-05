@@ -15,6 +15,10 @@ export const help: HelpMap = {
     info:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
   },
+  options: {
+    heading: 'Select acticity options',
+    info: '',
+  },
   category: {
     heading: 'Category',
     info: 'Select the category that describes better your activity',
