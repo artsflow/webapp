@@ -96,7 +96,12 @@ export default function Profile(): JSX.Element {
     reset()
     if (result) {
       showAlert({ title: 'Information updated', status: 'success' })
-      trackUpdateProfile(user.id, { ...data, displayName: `${data.firstName} ${data.lastName}` })
+      trackUpdateProfile(user.id, {
+        ...data,
+        name: `${data.firstName} ${data.lastName}`,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      })
     } else {
       showAlert({ title: 'Information not updated', status: 'error' })
     }

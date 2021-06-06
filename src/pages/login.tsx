@@ -62,7 +62,7 @@ export default function Login(): JSX.Element {
             const { uid: userId, displayName, email } = data.user as any
 
             window.localStorage.removeItem('emailForSignIn')
-            trackUserSignIn({ userId, displayName, email, provider: 'email' })
+            trackUserSignIn({ userId, name: displayName, email, provider: 'email' })
 
             if (isNewUser) {
               trackUserSignUp({ provider: 'email' })
@@ -85,7 +85,7 @@ export default function Login(): JSX.Element {
         const { uid: userId, displayName, email } = data.user as any
 
         window.localStorage.removeItem('emailForSignIn')
-        trackUserSignIn({ userId, displayName, email, provider: 'email' })
+        trackUserSignIn({ userId, name: displayName, email, provider: 'email' })
 
         if (isNewUser) {
           trackUserSignUp({ provider: 'email' })
@@ -137,7 +137,7 @@ export default function Login(): JSX.Element {
       const { isNewUser } = data.additionalUserInfo as any
       const { uid: userId, displayName, email } = data.user as any
 
-      trackUserSignIn({ userId, displayName, email, provider: 'google' })
+      trackUserSignIn({ userId, name: displayName, email, provider: 'google' })
 
       if (isNewUser) {
         trackUserSignUp({ provider: 'google' })

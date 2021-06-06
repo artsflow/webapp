@@ -19,10 +19,10 @@ export const trackUserSignOut = () => {
 }
 
 export const trackUserSignIn = (props: UserProps) => {
-  const { userId, provider, displayName, email } = props
-  window.analytics.identify(userId, { ...props, isCreative: true })
+  const { userId, provider, name, email } = props
+  window.analytics.identify(userId, { provider, name, email, isCreative: true })
   window.analytics.track('Creative Signed In', { provider })
-  Sentry.setUser({ email, displayName, userId })
+  Sentry.setUser({ email, name, userId })
 }
 
 export const trackUpdateProfile = (userId: string, props: ProfileProps) => {
