@@ -34,7 +34,7 @@ export const BookingList = ({ list }: any) => {
         {list.map(({ id, amount, timestamp, name, email, phone, createdAt }: any, i: number) => (
           <Tr key={id}>
             <Td fontSize="13px" isNumeric color="gray.500">
-              {i + 1}
+              {list.length - i}
             </Td>
             <Td fontSize="13px" isNumeric>
               {amount ? `£${amount / 100}` : <Badge colorScheme="green">Free</Badge>}
