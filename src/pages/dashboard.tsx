@@ -91,7 +91,7 @@ export default function Dashboard(): JSX.Element {
                         trackDownloadActivityBooking(id, title)
                       }}
                     >
-                      Download data
+                      Download data ({list.length})
                     </Button>
                   </HStack>
                   <BookingList list={list} />
