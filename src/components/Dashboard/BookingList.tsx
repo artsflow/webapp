@@ -21,6 +21,7 @@ export const BookingList = ({ list }: any) => {
     <Table size="sm" bg="white" rounded="10px" boxShadow="0px 2px 6px rgba(0, 0, 0, 0.02)">
       <Thead>
         <Tr>
+          <Th isNumeric>#</Th>
           <Th isNumeric>Amount</Th>
           <Th>Activity date</Th>
           <Th>Name</Th>
@@ -30,8 +31,11 @@ export const BookingList = ({ list }: any) => {
         </Tr>
       </Thead>
       <Tbody>
-        {list.map(({ id, amount, timestamp, name, email, phone, createdAt }: any) => (
+        {list.map(({ id, amount, timestamp, name, email, phone, createdAt }: any, i: number) => (
           <Tr key={id}>
+            <Td fontSize="13px" isNumeric color="gray.500">
+              {i + 1}
+            </Td>
             <Td fontSize="13px" isNumeric>
               {amount ? `£${amount / 100}` : <Badge colorScheme="green">Free</Badge>}
             </Td>
