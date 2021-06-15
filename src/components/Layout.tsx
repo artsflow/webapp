@@ -1,7 +1,8 @@
 import { useEffect, useContext } from 'react'
 import Head from 'next/head'
-import { Grid, Box, HStack, VStack, Text, Button, Center, useBreakpoint } from '@chakra-ui/react'
+import { Grid, Box, HStack, VStack, Text, Button, Center } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { isMobileOnly } from 'react-device-detect'
 
 import { Footer, Header, SidePanel, Loading } from 'components'
 import { trackSmallScreenUsed } from 'analytics'
@@ -64,9 +65,6 @@ export const NotAuthorizedLayout = () => {
 
 const AuthLayout = ({ children }: Props) => {
   const { user } = useUserData()
-  const screen = useBreakpoint('base') || ''
-  const isSmallScreen = ['base', 'sm'].includes(screen)
-
   if (user.provider && !user?.isBetaTester) return <NotAuthorizedLayout />
 
   return (
@@ -75,7 +73,7 @@ const AuthLayout = ({ children }: Props) => {
       <HStack as="main" bg="#F9F9F9" spacing="0">
         <SidePanel />
         <VStack h="100%" w="full" alignItems="flex-start" spacing="0">
-          {isSmallScreen ? <SmallScreenInfo /> : children}
+          {isMobileOnly ? <MobileScreenInfo /> : children}
         </VStack>
       </HStack>
     </Grid>
@@ -106,7 +104,7 @@ const UnAuthLayout = ({ children }: Props) => {
   )
 }
 
-const SmallScreenInfo = () => {
+const MobileScreenInfo = () => {
   useEffect(() => {
     trackSmallScreenUsed()
   }, [])
