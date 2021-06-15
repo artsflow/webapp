@@ -20,7 +20,7 @@ export const FeedbackOption = (props: FeedbackOptionProps) => {
         }}
         _checked={{
           transform: 'scale(1.125)',
-          borderColor: useColorModeValue('blue.500', 'blue.300'),
+          borderColor: useColorModeValue('af.teal', 'af.teal'),
         }}
         {...getCheckboxProps(props)}
       />
