@@ -4,7 +4,6 @@ import Papa from 'papaparse'
 import { format, fromUnixTime } from 'date-fns'
 
 export const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-console.log('env', process.env.NEXT_PUBLIC_VERCEL_ENV)
 
 const toast = createStandaloneToast()
 
