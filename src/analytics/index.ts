@@ -117,3 +117,7 @@ export const trackSmallScreenUsed = () => {
 export const trackHelpBulb = (step: string) => {
   window.analytics.track('Help Bulb Clicked', { step })
 }
+
+export const trackAddFeedback = (page: string) => {
+  window.analytics.track('Feedback Sent', { page })
+}

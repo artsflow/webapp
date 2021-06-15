@@ -28,7 +28,7 @@ import ChatIcon from 'svg/icons/chat.svg'
 import { auth } from 'lib/firebase'
 import { useRouter } from 'next/router'
 import { UserContext } from 'lib/context'
-import { Notifications } from 'components'
+import { Notifications, FeedbackPopover } from 'components'
 import { getImageKitUrl } from 'lib/utils'
 import { trackUserSignOut } from 'analytics'
 import { useOnboarding } from 'hooks'
@@ -107,6 +107,9 @@ export function Header() {
       >
         <RoundButton icon={<Icon as={ChatIcon} />} onClick={() => router.push('/chat')} />
         <RoundButton icon={<Icon as={BellIcon} />} onClick={onOpen} />
+      </HStack>
+      <HStack justifySelf="flex-end" mr="3rem">
+        <FeedbackPopover />
       </HStack>
       <VStack mr="4" spacing="0" alignItems="flex-end">
         {user?.displayName ? (
