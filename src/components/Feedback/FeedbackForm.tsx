@@ -16,7 +16,6 @@ import { addSeconds } from 'date-fns'
 
 import { addFeedback } from 'api'
 import { useUserData } from 'hooks'
-import { Loading } from 'components'
 import { trackAddFeedback } from 'analytics'
 import { FeedbackRadioGroup } from './FeedbackRatingGroup'
 import { FeedbackSuccessPanel } from './FeedbackSuccessPanel'
@@ -49,7 +48,7 @@ export const FeedbackForm = (props: Props) => {
     await addFeedback(feedbackData)
     setLoading(false)
     setSubmitted(true)
-    restart(addSeconds(new Date(), 15))
+    restart(addSeconds(new Date(), 10))
     trackAddFeedback(router.asPath)
   }
 
@@ -64,12 +63,6 @@ export const FeedbackForm = (props: Props) => {
     onExpire: resetForm,
   })
 
-  if (isLoading)
-    return (
-      <Flex h="180px" justifyContent="center">
-        <Loading />
-      </Flex>
-    )
   if (isSubmitted) return <FeedbackSuccessPanel />
 
   return (
@@ -100,7 +93,7 @@ export const FeedbackForm = (props: Props) => {
             options={['😍', '😀', '🤨', '😨']}
             onChange={setEmoji}
           />
-          <Button type="submit" size="sm" variant="outline">
+          <Button type="submit" size="sm" variant="outline" isLoading={isLoading}>
             Send
           </Button>
         </Flex>
