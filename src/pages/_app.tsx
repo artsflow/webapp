@@ -1,12 +1,14 @@
-import { useEffect } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { AppProps } from 'next/app'
 import NProgress from 'nprogress'
 import Router from 'next/router'
+import FullStory from 'react-fullstory'
 
 import { Layout } from 'components'
 import { UserContext } from 'lib/context'
+import { FULLSTORY_ORG } from 'lib/config'
 import { useUserData } from 'hooks'
+import { isProd } from 'lib/utils'
 import theme from '../theme'
 
 import 'components/Calendar/styles.css'
@@ -23,13 +25,10 @@ Router.events.on('routeChangeError', () => NProgress.done())
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const userData = useUserData()
 
-  useEffect(() => {
-    // if (userData) window.analytics?.identify(userData.user.id)
-  }, [])
-
   return (
     <ChakraProvider resetCSS theme={theme}>
       <UserContext.Provider value={userData}>
+        {isProd && <FullStory org={FULLSTORY_ORG} />}
         <Layout>
           <Component {...pageProps} />
         </Layout>
