@@ -152,7 +152,7 @@ export function Location() {
                 value={address}
                 {...register('address', {
                   required: true,
-                  minLength: 10,
+                  minLength: 5,
                   maxLength: 200,
                 })}
                 onChange={() => handleChange('address')}
