@@ -6,6 +6,7 @@ import { useStateMachine } from 'little-state-machine'
 import { addActivity, editActivity } from 'api'
 import { showAlert } from 'lib/utils'
 import { trackUpdateActivity } from 'analytics'
+import { useUserData } from 'hooks'
 import {
   steps,
   resetStore,
@@ -20,6 +21,7 @@ import {
 export function Navigation({ isValid, onClick }: any): JSX.Element {
   const { state, actions } = useStateMachine({ resetStore }) as any
   const [isLoading, setLoading] = useState(false)
+  const { user } = useUserData()
   const router = useRouter()
 
   const [currentStep] = useCurrentStep()
@@ -52,6 +54,11 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
     }
 
     if (isLastStep(currentStep)) {
+      if (state.monetizationType === 'Paid' && !user.isVerified) {
+        showAlert({ title: 'Error! Paid activities is only for verified users.' })
+        return
+      }
+
       setLoading(true)
       const result = await addActivity(cleanStore(state))
       setLoading(false)
@@ -67,6 +74,11 @@ export function Navigation({ isValid, onClick }: any): JSX.Element {
     if (onClick) onClick()
     if (!isValid) {
       showAlert({ title: 'Error! Invalid input.' })
+      return
+    }
+
+    if (state.monetizationType === 'Paid' && !user.isVerified) {
+      showAlert({ title: 'Error! Paid activities is only for verified users.' })
       return
     }
 

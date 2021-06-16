@@ -29,9 +29,9 @@ export const initialStore = {
   images: [],
   duration: 0,
   dates: [],
-  capacity: 1,
-  price: 5,
-  monetizationType: 'Paid',
+  capacity: 10,
+  price: 20,
+  monetizationType: 'Free',
   meta: {
     actionType: 'add',
   },

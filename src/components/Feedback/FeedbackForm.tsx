@@ -93,7 +93,7 @@ export const FeedbackForm = (props: Props) => {
             options={['😍', '😀', '🤨', '😨']}
             onChange={setEmoji}
           />
-          <Button type="submit" size="sm" variant="outline" isLoading={isLoading}>
+          <Button type="submit" size="sm" variant="primary" isLoading={isLoading}>
             Send
           </Button>
         </Flex>
