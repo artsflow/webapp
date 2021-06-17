@@ -11,7 +11,6 @@ import { Card } from 'components/UI'
 import { UserContext } from 'lib/context'
 import { isProd } from 'lib/utils'
 import { auth } from 'lib/firebase'
-import { useUserData } from 'hooks'
 import Logo from 'svg/artsflow.svg'
 
 const UNAUTH_ROUTES = ['/login', '/terms']
@@ -73,22 +72,17 @@ export const NotAuthorizedLayout = () => {
   )
 }
 
-const AuthLayout = ({ children }: Props) => {
-  const { user } = useUserData()
-  if (user.provider && !user?.isBetaTester) return <NotAuthorizedLayout />
-
-  return (
-    <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
-      <Header />
-      <HStack as="main" bg="#F9F9F9" spacing="0">
-        <SidePanel />
-        <VStack h="100%" w="full" alignItems="flex-start" spacing="0">
-          {isMobileOnly ? <MobileScreenInfo /> : children}
-        </VStack>
-      </HStack>
-    </Grid>
-  )
-}
+const AuthLayout = ({ children }: Props) => (
+  <Grid as="article" minHeight="100%" gridTemplateRows="auto 1fr auto" gridTemplateColumns="100%">
+    <Header />
+    <HStack as="main" bg="#F9F9F9" spacing="0">
+      <SidePanel />
+      <VStack h="100%" w="full" alignItems="flex-start" spacing="0">
+        {isMobileOnly ? <MobileScreenInfo /> : children}
+      </VStack>
+    </HStack>
+  </Grid>
+)
 
 const UnAuthLayout = ({ children }: Props) => {
   const { authState, loading } = useContext(UserContext)
