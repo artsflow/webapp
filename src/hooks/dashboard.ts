@@ -6,12 +6,12 @@ import { getActivityViews } from 'api'
 const LENGTH = 6
 
 interface DayCount {
-  day: number
+  date: { value: string }
   count: number
 }
 
-const getDayViewsCount = (days: DayCount[], day: number) =>
-  days.find((d) => d.day === day)?.count || 0
+const getDayViewsCount = (days: DayCount[], day: string) =>
+  days.find((d) => format(new Date(d.date.value), 'dd MMM') === day)?.count || 0
 
 export function useActivityViews() {
   const [data, setData] = useState([]) as any
@@ -26,7 +26,7 @@ export function useActivityViews() {
       end: new Date(),
     }).map((d) => ({
       x: format(d, 'dd MMM'),
-      y: getDayViewsCount(views, Number(format(d, 'dd'))),
+      y: getDayViewsCount(views, format(d, 'dd MMM')),
     }))
 
     setData(viewData)
