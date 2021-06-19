@@ -2,10 +2,24 @@ import { createStandaloneToast, forwardRef } from '@chakra-ui/react'
 import { motion, isValidMotionProp } from 'framer-motion'
 import Papa from 'papaparse'
 import { format, fromUnixTime } from 'date-fns'
+import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm'
+import ChakraUIRenderer from 'chakra-ui-markdown-renderer'
+
+import mdTheme from './md-theme'
 
 export const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 
 const toast = createStandaloneToast()
+
+export const MD = (source: any) => (
+  <ReactMarkdown
+    children={source}
+    components={ChakraUIRenderer(mdTheme)}
+    remarkPlugins={[gfm]}
+    linkTarget="_blank"
+  />
+)
 
 interface AlertProps {
   title: string

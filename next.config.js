@@ -12,7 +12,18 @@ const withTM = require('next-transpile-modules')([
   '@popperjs/core',
 ])
 
-const nextConfig = {}
+const nextConfig = {
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.md$/,
+      use: 'raw-loader',
+    })
+    return config
+  },
+  future: {
+    webpack5: true,
+  },
+}
 
 const SentryWebpackPluginOptions = {
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,

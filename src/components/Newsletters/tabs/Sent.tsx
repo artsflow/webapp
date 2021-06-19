@@ -76,6 +76,13 @@ const MessageDetail = ({ id, body, isOpen }: any) => (
       py="1rem"
       overflow="scroll"
       children={ReactHtmlParser(body, { transform: removeLinks })}
+      sx={{
+        '::-webkit-scrollbar': {
+          display: 'none',
+        },
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      }}
     />
     {isOpen && <MessageEvents id={id} />}
   </HStack>
@@ -89,7 +96,19 @@ const MessageEvents = ({ id }: any) => {
   }, [])
 
   return (
-    <VStack overflow="scroll" alignItems="center" h="full" w="260px">
+    <VStack
+      overflow="scroll"
+      alignItems="center"
+      h="full"
+      w="260px"
+      sx={{
+        '::-webkit-scrollbar': {
+          display: 'none',
+        },
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      }}
+    >
       <Text fontWeight="semibold" w="full">
         Message events:
       </Text>
