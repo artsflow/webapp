@@ -108,6 +108,7 @@ export const SidePanel = () => {
       pt="2rem"
       pos="relative"
       boxShadow="0px 3px 8px -1px rgba(50, 50, 71, 0.05)"
+      justifyContent="space-between"
     >
       <IconButton
         pos="absolute"
@@ -125,7 +126,6 @@ export const SidePanel = () => {
       <List spacing="0.8rem">
         {menu.map((item: any, index: number) => {
           const isSelected = selected === index
-
           return (
             <MotionListItem
               key={`${item.id}-${index + 1}`}
@@ -177,6 +177,19 @@ export const SidePanel = () => {
           )
         })}
       </List>
+      <VStack pb="1rem">
+        <Link as="/terms" href="/terms" passHref>
+          <ChakraLink>
+            <MotionText
+              as="p"
+              fontSize="xs"
+              animate={{ marginLeft: isCollapsed ? '15px' : '30px' }}
+            >
+              {isCollapsed ? 'ToS' : 'Terms of service'}
+            </MotionText>
+          </ChakraLink>
+        </Link>
+      </VStack>
     </MotionVStack>
   )
 }
