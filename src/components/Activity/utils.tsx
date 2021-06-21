@@ -31,6 +31,7 @@ export const initialStore = {
   dates: [],
   capacity: 10,
   price: 20,
+  isFeePassed: false,
   monetizationType: 'Free',
   meta: {
     actionType: 'add',

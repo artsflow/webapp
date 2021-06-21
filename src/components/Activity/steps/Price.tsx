@@ -2,10 +2,15 @@ import {
   Flex,
   Text,
   Input,
+  Switch,
   InputGroup,
+  FormControl,
+  FormLabel,
   InputLeftAddon,
   Heading,
   useRadioGroup,
+  VStack,
+  HStack,
 } from '@chakra-ui/react'
 import { useStateMachine } from 'little-state-machine'
 import { useForm, Controller } from 'react-hook-form'
@@ -19,10 +24,11 @@ const MIN_PRICE = 5
 const MAX_PRICE = 999
 
 const ACTIVITY_TYPE = ['Free', 'Paid']
+const SERVICE_FEE = 10
 
 export function Price() {
   const { state, actions } = useStateMachine({ update }) as any
-  const { monetizationType } = state
+  const { monetizationType, isFeePassed, price } = state
   const {
     formState,
     getValues,
@@ -42,6 +48,10 @@ export function Price() {
     await trigger()
   }
 
+  const handleAbsorbFee = (ev: any) => {
+    actions.update({ isFeePassed: !ev.target.checked })
+  }
+
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'duration',
     defaultValue: monetizationType,
@@ -51,6 +61,9 @@ export function Price() {
   })
 
   const group = getRootProps()
+
+  const payout = isFeePassed ? price : (price - (price * SERVICE_FEE) / 100).toFixed(2)
+  const userPays = isFeePassed ? (price + (price * SERVICE_FEE) / 100).toFixed(2) : price
 
   return (
     <>
@@ -108,6 +121,37 @@ export function Price() {
                   )}
                 />
               </InputGroup>
+              <FormControl display="flex" alignItems="center" mb="1rem">
+                <Switch
+                  id="absorb-fee"
+                  mt="2px"
+                  isChecked={!isFeePassed}
+                  onChange={handleAbsorbFee}
+                  colorScheme="teal"
+                />
+                <FormLabel htmlFor="absorb-fee" pl="1rem" mb="0" color="#616167">
+                  Absorb the service fee
+                </FormLabel>
+              </FormControl>
+              <Text color="#616167" fontSize="sm">
+                {isFeePassed
+                  ? 'The service fee is absorbed by the user'
+                  : 'The service fee is absorbed by you'}
+              </Text>
+              <VStack mt="1rem" color="#616167" w="200px">
+                <HStack justifyContent="space-between" w="full">
+                  <Text>Service fee</Text>
+                  <Text fontWeight="bold">10%</Text>
+                </HStack>
+                <HStack justifyContent="space-between" w="full">
+                  <Text>Your payout</Text>
+                  <Text fontWeight="bold">£{payout}</Text>
+                </HStack>
+                <HStack justifyContent="space-between" w="full" pt="1rem">
+                  <Text>User pays</Text>
+                  <Text fontWeight="bold">£{userPays}</Text>
+                </HStack>
+              </VStack>
               <Error
                 errors={errors}
                 name="price"
