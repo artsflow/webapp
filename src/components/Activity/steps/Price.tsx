@@ -24,7 +24,7 @@ const MIN_PRICE = 5
 const MAX_PRICE = 999
 
 const ACTIVITY_TYPE = ['Free', 'Paid']
-const SERVICE_FEE = 10
+const ARTSFLOW_FEE = 10
 
 export function Price() {
   const { state, actions } = useStateMachine({ update }) as any
@@ -62,8 +62,8 @@ export function Price() {
 
   const group = getRootProps()
 
-  const payout = isFeePassed ? price : (price - (price * SERVICE_FEE) / 100).toFixed(2)
-  const userPays = isFeePassed ? (price + (price * SERVICE_FEE) / 100).toFixed(2) : price
+  const payout = isFeePassed ? price : (price - (price * ARTSFLOW_FEE) / 100).toFixed(2)
+  const userPays = isFeePassed ? (price + (price * ARTSFLOW_FEE) / 100).toFixed(2) : price
 
   return (
     <>
@@ -135,7 +135,7 @@ export function Price() {
               </FormControl>
               <Text color="#616167" fontSize="sm">
                 {isFeePassed
-                  ? 'The service fee is absorbed by the user'
+                  ? 'The service fee is passed to the user'
                   : 'The service fee is absorbed by you'}
               </Text>
               <VStack mt="1rem" color="#616167" w="200px">
