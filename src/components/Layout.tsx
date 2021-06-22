@@ -3,13 +3,13 @@ import Head from 'next/head'
 import { Grid, Box, HStack, VStack, Text, Button, Center } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { isMobileOnly } from 'react-device-detect'
-import { identify } from 'react-fullstory'
+// import { identify } from 'react-fullstory'
 
 import { Footer, Header, SidePanel, Loading } from 'components'
 import { trackSmallScreenUsed } from 'analytics'
 import { Card } from 'components/UI'
 import { UserContext } from 'lib/context'
-import { isProd } from 'lib/utils'
+// import { isProd } from 'lib/utils'
 import { auth } from 'lib/firebase'
 import Logo from 'svg/artsflow.svg'
 
@@ -27,12 +27,12 @@ export function Layout({ children }: Props) {
   useEffect(() => {
     if (user) {
       window.analytics?.identify(user.id)
-      if (isProd) {
-        identify(user.id, {
-          email: user.email,
-          displayName: user.displayName,
-        })
-      }
+      // if (isProd) {
+      //   identify(user.id, {
+      //     email: user.email,
+      //     displayName: user.displayName,
+      //   })
+      // }
     }
 
     if (!authState && !loading) {
