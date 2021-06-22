@@ -73,7 +73,7 @@ export default function Dashboard(): JSX.Element {
             </Chart>
           </HStack>
           {loadingActivities && <Loading />}
-          <VStack spacing="2rem" w="full" maxW="calc(860px + 1.5rem)">
+          <VStack spacing="2rem" w="full" maxW="calc(960px + 1.5rem)">
             {activities.map(({ id, title }: any) => {
               const list = bookings.filter(({ activityId }: any) => activityId === id)
               return (

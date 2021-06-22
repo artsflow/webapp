@@ -46,15 +46,16 @@ export const BookingList = ({ list }: any) => {
           <Th>Email</Th>
           <Th>Phone</Th>
           <Th>Booking date</Th>
+          <Th>Status</Th>
         </Tr>
       </Thead>
       <Tbody>
         {list.map(
           (
-            { id, amount, isFeePassed, timestamp, name, email, phone, createdAt }: any,
+            { id, amount, isFeePassed, timestamp, name, email, phone, createdAt, isCancelled }: any,
             i: number
           ) => (
-            <Tr key={id}>
+            <Tr key={id} color={isCancelled ? 'red.500' : 'black'}>
               <Td fontSize="13px" isNumeric color="gray.500">
                 {list.length - i}
               </Td>
@@ -67,6 +68,7 @@ export const BookingList = ({ list }: any) => {
               <Td fontSize="13px">{email}</Td>
               <Td fontSize="13px">{phone}</Td>
               <Td fontSize="13px">{format(fromUnixTime(createdAt.seconds), 'dd MMM, HH:mm')}</Td>
+              <Td fontSize="13px">{isCancelled ? 'cancelled' : ''}</Td>
             </Tr>
           )
         )}
