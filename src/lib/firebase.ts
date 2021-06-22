@@ -87,6 +87,7 @@ export const firebaseCallable = async (func: string, params: any) => {
   } catch (e) {
     console.error(`firebaseCallable:error:${func}: ${JSON.stringify(e)}`)
     trace.stop()
+    if (e.message === 'deadline-exceeded') return e
     showAlert({
       title: 'Error!',
       description: e.message,
