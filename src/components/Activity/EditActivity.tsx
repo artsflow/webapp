@@ -9,7 +9,7 @@ import { steps, update } from 'components/Activity/utils'
 import { firestore } from 'lib/firebase'
 import { Preview } from './Preview'
 import { InfoBulb } from './InfoBulb'
-import { stepsMap } from './index'
+import { stepsMap, StoreChecker } from './index'
 
 export function EditActivity(): JSX.Element {
   const router = useRouter()
@@ -34,6 +34,7 @@ export function EditActivity(): JSX.Element {
           {step ? <StepScreen /> : <EditButtons />}
         </Flex>
         <Preview />
+        <StoreChecker />
       </Flex>
     </StateMachineProvider>
   )

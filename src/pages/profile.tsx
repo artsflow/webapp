@@ -16,6 +16,7 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 import { BsEye, BsLock } from 'react-icons/bs'
 import { useDropzone } from 'react-dropzone'
 
@@ -33,16 +34,20 @@ type Inputs = {
   bio: string
 }
 
+const DESCRIPTION_MAX_LENGTH = 1000
+
 export default function Profile(): JSX.Element {
   const [isLoading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [isCompressing, setCompressing] = useState(false)
   const [progress, setProgress] = useState(0)
   const { user, profile } = useContext(UserContext)
-  const { register, handleSubmit, formState, reset } = useForm<Inputs>()
+  const { register, handleSubmit, formState, reset, watch } = useForm<Inputs>()
 
   const { firstName, lastName, displayName, bio, photoURL } = profile
-  const { isDirty } = formState
+  const { isDirty, errors } = formState
+
+  const bioLength = watch('bio', '')?.length || bio?.length
 
   const onDrop = useCallback(async ([file]) => {
     setCompressing(true)
@@ -159,7 +164,7 @@ export default function Profile(): JSX.Element {
             />
           </Box>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <HStack spacing="1.5rem">
+            <HStack spacing="1.5rem" alignItems="flex-start">
               <VStack alignItems="flex-start" w="full">
                 <Text fontWeight="bold">First name</Text>
                 <InputGroup>
@@ -170,11 +175,16 @@ export default function Profile(): JSX.Element {
                     {...register('firstName', {
                       required: true,
                       maxLength: 20,
-                      pattern: /^[A-Za-z]+$/i,
+                      pattern: /^[A-Za-z\- ]+$/i,
                     })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
                 </InputGroup>
+                <Error
+                  errors={errors}
+                  name="firstName"
+                  message="First name max length is 20 characters"
+                />
               </VStack>
               <VStack alignItems="flex-start" w="full">
                 <Text fontWeight="bold">Last name</Text>
@@ -186,11 +196,16 @@ export default function Profile(): JSX.Element {
                     {...register('lastName', {
                       required: true,
                       maxLength: 40,
-                      pattern: /^[A-Za-z]+$/i,
+                      pattern: /^[A-Za-z\- ]+$/i,
                     })}
                   />
                   <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
                 </InputGroup>
+                <Error
+                  errors={errors}
+                  name="lastName"
+                  message="First name max length is 40 characters"
+                />
               </VStack>
               <VStack alignItems="flex-start" w="full">
                 <Text fontWeight="bold">Email</Text>
@@ -206,20 +221,28 @@ export default function Profile(): JSX.Element {
                 </InputGroup>
               </VStack>
             </HStack>
-            <HStack spacing="1.5rem" mt="1rem">
-              <VStack alignItems="flex-start" w="calc(66.66% - 1rem)">
+            <VStack alignItems="flex-start" w="calc(66.66% - 0.5rem)" mt="1.5rem">
+              <HStack justifyContent="space-between" w="full">
                 <Text fontWeight="bold">Short description</Text>
-                <InputGroup>
-                  <Textarea
-                    placeholder="a little about you"
-                    defaultValue={bio}
-                    rows={4}
-                    {...register('bio', { maxLength: 420 })}
-                  />
-                  <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
-                </InputGroup>
-              </VStack>
-            </HStack>
+                <Text fontSize="xs" color="gray.400">
+                  {bioLength} / {DESCRIPTION_MAX_LENGTH}
+                </Text>
+              </HStack>
+              <InputGroup>
+                <Textarea
+                  placeholder="a little about you"
+                  defaultValue={bio}
+                  rows={8}
+                  {...register('bio', { maxLength: DESCRIPTION_MAX_LENGTH })}
+                />
+                <InputRightElement children={<Icon as={BsEye} color="gray.300" />} />
+              </InputGroup>
+              <Error
+                errors={errors}
+                name="bio"
+                message={`Short description max length is ${DESCRIPTION_MAX_LENGTH} characters`}
+              />
+            </VStack>
             <VStack py="1.5rem" mb="1.5rem" alignItems="flex-start" color="gray.400">
               <Text fontSize="xs">
                 <Icon as={BsEye} mr="0.7rem" />
@@ -245,3 +268,7 @@ export default function Profile(): JSX.Element {
     </>
   )
 }
+
+const Error = (props: any) => (
+  <ErrorMessage as={<Text color="red.400" fontSize="xs" />} {...props} />
+)

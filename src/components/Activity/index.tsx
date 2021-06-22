@@ -79,7 +79,7 @@ export function Activity(): JSX.Element {
   )
 }
 
-const StoreChecker = () => {
+export const StoreChecker = () => {
   const { state, actions } = useStateMachine({ resetStore }) as any
 
   useEffect(() => {

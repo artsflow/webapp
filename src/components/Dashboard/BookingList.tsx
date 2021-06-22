@@ -1,4 +1,16 @@
-import { VStack, Text, Table, Thead, Tbody, Tr, Th, Td, Badge } from '@chakra-ui/react'
+import {
+  VStack,
+  Text,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Badge,
+  Tooltip,
+  Icon,
+} from '@chakra-ui/react'
 import { format, fromUnixTime } from 'date-fns'
 
 export const BookingList = ({ list }: any) => {
@@ -23,6 +35,12 @@ export const BookingList = ({ list }: any) => {
         <Tr>
           <Th isNumeric>#</Th>
           <Th isNumeric>Amount</Th>
+          <Th title="Pass or absorb the service fee">
+            Fee
+            <Tooltip hasArrow label="Pass or absorb the service fee" placement="right">
+              <Icon ml="1" color="gray.500" cursor="help" boxSize="0.75rem" />
+            </Tooltip>
+          </Th>
           <Th>Activity date</Th>
           <Th>Name</Th>
           <Th>Email</Th>
@@ -31,21 +49,27 @@ export const BookingList = ({ list }: any) => {
         </Tr>
       </Thead>
       <Tbody>
-        {list.map(({ id, amount, timestamp, name, email, phone, createdAt }: any, i: number) => (
-          <Tr key={id}>
-            <Td fontSize="13px" isNumeric color="gray.500">
-              {list.length - i}
-            </Td>
-            <Td fontSize="13px" isNumeric>
-              {amount ? `£${amount / 100}` : <Badge colorScheme="green">Free</Badge>}
-            </Td>
-            <Td fontSize="13px">{format(fromUnixTime(timestamp), 'dd MMM, HH:mm')}</Td>
-            <Td fontSize="13px">{name}</Td>
-            <Td fontSize="13px">{email}</Td>
-            <Td fontSize="13px">{phone}</Td>
-            <Td fontSize="13px">{format(fromUnixTime(createdAt.seconds), 'dd MMM, HH:mm')}</Td>
-          </Tr>
-        ))}
+        {list.map(
+          (
+            { id, amount, isFeePassed, timestamp, name, email, phone, createdAt }: any,
+            i: number
+          ) => (
+            <Tr key={id}>
+              <Td fontSize="13px" isNumeric color="gray.500">
+                {list.length - i}
+              </Td>
+              <Td fontSize="13px" isNumeric>
+                {amount ? `£${amount / 100}` : <Badge colorScheme="green">Free</Badge>}
+              </Td>
+              <Td fontSize="13px">{amount ? (isFeePassed ? 'pass' : 'abs') : ''}</Td>
+              <Td fontSize="13px">{format(fromUnixTime(timestamp), 'dd MMM, HH:mm')}</Td>
+              <Td fontSize="13px">{name}</Td>
+              <Td fontSize="13px">{email}</Td>
+              <Td fontSize="13px">{phone}</Td>
+              <Td fontSize="13px">{format(fromUnixTime(createdAt.seconds), 'dd MMM, HH:mm')}</Td>
+            </Tr>
+          )
+        )}
       </Tbody>
     </Table>
   )
