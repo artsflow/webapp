@@ -85,7 +85,17 @@ const transformedData: any = [
   { x: '19 May', y: 35 },
 ]
 
+const RealDate = Date
+
 describe('transform booking data', () => {
+  beforeAll(() => {
+    global.Date.now = jest.fn(() => new Date('2021-05-19T10:20:30Z').getTime())
+  })
+
+  afterAll(() => {
+    global.Date = RealDate
+  })
+
   it('should transfom data for last 7 days', () => {
     expect(getIncomeLast7d(bookingData)).toEqual(transformedData)
   })
