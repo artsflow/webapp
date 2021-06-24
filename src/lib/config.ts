@@ -10,3 +10,4 @@ export const FIREBASE_APP_ID = process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 export const FIREBASE_MEASUREMENT_ID = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 export const SEGMENT_KEY = process.env.NEXT_PUBLIC_SEGMENT_KEY
 export const FULLSTORY_ORG = process.env.NEXT_PUBLIC_FULLSTORY_ORG as string
+export const COHERE_KEY = process.env.NEXT_PUBLIC_COHERE_KEY as string
