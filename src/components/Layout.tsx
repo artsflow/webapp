@@ -31,7 +31,9 @@ export function Layout({ children }: Props) {
         email: user.email,
       })
     }
+  }, [user.id])
 
+  useEffect(() => {
     if (!authState && !loading) {
       router.push('/login')
     }
