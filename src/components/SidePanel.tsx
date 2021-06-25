@@ -32,43 +32,43 @@ import { trackSidepanelToggle } from 'analytics'
 
 const menu = [
   {
-    id: 'dashboard',
+    id: 'menu-dashboard',
     text: 'Dashboard',
     icon: DashboardIcon,
     iconSelected: DashboardSelectedIcon,
   },
   {
-    id: 'activities',
+    id: 'menu-activities',
     text: 'My activities',
     icon: ActivitiesIcon,
     iconSelected: ActivitiesSelectedIcon,
   },
   {
-    id: 'newsletters',
+    id: 'menu-newsletters',
     text: 'Newsletters',
     icon: BiMailSend,
     iconSelected: BiMailSend,
   },
   {
-    id: 'calendar',
+    id: 'menu-calendar',
     text: 'Calendar',
     icon: CalendarIcon,
     iconSelected: CalendarSelectedIcon,
   },
   {
-    id: 'divider',
+    id: 'menu-divider',
   },
   {
-    id: 'payouts',
+    id: 'menu-payouts',
     text: 'Payouts',
     icon: CardIcon,
     iconSelected: CardSelectedIcon,
   },
   {
-    id: 'divider',
+    id: 'menu-divider',
   },
   {
-    id: 'support',
+    id: 'menu-support',
     text: 'Support',
     icon: IoChatbubbleEllipsesOutline,
     iconSelected: IoChatbubbleEllipsesOutline,
@@ -135,11 +135,12 @@ export const SidePanel = () => {
               borderLeft={`3px solid ${isSelected ? '#47BCC8' : '#FFF'}`}
               animate={{ paddingLeft: isCollapsed ? '13px' : '29px' }}
             >
-              {item.id === 'divider' ? (
+              {item.id === 'menu-divider' ? (
                 <Divider w={isCollapsed ? '20px' : '130px'} />
               ) : (
                 <Link as={`/${item.id}`} href={`/${item.id}`} passHref>
                   <ChakraLink
+                    id={item.id}
                     color={isSelected ? '#47BCC8' : 'black'}
                     fontWeight={isSelected ? 'bold' : 'normal'}
                     title={item.text}
