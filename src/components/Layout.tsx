@@ -24,7 +24,7 @@ export function Layout({ children }: Props) {
   const router = useRouter()
 
   useEffect(() => {
-    if (user) {
+    if (user.id) {
       window.analytics?.identify(user.id)
       Cohere.identify(user.id, {
         displayName: user.displayName,
