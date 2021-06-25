@@ -32,43 +32,43 @@ import { trackSidepanelToggle } from 'analytics'
 
 const menu = [
   {
-    id: 'menu-dashboard',
+    id: 'dashboard',
     text: 'Dashboard',
     icon: DashboardIcon,
     iconSelected: DashboardSelectedIcon,
   },
   {
-    id: 'menu-activities',
+    id: 'activities',
     text: 'My activities',
     icon: ActivitiesIcon,
     iconSelected: ActivitiesSelectedIcon,
   },
   {
-    id: 'menu-newsletters',
+    id: 'newsletters',
     text: 'Newsletters',
     icon: BiMailSend,
     iconSelected: BiMailSend,
   },
   {
-    id: 'menu-calendar',
+    id: 'calendar',
     text: 'Calendar',
     icon: CalendarIcon,
     iconSelected: CalendarSelectedIcon,
   },
   {
-    id: 'menu-divider',
+    id: 'divider',
   },
   {
-    id: 'menu-payouts',
+    id: 'payouts',
     text: 'Payouts',
     icon: CardIcon,
     iconSelected: CardSelectedIcon,
   },
   {
-    id: 'menu-divider',
+    id: 'divider',
   },
   {
-    id: 'menu-support',
+    id: 'support',
     text: 'Support',
     icon: IoChatbubbleEllipsesOutline,
     iconSelected: IoChatbubbleEllipsesOutline,
@@ -140,7 +140,7 @@ export const SidePanel = () => {
               ) : (
                 <Link as={`/${item.id}`} href={`/${item.id}`} passHref>
                   <ChakraLink
-                    id={item.id}
+                    id={`menu-${item.id}`}
                     color={isSelected ? '#47BCC8' : 'black'}
                     fontWeight={isSelected ? 'bold' : 'normal'}
                     title={item.text}
