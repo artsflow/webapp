@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const userData = useUserData()
 
   useEffect(() => {
-    Cohere.init(COHERE_KEY, { segmentIntegration: true })
+    Cohere.init(COHERE_KEY)
   }, [])
 
   return (
