@@ -133,6 +133,7 @@ export function Header() {
       </VStack>
       <Menu>
         <MenuButton
+          id="nav-profile-menu"
           as={Button}
           variant="unstyled"
           display="flex"
