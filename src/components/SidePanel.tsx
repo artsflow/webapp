@@ -135,7 +135,7 @@ export const SidePanel = () => {
               borderLeft={`3px solid ${isSelected ? '#47BCC8' : '#FFF'}`}
               animate={{ paddingLeft: isCollapsed ? '13px' : '29px' }}
             >
-              {item.id === 'menu-divider' ? (
+              {item.id === 'divider' ? (
                 <Divider w={isCollapsed ? '20px' : '130px'} />
               ) : (
                 <Link as={`/${item.id}`} href={`/${item.id}`} passHref>
