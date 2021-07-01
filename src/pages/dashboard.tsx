@@ -1,6 +1,19 @@
-import { Box, Text, Heading, VStack, HStack, Button } from '@chakra-ui/react'
+import { useState, useEffect } from 'react'
+import {
+  Box,
+  Text,
+  Heading,
+  VStack,
+  HStack,
+  Button,
+  Link,
+  Icon,
+  useClipboard,
+  Badge,
+} from '@chakra-ui/react'
 import { uniqBy, sumBy } from 'lodash'
-import { DownloadIcon } from '@chakra-ui/icons'
+import { DownloadIcon, CopyIcon } from '@chakra-ui/icons'
+import { BsLink } from 'react-icons/bs'
 
 import BalanceSvg from 'svg/icons/balance.svg'
 import BookingsSvg from 'svg/icons/bookings.svg'
@@ -12,6 +25,7 @@ import { Meta, Loading } from 'components'
 import { Card, BookingList, Chart, getIncomeLast7d } from 'components/Dashboard'
 import { useBalance, useBookings, useActivities, useActivityViews, useAudience } from 'hooks'
 import { trackDownloadActivityBooking } from 'analytics'
+import { ARTSFLOW_URL } from 'lib/config'
 
 export default function Dashboard(): JSX.Element {
   const [balance, loadingBalance] = useBalance()
@@ -22,9 +36,15 @@ export default function Dashboard(): JSX.Element {
   const [activities = [], loadingActivities] = useActivities()
   const [views, loadingViews] = useActivityViews()
   const [audience, loadingAudience] = useAudience()
+  const [url, setUrl] = useState('')
+  const { hasCopied, onCopy } = useClipboard(url)
 
   const chartData = [{ data: getIncomeLast7d(bookings), key: 'Income', stroke: '#45BCC8' }]
   const viewsData = [{ data: views, key: 'Views', stroke: '#E27CB0' }]
+
+  useEffect(() => {
+    onCopy()
+  }, [url])
 
   return (
     <>
@@ -76,10 +96,35 @@ export default function Dashboard(): JSX.Element {
           <VStack spacing="2rem" w="full" maxW="calc(960px + 1.5rem)">
             {activities.map(({ id, title }: any) => {
               const list = bookings.filter(({ activityId }: any) => activityId === id)
+              const activityLink = `${ARTSFLOW_URL}/a/${id}`
+
               return (
                 <VStack key={id} w="full">
-                  <HStack justifyContent="space-between" w="full">
-                    <Heading size="sm">{title}</Heading>
+                  <HStack w="full" justifyContent="space-between">
+                    <HStack>
+                      <Heading size="sm">{title}</Heading>
+                      <Link href={activityLink} isExternal>
+                        <Text as="span" fontSize="xs" color="gray.500">
+                          <Icon as={BsLink} h="16px" w="16px" mx="1" mb="2px" />
+                          {activityLink}
+                        </Text>
+                      </Link>
+                      <CopyIcon
+                        cursor="pointer"
+                        color="gray.500"
+                        w="12px"
+                        h="12px"
+                        onClick={() => {
+                          setUrl(activityLink)
+                          onCopy()
+                        }}
+                      />
+                      {hasCopied && url === activityLink && (
+                        <Badge variant="outline" colorScheme="green">
+                          Link copied
+                        </Badge>
+                      )}
+                    </HStack>
                     <Button
                       disabled={!list.length}
                       leftIcon={<DownloadIcon />}
