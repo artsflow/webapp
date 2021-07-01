@@ -25,7 +25,9 @@ export const BookingList = ({ list }: any) => {
         py="0.5rem"
       >
         <Text fontSize="sm">no bookings yet</Text>
-        <Text fontSize="xs">(copy asking user to share the activity link)</Text>
+        <Text fontSize="xs">
+          (share the activity link with your existing following and receive new bookings)
+        </Text>
       </VStack>
     )
 
