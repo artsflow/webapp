@@ -96,9 +96,16 @@ export const ActivityCard = (props: any) => {
           src={getImageKitUrl(images[0], { w: 48, h: 48 })}
           bg="af.pink"
         />
-        <Heading as="h2" fontSize="1rem" fontWeight="semibold">
-          {title}
-        </Heading>
+        <VStack alignItems="flex-start" spacing="0">
+          <Heading as="h2" fontSize="1rem" fontWeight="semibold">
+            {title}
+          </Heading>
+          <Link href={activityLink} isExternal>
+            <Text as="span" fontSize="xs" color="gray.500">
+              {activityLink}
+            </Text>
+          </Link>
+        </VStack>
         <OptionsMenu id={id} isActive={isActive} />
       </HStack>
       <HStack justifyContent="flex-start" w="full" spacing="1.5rem">
