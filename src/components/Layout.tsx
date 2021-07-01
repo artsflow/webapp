@@ -1,6 +1,7 @@
 import { useEffect, useContext } from 'react'
 import Head from 'next/head'
 import { Grid, Box, HStack, VStack, Text, Button, Center } from '@chakra-ui/react'
+import { InfoIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { isMobileOnly } from 'react-device-detect'
 import Cohere from 'cohere-js'
@@ -40,6 +41,7 @@ export function Layout({ children }: Props) {
   }, [authState])
 
   if (!user || loading) return <Loading />
+  if (isMobileOnly) return <MobileScreenInfo />
 
   return (
     <>
@@ -77,7 +79,7 @@ const AuthLayout = ({ children }: Props) => (
     <HStack as="main" bg="#F9F9F9" spacing="0">
       <SidePanel />
       <VStack h="100%" w="full" alignItems="flex-start" spacing="0">
-        {isMobileOnly ? <MobileScreenInfo /> : children}
+        {children}
       </VStack>
     </HStack>
   </Grid>
@@ -113,11 +115,15 @@ const MobileScreenInfo = () => {
   }, [])
 
   return (
-    <Card m="1rem" w="200px">
-      <Text fontWeight="bold" mb="0.5rem" color="af.teal">
-        This app is optimized for large screens
+    <Card m="1rem" display="flex" alignItems="center" flexDirection="column">
+      <InfoIcon w={75} h={75} color="af.teal" m="3rem" />
+      <Text fontWeight="bold" fontSize="xl" mb="1rem" color="af.teal">
+        The Artsflow web app is optimized for larger screens.
       </Text>
-      <Text>Please load it on a tablet or laptop</Text>
+      <Text fontSize="lg" mb="2rem">
+        In order to have the best experience, please open it on a <b>tablet, laptop or desktop</b>.
+      </Text>
+      <Text>Thank you.</Text>
     </Card>
   )
 }
