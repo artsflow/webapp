@@ -24,7 +24,7 @@ const MIN_PRICE = 5
 const MAX_PRICE = 999
 
 const ACTIVITY_TYPE = ['Free', 'Paid']
-const ARTSFLOW_FEE = 10
+const ARTSFLOW_FEE = 5
 
 export function Price() {
   const { state, actions } = useStateMachine({ update }) as any
