@@ -141,7 +141,7 @@ export function Price() {
               <VStack mt="1rem" color="#616167" w="200px">
                 <HStack justifyContent="space-between" w="full">
                   <Text>Service fee</Text>
-                  <Text fontWeight="bold">10%</Text>
+                  <Text fontWeight="bold">{ARTSFLOW_FEE}%</Text>
                 </HStack>
                 <HStack justifyContent="space-between" w="full">
                   <Text>Your payout</Text>
