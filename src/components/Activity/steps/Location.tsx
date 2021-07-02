@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import GooglePlacesAutocomplete, { geocodeByPlaceId } from 'react-google-places-autocomplete'
 import { Flex, Text, Box, Textarea, Heading, Image } from '@chakra-ui/react'
 import { useStateMachine } from 'little-state-machine'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 import GoogleMap from 'google-map-react'
 import { components } from 'react-select'
@@ -21,6 +21,7 @@ export function Location() {
     getValues,
     formState: { errors },
     trigger,
+    control,
   } = useForm({
     defaultValues: state,
     mode: 'onBlur',
@@ -65,6 +66,7 @@ export function Location() {
 
   const handleTrigger = async () => {
     await trigger()
+    console.log(errors)
   }
 
   return (
@@ -150,19 +152,13 @@ export function Location() {
                 border="none"
                 shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
                 value={address}
+                readOnly
                 {...register('address', {
                   required: true,
-                  minLength: 5,
-                  maxLength: 200,
                 })}
-                onChange={() => handleChange('address')}
               />
               <Box marginTop={address ? '-10px' : '40px'}>
-                <Error
-                  errors={errors}
-                  name="address"
-                  message="Address must have between 10 and 200 characters"
-                />
+                <Error errors={errors} name="address" message="Address is required" />
               </Box>
             </Box>
 
@@ -170,19 +166,30 @@ export function Location() {
               <Text fontWeight="bold" alignItems="center">
                 Additional details (optional)
               </Text>
-              <Textarea
-                mt="1rem"
-                placeholder="Additional location details..."
-                rows={2}
-                bg="white"
-                border="none"
-                shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
-                value={details}
-                {...register('details', {
+              <Controller
+                control={control}
+                name="details"
+                rules={{
                   required: false,
                   maxLength: 200,
-                })}
-                onChange={() => handleChange('details')}
+                }}
+                defaultValue={details}
+                render={({ field }) => (
+                  <Textarea
+                    {...field}
+                    mt="1rem"
+                    placeholder="Additional location details..."
+                    rows={2}
+                    bg="white"
+                    border="none"
+                    shadow="0px 3px 8px rgba(50, 50, 71, 0.05)"
+                    onChange={(e: any) => {
+                      field.onChange(e)
+                      handleChange('details')
+                      field.onBlur()
+                    }}
+                  />
+                )}
               />
               <Box mt="20px">
                 <Error

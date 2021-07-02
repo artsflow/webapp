@@ -1,6 +1,6 @@
 {
   "name": "artsflow-webapp",
-  "version": "0.1.213",
+  "version": "0.1.214",
   "private": true,
   "scripts": {
     "dev": "next dev --port=4042",
