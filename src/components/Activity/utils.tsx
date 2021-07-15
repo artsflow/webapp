@@ -79,12 +79,11 @@ export const useCurrentStep = () => {
 
 export const isValidState = (state: any) => {
   // TODO: check against all state fields
-  const { activityType, activityPresence, presenceUrl, audienceType, audienceLevel } = state
+  const { activityType, activityPresence, audienceType, audienceLevel } = state
 
-  const needsPresenceUrl = !(activityPresence === 'Online' && !presenceUrl)
   const isValid = !!activityType && !!activityPresence && !!audienceType && !!audienceLevel
 
-  return isValid && needsPresenceUrl
+  return isValid
 }
 
 export const emojiSuggestKey = new PluginKey('emojiSuggestKey')

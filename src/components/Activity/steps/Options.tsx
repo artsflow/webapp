@@ -106,7 +106,7 @@ const ActivityPresence = () => {
               display={isOnline ? 'block' : 'none'}
               my="4"
               pr="60px"
-              placeholder="https://"
+              placeholder="https://... [zoom link - optional]"
               autoFocus
               {...field}
               onChange={(e) => {
